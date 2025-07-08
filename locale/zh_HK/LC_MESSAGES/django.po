@@ -1,0 +1,6022 @@
+# SOME DESCRIPTIVE TITLE.
+
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+
+# This file is distributed under the same license as the PACKAGE package.
+
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+
+#
+
+#, fuzzy
+
+msgid ""
+msgstr "Project-Id-Version: PACKAGE VERSION\nReport-Msgid-Bugs-To: \nPOT-Creation-Date: 2025-04-25 14:27+0800\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\nLast-Translator: FULL NAME <EMAIL@ADDRESS>\nLanguage-Team: LANGUAGE <LL@li.org>\nLanguage: \nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+
+"Report-Msgid-Bugs-To: \n"
+
+"POT-Creation-Date: 2025-04-25 14:27+0800\n"
+
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+"Language: \n"
+
+"MIME-Version: 1.0\n"
+
+"Content-Type: text/plain; charset=UTF-8\n"
+
+"Content-Transfer-Encoding: 8bit\n"
+
+
+
+#: .\apps\authentication\models.py:24
+
+msgid "The Email must be set"
+msgstr "必須設定電子郵件"
+
+
+#: .\apps\authentication\models.py:41
+
+msgid "Superuser must have is_active=True."
+msgstr "超級使用者必須具有 is_active=True。"
+
+
+#: .\apps\authentication\models.py:43
+
+msgid "Superuser must have is_superuser=True."
+msgstr "超級使用者必須具有 is_superuser=True。"
+
+
+#: .\apps\authentication\models.py:48
+
+msgid "admin"
+msgstr "行政"
+
+
+#: .\apps\authentication\models.py:49
+
+msgid "staff"
+msgstr "員工"
+
+
+#: .\apps\authentication\models.py:50
+
+msgid "seller"
+msgstr "商家"
+
+
+#: .\apps\authentication\models.py:63
+
+msgid "Only Numbers are allowed."
+msgstr "只允許數字。"
+
+
+#: .\apps\authentication\models.py:70
+
+msgid "user"
+msgstr "使用者"
+
+
+#: .\apps\authentication\models.py:71
+
+msgid "users"
+msgstr "使用者"
+
+
+#: .\apps\authentication\models.py:84
+
+msgid "profile pic"
+msgstr "個人資料圖片"
+
+
+#: .\apps\authentication\models.py:85
+
+msgid "profile pics"
+msgstr "個人資料照片"
+
+
+#: .\apps\authentication\views.py:29
+
+msgid "Invalid credentials"
+msgstr "憑證無效"
+
+
+#: .\apps\authentication\views.py:31
+
+msgid "Error validating the form"
+msgstr "驗證表單時發生錯誤"
+
+
+#: .\apps\authentication\views.py:48
+
+msgid "User created successfully."
+msgstr "用戶創建成功。"
+
+
+#: .\apps\authentication\views.py:54
+
+msgid "Form is not valid"
+msgstr "表單無效"
+
+
+#: .\apps\home\crud\address.py:33
+
+msgid "Address added successfully"
+msgstr "地址添加成功"
+
+
+#: .\apps\home\crud\address.py:38
+
+msgid "Form is invalid"
+msgstr "表格無效"
+
+
+#: .\apps\home\crud\address.py:52 .\apps\home\crud\customer.py:754
+
+msgid "customer not found"
+msgstr "未能找到客戶"
+
+
+#: .\apps\home\crud\address.py:63
+
+msgid "Address updated successfully"
+msgstr "已成功更新地址"
+
+
+#: .\apps\home\crud\address.py:68
+
+msgid "form is invalid"
+msgstr "表格無效"
+
+
+#: .\apps\home\crud\address.py:80
+
+msgid "Address deleted successfully"
+msgstr "已成功刪除地址"
+
+
+#: .\apps\home\crud\customer.py:773
+
+msgid "customer deleted successfully"
+msgstr "客戶刪除成功"
+
+
+#: .\apps\home\crud\instock.py:154 .\apps\home\crud\purchase.py:233
+
+msgid "Purchase information updated successfully"
+msgstr "已成功更新採購資料"
+
+
+#: .\apps\home\crud\instock.py:170
+
+msgid "Purchase deleted successfully"
+msgstr "已成功刪除採購資料"
+
+
+#: .\apps\home\crud\order.py:564
+
+msgid "order not found"
+msgstr "未能找到訂單"
+
+
+#: .\apps\home\crud\order.py:645
+
+msgid "order updated successfully"
+msgstr "訂單更新成功"
+
+
+#: .\apps\home\crud\order.py:662
+
+msgid "Order deleted successfully"
+msgstr "訂單刪除成功"
+
+
+#: .\apps\home\crud\product.py:1102
+
+msgid "product deleted successfully"
+msgstr "已成功刪除產品"
+
+
+#: .\apps\home\crud\supplier.py:646
+
+msgid "Supplier not found"
+msgstr "未能找到供應商"
+
+
+#: .\apps\home\crud\supplier.py:661
+
+msgid "supplier deleted successfully"
+msgstr "已成功刪除供應商"
+
+
+#: .\apps\home\crud\transaction.py:20
+
+msgid "Order does not exist"
+msgstr "訂單不存在"
+
+
+#: .\apps\home\crud\transaction.py:35
+
+msgid "Transaction created successfully, awaiting approval"
+msgstr "交易創建成功，等待審批"
+
+
+#: .\apps\home\crud\transaction.py:42 .\apps\home\crud\transaction.py:76
+
+msgid "Form validation failed"
+msgstr "表單驗證失敗"
+
+
+#: .\apps\home\crud\transaction.py:58 .\apps\home\crud\transaction.py:92
+
+#: .\apps\home\crud\transaction.py:188
+
+msgid "Transaction does not exist"
+msgstr "交易不存在"
+
+
+#: .\apps\home\crud\transaction.py:61
+
+msgid "Cannot update transaction in Awaiting Approval status"
+msgstr "無法更新處於等待批准狀態的交易"
+
+
+#: .\apps\home\crud\transaction.py:69
+
+msgid "Transaction updated successfully"
+msgstr "交易更新成功"
+
+
+#: .\apps\home\crud\transaction.py:95
+
+msgid "Transaction is not in Awaiting Approval status"
+msgstr "交易非處於等待批准狀態"
+
+
+#: .\apps\home\crud\transaction.py:104
+
+msgid "Transaction approved successfully"
+msgstr "此交易已被成功批准。"
+
+
+#: .\apps\home\crud\transaction.py:134
+
+msgid "Invalid date format"
+msgstr "日期格式無效"
+
+
+#: .\apps\home\crud\transaction.py:191
+
+msgid "You do not have permission to delete transactions"
+msgstr "你無權限刪除此交易"
+
+
+#: .\apps\home\crud\transaction.py:194
+
+msgid "Cannot delete completed or approved transactions"
+msgstr "無法刪除已完成或已核准的交易"
+
+
+#: .\apps\home\crud\transaction.py:200
+
+msgid "Transaction deleted successfully"
+msgstr "交易刪除成功"
+
+
+#: .\apps\home\crud\voucher.py:32
+
+msgid "product not found"
+msgstr "未能找到此產品"
+
+
+#: .\apps\home\crud\voucher.py:78 .\apps\home\crud\voucher.py:110
+
+msgid "voucher sucessfully added!"
+msgstr "優惠券添加成功！"
+
+
+#: .\apps\home\crud\voucher.py:124
+
+msgid "Voucher deleted successfully"
+msgstr "優惠券刪除成功"
+
+
+#: .\apps\home\forms\customerform.py:9
+
+msgid "beauty salon"
+msgstr "美容院"
+
+
+#: .\apps\home\forms\customerform.py:10
+
+msgid "massage parlor"
+msgstr "按摩院"
+
+
+#: .\apps\home\forms\customerform.py:11
+
+msgid "manicure store"
+msgstr "美甲店"
+
+
+#: .\apps\home\forms\customerform.py:12
+
+msgid "retail store"
+msgstr "零售店"
+
+
+#: .\apps\home\forms\customerform.py:13
+
+msgid "street guest"
+msgstr "街頭嘉賓"
+
+
+#: .\apps\home\forms\orderconfirmationform.py:7
+
+#: .\apps\home\forms\orderform.py:22 .\apps\home\forms\orderform.py:30
+
+#: .\apps\home\forms\purchaseconfirmationform.py:7
+
+#: .\apps\home\model\order.py:26 .\apps\home\model\order.py:76
+
+#: .\apps\home\model\order.py:91 .\apps\home\model\purchase_details.py:13
+
+#: .\apps\home\model\transaction.py:15
+
+msgid "Pending"
+msgstr "待辦的"
+
+
+#: .\apps\home\forms\orderconfirmationform.py:8
+
+msgid "Received"
+msgstr "已收到"
+
+
+#: .\apps\home\forms\orderform.py:8 .\apps\home\forms\purchaseform.py:7
+
+#: .\apps\home\model\order.py:69
+
+msgid "COD"
+msgstr "貨到收款"
+
+
+#: .\apps\home\forms\orderform.py:9 .\apps\home\model\order.py:70
+
+msgid "Bank Transfer"
+msgstr "銀行轉帳"
+
+
+#: .\apps\home\forms\orderform.py:10 .\apps\home\model\order.py:71
+
+msgid "Cheque"
+msgstr "支票"
+
+
+#: .\apps\home\forms\orderform.py:15 .\apps\home\model\order.py:57
+
+msgid "Self-Pickup"
+msgstr "自取"
+
+
+#: .\apps\home\forms\orderform.py:16 .\apps\home\model\order.py:58
+
+msgid "SF Express"
+msgstr "順豐"
+
+
+#: .\apps\home\forms\orderform.py:17
+
+msgid "Salesperson Delivery"
+msgstr "銷售員送貨"
+
+
+#: .\apps\home\forms\orderform.py:18 .\apps\home\model\order.py:60
+
+msgid "GOGOVAN"
+msgstr "Gogovan"
+
+
+#: .\apps\home\forms\orderform.py:23
+
+msgid "Partially Delievered"
+msgstr "部分送貨"
+
+
+#: .\apps\home\forms\orderform.py:24
+
+msgid "Delievered"
+msgstr "已送貨"
+
+
+#: .\apps\home\forms\orderform.py:29 .\apps\home\model\transaction.py:25
+
+msgid "Paid"
+msgstr "已付"
+
+
+#: .\apps\home\forms\orderform.py:31 .\apps\home\model\order.py:92
+
+#: .\apps\home\model\transaction.py:19
+
+msgid "Failed"
+msgstr "失敗的"
+
+
+#: .\apps\home\forms\orderform.py:35 .\apps\home\model\order.py:97
+
+msgid "Invoice"
+msgstr "發票"
+
+
+#: .\apps\home\forms\orderform.py:36 .\apps\home\model\order.py:98
+
+#: .\apps\home\model\purchase_details.py:19
+
+#: .\apps\templates\includes\sidebar.html:112
+
+msgid "Quotation"
+msgstr "報"
+
+
+#: .\apps\home\forms\productform.py:19
+
+msgid "bottle"
+msgstr "瓶"
+
+
+#: .\apps\home\forms\productform.py:20
+
+msgid "Bag"
+msgstr "包"
+
+
+#: .\apps\home\forms\productform.py:21
+
+msgid "box"
+msgstr "盒"
+
+
+#: .\apps\home\forms\productform.py:22
+
+msgid "strip"
+msgstr "條"
+
+
+#: .\apps\home\forms\productform.py:23
+
+msgid "piece"
+msgstr "片"
+
+
+#: .\apps\home\forms\productform.py:24
+
+msgid "open"
+msgstr "打開"
+
+
+#: .\apps\home\forms\productform.py:25
+
+msgid "etc"
+msgstr "等等"
+
+
+#: .\apps\home\forms\productform.py:28
+
+msgid "In Sales"
+msgstr "銷售中"
+
+
+#: .\apps\home\forms\productform.py:29
+
+msgid "In Preparation"
+msgstr "準備中"
+
+
+#: .\apps\home\forms\productform.py:30
+
+msgid "Offlined"
+msgstr "離線"
+
+
+#: .\apps\home\forms\purchaseconfirmationform.py:8
+
+#: .\apps\home\model\order.py:30 .\apps\home\model\order.py:80
+
+#: .\apps\home\model\purchase_details.py:14
+
+#: .\apps\templates\home\delivery_details.html:15
+
+msgid "Delivered"
+msgstr "已送貨"
+
+
+#: .\apps\home\forms\purchaseconfirmationform.py:9
+
+#: .\apps\home\model\order.py:28 .\apps\home\model\order.py:78
+
+#: .\apps\home\model\purchase_details.py:15
+
+msgid "Partially Delivered"
+msgstr "部分送貨"
+
+
+#: .\apps\home\forms\purchaseform.py:8
+
+msgid "Bank Transfer/Cheque"
+msgstr "銀行轉帳/支票"
+
+
+#: .\apps\home\forms\voucherform.py:8 .\apps\home\model\voucher.py:9
+
+msgid "Ready to start"
+msgstr "準備開始"
+
+
+#: .\apps\home\forms\voucherform.py:9 .\apps\home\model\voucher.py:10
+
+msgid "Valid"
+msgstr "有效的"
+
+
+#: .\apps\home\forms\voucherform.py:10 .\apps\home\model\voucher.py:11
+
+msgid "Paused"
+msgstr "暫停"
+
+
+#: .\apps\home\forms\voucherform.py:11 .\apps\home\model\voucher.py:12
+
+msgid "Ended"
+msgstr "已結束"
+
+
+#: .\apps\home\forms\voucherform.py:12 .\apps\home\model\order.py:33
+
+#: .\apps\home\model\order.py:83 .\apps\home\model\transaction.py:20
+
+#: .\apps\home\model\voucher.py:13
+
+msgid "Cancelled"
+msgstr "取消"
+
+
+#: .\apps\home\forms\voucherform.py:17 .\apps\home\model\voucher.py:17
+
+msgid "Product Combo"
+msgstr "產品組合"
+
+
+#: .\apps\home\forms\voucherform.py:18 .\apps\home\model\voucher.py:18
+
+msgid "Discount Voucher"
+msgstr "折扣券"
+
+
+#: .\apps\home\forms\voucherform.py:19 .\apps\home\model\voucher.py:19
+
+msgid "Free Gift"
+msgstr "贈品"
+
+
+#: .\apps\home\forms\voucherform.py:20 .\apps\home\model\voucher.py:20
+
+msgid "Manual Discount"
+msgstr "手動折扣"
+
+
+#: .\apps\home\forms\voucherform.py:25 .\apps\home\model\voucher.py:25
+
+msgid "Fixed Amount"
+msgstr "固定金額"
+
+
+#: .\apps\home\forms\voucherform.py:26 .\apps\home\model\voucher.py:26
+
+msgid "Rate(%)"
+msgstr "率（％）"
+
+
+#: .\apps\home\forms\voucherform.py:31 .\apps\home\model\voucher.py:31
+
+#: .\apps\templates\home\voucher.html:254
+
+#: .\apps\templates\home\voucher.html:273
+
+msgid "More than"
+msgstr "多於"
+
+
+#: .\apps\home\forms\voucherform.py:32 .\apps\home\model\voucher.py:32
+
+#: .\apps\templates\home\voucher.html:255
+
+#: .\apps\templates\home\voucher.html:274
+
+msgid "More than and equals to"
+msgstr "大於或等於"
+
+
+#: .\apps\home\forms\voucherform.py:33 .\apps\home\model\voucher.py:33
+
+#: .\apps\templates\home\voucher.html:256
+
+#: .\apps\templates\home\voucher.html:275
+
+msgid "Equals to"
+msgstr "等於"
+
+
+#: .\apps\home\forms\voucherform.py:34 .\apps\home\model\voucher.py:34
+
+#: .\apps\templates\home\voucher.html:257
+
+#: .\apps\templates\home\voucher.html:276
+
+msgid "Less than and equals to"
+msgstr "小於或等於"
+
+
+#: .\apps\home\forms\voucherform.py:35 .\apps\home\model\voucher.py:35
+
+#: .\apps\templates\home\voucher.html:258
+
+#: .\apps\templates\home\voucher.html:277
+
+msgid "Less than"
+msgstr "少於"
+
+
+#: .\apps\home\model\customer.py:92
+
+msgid "customer"
+msgstr "客戶"
+
+
+#: .\apps\home\model\customer.py:93
+
+msgid "customers"
+msgstr "客戶"
+
+
+#: .\apps\home\model\customer.py:112
+
+msgid "address"
+msgstr "地址"
+
+
+msgid "addresses"
+msgstr "地址"
+
+
+#: .\apps\home\model\discount.py:6
+
+#: .\apps\templates\home\discount_scheme_list.html:29
+
+#: .\apps\home\model\customer.py:113
+
+msgid "Scheme Name"
+msgstr "方案名稱"
+
+
+#: .\apps\home\model\discount.py:11 .\apps\home\model\discount.py:35
+
+#: .\apps\home\model\discount.py:57 .\apps\templates\home\coupon_list.html:30
+
+#: .\apps\templates\home\discount_scheme_list.html:30
+
+#: .\apps\templates\home\promotion_list.html:30
+
+msgid "Type"
+msgstr "類型"
+
+
+#: .\apps\home\model\discount.py:12
+
+#: .\apps\templates\home\discount_scheme_list.html:31
+
+msgid "Condition Amount"
+msgstr "條件金額"
+
+
+#: .\apps\home\model\discount.py:13 .\apps\home\model\discount.py:38
+
+#: .\apps\home\model\discount.py:73
+
+msgid "Start Date"
+msgstr "開始日期"
+
+
+#: .\apps\home\model\discount.py:14 .\apps\home\model\discount.py:39
+
+#: .\apps\home\model\discount.py:74
+
+msgid "End Date"
+msgstr "結束日期"
+
+
+#: .\apps\home\model\discount.py:15 .\apps\home\model\discount.py:40
+
+#: .\apps\home\model\discount.py:75
+
+msgid "Usage Limit"
+msgstr "使用次數限制"
+
+
+#: .\apps\home\model\discount.py:19
+
+#: .\apps\templates\home\discount_scheme_list.html:33
+
+msgid "Status"
+msgstr "狀態"
+
+
+#: .\apps\home\model\discount.py:23 .\apps\home\model\discount.py:24
+
+msgid "Discount Scheme"
+msgstr "優惠方案"
+
+
+#: .\apps\home\model\discount.py:30
+
+msgid "Coupon Code"
+msgstr "優惠券代碼"
+
+
+#: .\apps\home\model\discount.py:36 .\apps\home\model\discount.py:72
+
+#: .\apps\templates\home\coupon_list.html:31
+
+#: .\apps\templates\home\promo_code_list.html:30
+
+msgid "Discount Value"
+msgstr "折扣值"
+
+
+#: .\apps\home\model\discount.py:37 .\apps\templates\home\coupon_list.html:32
+
+msgid "Minimum Spend Amount"
+msgstr "最低消費額"
+
+
+#: .\apps\home\model\discount.py:41 .\apps\home\model\discount.py:76
+
+msgid "Number of Uses"
+msgstr "已使用次數"
+
+
+#: .\apps\home\model\discount.py:45 .\apps\home\model\discount.py:46
+
+msgid "Coupon"
+msgstr "優惠券"
+
+
+#: .\apps\home\model\discount.py:52
+
+#: .\apps\templates\home\promotion_list.html:29
+
+msgid "Event Name"
+msgstr "活動名稱"
+
+
+#: .\apps\home\model\discount.py:58
+
+msgid "Start Time"
+msgstr "開始時間"
+
+
+#: .\apps\home\model\discount.py:59
+
+msgid "End Time"
+msgstr "結束時間"
+
+
+#: .\apps\home\model\discount.py:60
+
+msgid "Event Description"
+msgstr "活動描述"
+
+
+#: .\apps\home\model\discount.py:64 .\apps\home\model\discount.py:65
+
+msgid "Promotional Event"
+msgstr "促銷活動"
+
+
+#: .\apps\home\model\discount.py:71 .\apps\home\model\discount.py:80
+
+#: .\apps\home\model\discount.py:81
+
+msgid "Promo Code"
+msgstr "促銷碼"
+
+
+#: .\apps\home\model\inventory.py:30 .\apps\home\model\inventory.py:31
+
+msgid "inventory"
+msgstr "存貨"
+
+
+#: .\apps\home\model\inventory.py:64
+
+msgid "draft"
+msgstr "草稿"
+
+
+#: .\apps\home\model\inventory.py:65
+
+msgid "pending stock in"
+msgstr "待入庫"
+
+
+#: .\apps\home\model\inventory.py:66
+
+msgid "cancelled"
+msgstr "取消"
+
+
+#: .\apps\home\model\inventory.py:67
+
+msgid "stocked in"
+msgstr "入庫"
+
+
+#: .\apps\home\model\inventory.py:96
+
+msgid "purchase"
+msgstr "採購"
+
+
+#: .\apps\home\model\inventory.py:97
+
+msgid "exchange"
+msgstr "交換"
+
+
+#: .\apps\home\model\inventory.py:98
+
+msgid "depreciation"
+msgstr "折舊"
+
+
+#: .\apps\home\model\inventory.py:99
+
+msgid "cycle count"
+msgstr "盤點"
+
+
+#: .\apps\home\model\inventory.py:100
+
+msgid "sample"
+msgstr "試用裝"
+
+
+#: .\apps\home\model\inventory.py:101
+
+msgid "others"
+msgstr "其他"
+
+
+#: .\apps\home\model\order.py:27 .\apps\home\model\order.py:77
+
+#: .\apps\templates\home\delivery_details.html:3
+
+#: .\apps\templates\home\delivery_details.html:15
+
+msgid "Pending Delivery"
+msgstr "待出貨"
+
+
+#: .\apps\home\model\order.py:29 .\apps\home\model\order.py:79
+
+msgid "Delivering"
+msgstr "送貨中"
+
+
+#: .\apps\home\model\order.py:31 .\apps\home\model\order.py:81
+
+msgid "Handling"
+msgstr "處理"
+
+
+#: .\apps\home\model\order.py:32 .\apps\home\model\order.py:82
+
+#: .\apps\home\model\transaction.py:18
+
+msgid "Completed"
+msgstr "已完成"
+
+
+#: .\apps\home\model\order.py:34 .\apps\home\model\order.py:84
+
+#: .\apps\templates\home\product.html:77
+
+#: .\apps\templates\home\product_details.html:73
+
+msgid "Out of Stock"
+msgstr "缺貨"
+
+
+#: .\apps\home\model\order.py:35 .\apps\home\model\order.py:85
+
+msgid "Partial Out of Stock"
+msgstr "部分缺貨"
+
+
+#: .\apps\home\model\order.py:41
+
+msgid "orderitem"
+msgstr "訂單項"
+
+
+#: .\apps\home\model\order.py:42
+
+msgid "orderitems"
+msgstr "訂單項"
+
+
+#: .\apps\home\model\order.py:59
+
+msgid "salesperson delivery"
+msgstr "銷售員送貨"
+
+
+#: .\apps\home\model\order.py:90
+
+msgid "paid"
+msgstr "已付"
+
+
+#: .\apps\home\model\order.py:128
+
+msgid "order"
+msgstr "訂單"
+
+
+#: .\apps\home\model\order.py:129
+
+msgid "orders"
+msgstr "訂單"
+
+
+#: .\apps\home\model\product.py:61
+
+msgid "product"
+msgstr "產品"
+
+
+#: .\apps\home\model\product.py:62
+
+msgid "products"
+msgstr "產品"
+
+
+#: .\apps\home\model\product_category.py:14
+
+msgid "category"
+msgstr "類別"
+
+
+#: .\apps\home\model\product_category.py:15
+
+msgid "categories"
+msgstr "類別"
+
+
+#: .\apps\home\model\product_picture.py:18
+
+msgid "product picture"
+msgstr "產品圖片"
+
+
+#: .\apps\home\model\product_picture.py:19
+
+msgid "product pictures"
+msgstr "產品圖片"
+
+
+#: .\apps\home\model\purchase_details.py:20
+
+msgid "Purchase"
+msgstr "採購"
+
+
+#: .\apps\home\model\transaction.py:9
+
+msgid "Payment"
+msgstr "款項"
+
+
+#: .\apps\home\model\transaction.py:10
+
+msgid "Refund"
+msgstr "退款"
+
+
+#: .\apps\home\model\transaction.py:11
+
+msgid "Adjustment"
+msgstr "調整"
+
+
+#: .\apps\home\model\transaction.py:12
+
+msgid "Discount"
+msgstr "折扣"
+
+
+#: .\apps\home\model\transaction.py:16
+
+msgid "Awaiting Approval"
+msgstr "等待審批"
+
+
+#: .\apps\home\model\transaction.py:17
+
+msgid "Approved"
+msgstr "已批準"
+
+
+#: .\apps\home\model\transaction.py:23
+
+msgid "Unpaid"
+msgstr "未付"
+
+
+#: .\apps\home\model\transaction.py:24
+
+msgid "Partial"
+msgstr "部分"
+
+
+#: .\apps\home\model\transaction.py:27
+
+#: .\apps\templates\home\transaction_detail.html:28
+
+#: .\apps\templates\home\transaction_list.html:57
+
+msgid "Transaction ID"
+msgstr "交易 ID"
+
+
+#: .\apps\home\model\transaction.py:28
+
+msgid "Order"
+msgstr "訂單"
+
+
+#: .\apps\home\model\transaction.py:30
+
+msgid "Order Item"
+msgstr "訂單商品"
+
+
+#: .\apps\home\model\transaction.py:32
+
+#: .\apps\templates\home\transaction_form.html:47
+
+msgid "Transaction Type"
+msgstr "交易類型"
+
+
+#: .\apps\home\model\transaction.py:33
+
+#: .\apps\templates\home\transaction_detail.html:52
+
+#: .\apps\templates\home\transaction_form.html:51
+
+#: .\apps\templates\home\transaction_list.html:63
+
+msgid "Amount"
+msgstr "金額"
+
+
+#: .\apps\home\model\transaction.py:34
+
+#: .\apps\templates\home\customer-list.html:69
+
+#: .\apps\templates\home\customer.html:113
+
+#: .\apps\templates\home\customer_details.html:114
+
+#: .\apps\templates\home\order-approval-list.html:46
+
+#: .\apps\templates\home\order-list.html:54
+
+#: .\apps\templates\home\order.html:113 .\apps\templates\home\order.html:153
+
+#: .\apps\templates\home\order.html:189 .\apps\templates\home\product.html:124
+
+#: .\apps\templates\home\product_details.html:127
+
+#: .\apps\templates\home\supplier-list.html:51
+
+#: .\apps\templates\home\supplier.html:77
+
+#: .\apps\templates\home\supplier_details.html:75
+
+#: .\apps\templates\home\transaction_form.html:55
+
+#: .\apps\templates\home\transaction_list.html:64
+
+msgid "Currency"
+msgstr "貨幣"
+
+
+#: .\apps\home\model\transaction.py:35
+
+#: .\apps\templates\home\delivery-list.html:55
+
+#: .\apps\templates\home\delivery_details.html:45
+
+#: .\apps\templates\home\order-approval-deatils.html:83
+
+#: .\apps\templates\home\order-approval-list.html:49
+
+#: .\apps\templates\home\order-deatils.html:99
+
+#: .\apps\templates\home\order-list.html:57 .\apps\templates\home\order.html:95
+
+#: .\apps\templates\home\orderconfirmation.html:88
+
+#: .\apps\templates\home\orderold.html:145
+
+#: .\apps\templates\home\purchase-deatils.html:87
+
+#: .\apps\templates\home\purchase.html:134
+
+#: .\apps\templates\home\quotationtopurchase.html:111
+
+#: .\apps\templates\home\transaction_detail.html:56
+
+#: .\apps\templates\home\transaction_form.html:59
+
+#: .\apps\templates\home\transaction_list.html:65
+
+msgid "Payment Method"
+msgstr "付款方式"
+
+
+#: .\apps\home\model\transaction.py:37
+
+#: .\apps\templates\home\customer-list.html:63
+
+#: .\apps\templates\home\customer.html:142
+
+#: .\apps\templates\home\customer_details.html:155
+
+#: .\apps\templates\home\instock-details.html:57
+
+#: .\apps\templates\home\instock-list.html:29
+
+#: .\apps\templates\home\instock.html:55 .\apps\templates\home\instock.html:87
+
+#: .\apps\templates\home\inventory-list.html:46
+
+#: .\apps\templates\home\inventory_po_list.html:39
+
+#: .\apps\templates\home\orderconfirmation.html:117
+
+#: .\apps\templates\home\product-detail.html:95
+
+#: .\apps\templates\home\product-list.html:53
+
+#: .\apps\templates\home\purchase-deatils.html:59
+
+#: .\apps\templates\home\supplier-list.html:55
+
+#: .\apps\templates\home\transaction_detail.html:64
+
+#: .\apps\templates\home\transaction_form.html:63
+
+#: .\apps\templates\home\transaction_list.html:67
+
+#: .\apps\templates\home\voucher-details.html:198
+
+#: .\apps\templates\home\voucher-list.html:33
+
+#: .\apps\templates\home\voucher.html:122
+
+#:  msgid "Status"
+#:  msgstr "狀態"
+
+
+#: .\apps\home\model\transaction.py:39
+
+#: .\apps\templates\home\delivery-list.html:54
+
+#: .\apps\templates\home\delivery_details.html:41
+
+#: .\apps\templates\home\order-approval-deatils.html:75
+
+#: .\apps\templates\home\order-deatils.html:91
+
+#: .\apps\templates\home\transaction_detail.html:60
+
+#: .\apps\templates\home\transaction_form.html:69
+
+#: .\apps\templates\home\transaction_list.html:42
+
+#: .\apps\templates\home\transaction_list.html:66
+
+msgid "Payment Status"
+msgstr "付款狀態"
+
+
+#: .\apps\home\model\transaction.py:40
+
+#: .\apps\templates\home\customer-list.html:64
+
+#: .\apps\templates\home\customer.html:84
+
+#: .\apps\templates\home\customer_details.html:85
+
+#: .\apps\templates\home\delivery_details.html:31
+
+#: .\apps\templates\home\order-approval-deatils.html:61
+
+#: .\apps\templates\home\order-deatils.html:77
+
+#: .\apps\templates\home\order.html:34 .\apps\templates\home\order.html:50
+
+#: .\apps\templates\home\transaction_detail.html:36
+
+#: .\apps\templates\home\transaction_list.html:38
+
+#: .\apps\templates\home\transaction_list.html:59
+
+msgid "Customer ID"
+msgstr "客戶編號"
+
+
+#: .\apps\home\model\transaction.py:41
+
+#: .\apps\templates\home\customer-list.html:43
+
+#: .\apps\templates\home\customer.html:30
+
+#: .\apps\templates\home\customer_details.html:31
+
+#: .\apps\templates\home\delivery_details.html:37
+
+#: .\apps\templates\home\order-approval-deatils.html:79
+
+#: .\apps\templates\home\order-deatils.html:95
+
+#: .\apps\templates\home\order.html:35 .\apps\templates\home\order.html:108
+
+#: .\apps\templates\home\transaction_detail.html:40
+
+#: .\apps\templates\home\transaction_list.html:60
+
+msgid "Customer Name"
+msgstr "客戶姓名"
+
+
+#: .\apps\home\model\transaction.py:42
+
+#: .\apps\templates\home\delivery_details.html:49
+
+#: .\apps\templates\home\order-approval-deatils.html:107
+
+#: .\apps\templates\home\order-deatils.html:121
+
+#: .\apps\templates\home\order.html:83
+
+#: .\apps\templates\home\transaction_detail.html:44
+
+#: .\apps\templates\home\transaction_list.html:61
+
+msgid "Sales Person"
+msgstr "銷售員"
+
+
+#: .\apps\home\model\transaction.py:43
+
+#: .\apps\templates\home\transaction_detail.html:68
+
+#: .\apps\templates\home\transaction_list.html:68
+
+msgid "Upload Date"
+msgstr "上傳日期"
+
+
+#: .\apps\home\model\transaction.py:44
+
+#: .\apps\templates\home\transaction_detail.html:72
+
+#: .\apps\templates\home\transaction_form.html:73
+
+#: .\apps\templates\home\transaction_list.html:69
+
+msgid "Refund Amount"
+msgstr "退款金額"
+
+
+#: .\apps\home\model\transaction.py:45
+
+#: .\apps\templates\home\transaction_detail.html:76
+
+#: .\apps\templates\home\transaction_form.html:77
+
+#: .\apps\templates\home\transaction_list.html:70
+
+msgid "Refund Date"
+msgstr "退款日期"
+
+
+#: .\apps\home\model\transaction.py:46
+
+#: .\apps\templates\home\transaction_detail.html:80
+
+#: .\apps\templates\home\transaction_list.html:71
+
+msgid "Net Amount"
+msgstr "淨額"
+
+
+#: .\apps\home\model\transaction.py:47
+
+#: .\apps\templates\home\after_sales_delivery_details.html:58
+
+#: .\apps\templates\home\after_sales_delivery_details.html:105
+
+#: .\apps\templates\home\delivery-list.html:58
+
+#: .\apps\templates\home\delivery_details.html:153
+
+#: .\apps\templates\home\delivery_details.html:186
+
+#: .\apps\templates\home\delivery_details.html:221
+
+#: .\apps\templates\home\delivery_details.html:278
+
+#: .\apps\templates\home\delivery_details.html:307
+
+#: .\apps\templates\home\delivery_details.html:340
+
+#: .\apps\templates\home\delivery_details.html:383
+
+#: .\apps\templates\home\instock-details.html:61
+
+#: .\apps\templates\home\instock-list.html:27
+
+#: .\apps\templates\home\instock.html:59
+
+#: .\apps\templates\home\order-approval-deatils.html:69
+
+#: .\apps\templates\home\order-approval-list.html:50
+
+#: .\apps\templates\home\order-deatils.html:85
+
+#: .\apps\templates\home\order-list.html:58
+
+#: .\apps\templates\home\order.html:293
+
+#: .\apps\templates\home\orderconfirmation.html:92
+
+#: .\apps\templates\home\orderold.html:126
+
+#: .\apps\templates\home\purchase-deatils.html:63
+
+#: .\apps\templates\home\purchase-list.html:32
+
+#: .\apps\templates\home\purchase.html:116
+
+#: .\apps\templates\home\quotationtopurchase.html:93
+
+#: .\apps\templates\home\transaction_detail.html:84
+
+#: .\apps\templates\home\transaction_form.html:81
+
+#: .\apps\templates\home\transaction_list.html:72
+
+msgid "Delivery Date"
+msgstr "送貨日期"
+
+
+#: .\apps\home\model\transaction.py:48
+
+#: .\apps\templates\home\transaction_detail.html:88
+
+#: .\apps\templates\home\transaction_list.html:34
+
+#: .\apps\templates\home\transaction_list.html:56
+
+msgid "Transaction Date"
+msgstr "交易日期"
+
+
+#: .\apps\home\model\transaction.py:49
+
+#: .\apps\templates\home\transaction_detail.html:92
+
+#: .\apps\templates\home\transaction_list.html:73
+
+msgid "Updated At"
+msgstr "更新於"
+
+
+#: .\apps\home\model\transaction.py:50
+
+#: .\apps\templates\home\instock-details.html:65
+
+#: .\apps\templates\home\instock-list.html:28
+
+#: .\apps\templates\home\instock.html:63 .\apps\templates\home\order.html:188
+
+#: .\apps\templates\home\orderconfirmation.html:72
+
+#: .\apps\templates\home\orderold.html:138
+
+#: .\apps\templates\home\purchase-deatils.html:67
+
+#: .\apps\templates\home\purchase-list.html:35
+
+#: .\apps\templates\home\purchase.html:128
+
+#: .\apps\templates\home\quotationtopurchase.html:105
+
+#: .\apps\templates\home\transaction_detail.html:100
+
+#: .\apps\templates\home\transaction_form.html:85
+
+#: .\apps\templates\home\transaction_list.html:75
+
+msgid "Remarks"
+msgstr "備註"
+
+
+#: .\apps\home\model\transaction.py:51
+
+#: .\apps\templates\home\system_parameter_list.html:30
+
+#: .\apps\templates\home\transaction_detail.html:96
+
+#: .\apps\templates\home\transaction_list.html:74
+
+#: .\apps\templates\home\voucher-details.html:204
+
+#: .\apps\templates\home\voucher-list.html:35
+
+msgid "Created By"
+msgstr "創建者"
+
+
+#: .\apps\home\model\transaction.py:52
+
+msgid "Is Deleted"
+msgstr "已刪除"
+
+
+#: .\apps\home\model\transaction.py:53
+
+#: .\apps\templates\home\transaction_detail.html:104
+
+#: .\apps\templates\home\transaction_form.html:89
+
+msgid "Attachment"
+msgstr "附件"
+
+
+#: .\apps\home\model\transaction.py:56
+
+msgid "Transaction"
+msgstr "交易"
+
+
+#: .\apps\home\model\transaction.py:57
+
+msgid "Transactions"
+msgstr "交易"
+
+
+#: .\apps\templates\accounts\login.html:6
+
+#: .\apps\templates\accounts\login.html:23
+
+#: .\apps\templates\accounts\login.html:42
+
+#: .\apps\templates\accounts\register.html:25
+
+msgid "Login"
+msgstr "登入"
+
+
+#: .\apps\templates\accounts\login.html:30
+
+#: .\apps\templates\accounts\register.html:35
+
+msgid "Username"
+msgstr "使用者名稱"
+
+
+#: .\apps\templates\accounts\login.html:36
+
+#: .\apps\templates\accounts\register.html:47
+
+msgid "Password"
+msgstr "密碼"
+
+
+#: .\apps\templates\accounts\register.html:3
+
+#: .\apps\templates\accounts\register.html:20
+
+#: .\apps\templates\accounts\register.html:89
+
+msgid "Register"
+msgstr "登記"
+
+
+#: .\apps\templates\accounts\register.html:41
+
+msgid "Email Address"
+msgstr "電郵"
+
+
+#: .\apps\templates\accounts\register.html:53
+
+msgid "Re-type Password"
+msgstr "重新輸入密碼"
+
+
+#: .\apps\templates\accounts\register.html:59
+
+msgid "First name"
+msgstr "名"
+
+
+#: .\apps\templates\accounts\register.html:65
+
+msgid "Last name"
+msgstr "姓"
+
+
+#: .\apps\templates\accounts\register.html:71
+
+#: .\apps\templates\home\order.html:54
+
+msgid "Mobile"
+msgstr "手機"
+
+
+#: .\apps\templates\accounts\register.html:77
+
+msgid "Role"
+msgstr "角色"
+
+
+#: .\apps\templates\accounts\register.html:83
+
+msgid "Birth Date"
+msgstr "出生日期"
+
+
+#: .\apps\templates\home\address.html:3
+
+#: .\apps\templates\home\customer-detail.html:90
+
+msgid "Add Address"
+msgstr "新增地址"
+
+
+#: .\apps\templates\home\address.html:16
+
+#: .\apps\templates\home\customer-detail.html:97
+
+#: .\apps\templates\home\orderold.html:40
+
+msgid "Address"
+msgstr "地址"
+
+
+#: .\apps\templates\home\address.html:24
+
+msgid "Address Line"
+msgstr "地址行"
+
+
+#: .\apps\templates\home\address.html:31
+
+#: .\apps\templates\home\customer_old.html:177
+
+#: .\apps\templates\home\import.html:20 .\apps\templates\home\instock.html:95
+
+#: .\apps\templates\home\order-deatils.html:229
+
+#: .\apps\templates\home\order.html:323
+
+#: .\apps\templates\home\orderconfirmation.html:126
+
+#: .\apps\templates\home\orderold.html:169
+
+#: .\apps\templates\home\purchase.html:144
+
+#: .\apps\templates\home\quotation.html:91
+
+#: .\apps\templates\home\quotationtopurchase.html:121
+
+#: .\apps\templates\home\supplier_old.html:143
+
+#: .\apps\templates\home\voucher.html:140
+
+msgid "Submit"
+msgstr "提交"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:3
+
+#: .\apps\templates\home\after_sales_delivery_details.html:15
+
+#: .\apps\templates\home\delivery_details.html:124
+
+msgid "After Sales"
+msgstr "售後"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:26
+
+#: .\apps\templates\home\delivery-list.html:47
+
+#: .\apps\templates\home\delivery_details.html:25
+
+msgid "Order Type"
+msgstr "訂單類型"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:38
+
+#: .\apps\templates\home\delivery-list.html:46
+
+#: .\apps\templates\home\delivery_details.html:139
+
+#: .\apps\templates\home\delivery_details.html:266
+
+msgid "Delivery ID"
+msgstr "送貨單號"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:40
+
+#: .\apps\templates\home\delivery-list.html:45
+
+#: .\apps\templates\home\delivery_details.html:27
+
+#: .\apps\templates\home\order-approval-deatils.html:24
+
+#: .\apps\templates\home\order-approval-list.html:39
+
+#: .\apps\templates\home\order-deatils.html:24
+
+#: .\apps\templates\home\order-list.html:48
+
+#: .\apps\templates\home\order-list.html:153
+
+#: .\apps\templates\includes\navigation.html:290
+
+msgid "Invoice ID"
+msgstr "發票 ID"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:49
+
+#: .\apps\templates\home\delivery_details.html:176
+
+#: .\apps\templates\home\delivery_details.html:299
+
+msgid "Delivered Product List"
+msgstr "已出貨產品清單"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:54
+
+#: .\apps\templates\home\delivery_details.html:182
+
+#: .\apps\templates\home\delivery_details.html:217
+
+#: .\apps\templates\home\delivery_details.html:303
+
+#: .\apps\templates\home\delivery_details.html:335
+
+#: .\apps\templates\home\inventory-list.html:40
+
+#: .\apps\templates\home\inventory-stockin-list.html:43
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:45
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:95
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:143
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:191
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:239
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:287
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:335
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:383
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:431
+
+#: .\apps\templates\home\inventory_po.html:27
+
+#: .\apps\templates\home\inventory_po.html:71
+
+#: .\apps\templates\home\inventory_po_details.html:29
+
+#: .\apps\templates\home\inventory_po_list.html:29
+
+#: .\apps\templates\home\inventory_stockin_order.html:29
+
+#: .\apps\templates\home\inventory_stockin_order.html:68
+
+#: .\apps\templates\home\order-approval-deatils.html:132
+
+#: .\apps\templates\home\order-approval-list.html:42
+
+#: .\apps\templates\home\order-deatils.html:153
+
+#: .\apps\templates\home\order-list.html:50
+
+#: .\apps\templates\home\product-list.html:37
+
+#: .\apps\templates\home\product.html:33
+
+#: .\apps\templates\home\product_details.html:33
+
+msgid "Product ID"
+msgstr "產品 ID"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:55
+
+#: .\apps\templates\home\delivery_details.html:183
+
+#: .\apps\templates\home\delivery_details.html:218
+
+#: .\apps\templates\home\delivery_details.html:304
+
+#: .\apps\templates\home\delivery_details.html:336
+
+#: .\apps\templates\home\instock.html:22
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:39
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:89
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:137
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:185
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:233
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:281
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:329
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:377
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:425
+
+#: .\apps\templates\home\inventory_po.html:28
+
+#: .\apps\templates\home\inventory_po.html:72
+
+#: .\apps\templates\home\inventory_po_details.html:30
+
+#: .\apps\templates\home\inventory_po_list.html:30
+
+#: .\apps\templates\home\inventory_stockin_order.html:30
+
+#: .\apps\templates\home\inventory_stockin_order.html:69
+
+#: .\apps\templates\home\order-approval-deatils.html:133
+
+#: .\apps\templates\home\order-approval-list.html:43
+
+#: .\apps\templates\home\order-deatils.html:154
+
+#: .\apps\templates\home\order-list.html:51
+
+#: .\apps\templates\home\order.html:150 .\apps\templates\home\order.html:186
+
+#: .\apps\templates\home\ordercart.html:46
+
+#: .\apps\templates\home\orderconfirmation.html:22
+
+#: .\apps\templates\home\orderconfirmation.html:54
+
+#: .\apps\templates\home\orderold.html:59
+
+#: .\apps\templates\home\purchase-deatils.html:22
+
+#: .\apps\templates\home\purchase.html:63
+
+#: .\apps\templates\home\quotation-deatils.html:29
+
+#: .\apps\templates\home\quotation-update.html:29
+
+#: .\apps\templates\home\quotation.html:77
+
+#: .\apps\templates\home\quotationtopurchase.html:21
+
+msgid "Product Name"
+msgstr "產品名稱"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:56
+
+#: .\apps\templates\home\delivery_details.html:184
+
+#: .\apps\templates\home\delivery_details.html:219
+
+#: .\apps\templates\home\delivery_details.html:305
+
+#: .\apps\templates\home\delivery_details.html:337
+
+#: .\apps\templates\home\instock.html:23
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:49
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:99
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:147
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:195
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:243
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:291
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:339
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:387
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:435
+
+#: .\apps\templates\home\inventory_po.html:29
+
+#: .\apps\templates\home\inventory_po.html:73
+
+#: .\apps\templates\home\inventory_po_details.html:31
+
+#: .\apps\templates\home\inventory_po_list.html:31
+
+#: .\apps\templates\home\inventory_stockin_order.html:31
+
+#: .\apps\templates\home\inventory_stockin_order.html:70
+
+#: .\apps\templates\home\order-approval-deatils.html:134
+
+#: .\apps\templates\home\order-deatils.html:155
+
+#: .\apps\templates\home\order.html:151 .\apps\templates\home\order.html:187
+
+#: .\apps\templates\home\ordercart.html:47
+
+#: .\apps\templates\home\orderconfirmation.html:23
+
+#: .\apps\templates\home\orderconfirmation.html:55
+
+#: .\apps\templates\home\orderold.html:60
+
+#: .\apps\templates\home\product-list.html:39
+
+#: .\apps\templates\home\product.html:69
+
+#: .\apps\templates\home\product_details.html:65
+
+#: .\apps\templates\home\purchase-deatils.html:23
+
+#: .\apps\templates\home\quotation-deatils.html:30
+
+#: .\apps\templates\home\quotation-update.html:30
+
+msgid "Product English Name"
+msgstr "產品英文名稱"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:57
+
+#: .\apps\templates\home\delivery_details.html:185
+
+#: .\apps\templates\home\delivery_details.html:220
+
+#: .\apps\templates\home\delivery_details.html:306
+
+#: .\apps\templates\home\delivery_details.html:338
+
+#: .\apps\templates\home\inventory-stockin-list.html:50
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:66
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:115
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:163
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:211
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:259
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:307
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:355
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:403
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:451
+
+#: .\apps\templates\home\inventory_po.html:80
+
+#: .\apps\templates\home\inventory_po_details.html:39
+
+#: .\apps\templates\home\order-approval-deatils.html:135
+
+#: .\apps\templates\home\order-approval-list.html:44
+
+#: .\apps\templates\home\order-deatils.html:156
+
+#: .\apps\templates\home\order-list.html:52
+
+#: .\apps\templates\home\supplier-list.html:44
+
+#: .\apps\templates\home\supplier.html:99
+
+#: .\apps\templates\home\supplier_details.html:96
+
+msgid "Remark"
+msgstr "備註"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:59
+
+#: .\apps\templates\home\delivery_details.html:187
+
+#: .\apps\templates\home\delivery_details.html:222
+
+#: .\apps\templates\home\delivery_details.html:308
+
+#: .\apps\templates\home\delivery_details.html:341
+
+#: .\apps\templates\home\instock-details.html:32
+
+#: .\apps\templates\home\instock.html:29
+
+#: .\apps\templates\home\orderconfirmation.html:27
+
+msgid "Delivered Quantity"
+msgstr "已出貨數量"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:60
+
+#: .\apps\templates\home\delivery_details.html:188
+
+msgid "After Sales Arrangement"
+msgstr "售後安排"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:63
+
+#: .\apps\templates\home\delivery_details.html:191
+
+msgid "Failed to Delivery Quantity"
+msgstr "未能交付數量"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:64
+
+#: .\apps\templates\home\delivery_details.html:192
+
+msgid "Redelivery Quantity"
+msgstr "重新出貨數量"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:65
+
+#: .\apps\templates\home\delivery_details.html:193
+
+msgid "Overdelivery Quantity"
+msgstr "超交數量"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:66
+
+#: .\apps\templates\home\delivery_details.html:194
+
+msgid "Return Quantity"
+msgstr "退貨數量"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:91
+
+#: .\apps\templates\home\delivery_details.html:132
+
+#: .\apps\templates\home\delivery_details.html:369
+
+msgid "Delivery Note"
+msgstr "送貨單"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:96
+
+#: .\apps\templates\home\delivery_details.html:374
+
+msgid "Copy"
+msgstr "複製"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:99
+
+#: .\apps\templates\home\delivery_details.html:145
+
+#: .\apps\templates\home\delivery_details.html:272
+
+#: .\apps\templates\home\delivery_details.html:377
+
+msgid "Warehouse Comment"
+msgstr "倉庫備註"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:114
+
+#: .\apps\templates\home\delivery-list.html:59
+
+#: .\apps\templates\home\delivery_details.html:155
+
+#: .\apps\templates\home\delivery_details.html:280
+
+#: .\apps\templates\home\delivery_details.html:392
+
+#: .\apps\templates\home\order-approval-deatils.html:115
+
+#: .\apps\templates\home\order-deatils.html:136
+
+#: .\apps\templates\home\order.html:118
+
+msgid "Delivery Method"
+msgstr "送貨方式"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:118
+
+#: .\apps\templates\home\delivery-list.html:60
+
+#: .\apps\templates\home\delivery_details.html:82
+
+#: .\apps\templates\home\delivery_details.html:149
+
+#: .\apps\templates\home\delivery_details.html:276
+
+#: .\apps\templates\home\delivery_details.html:396
+
+#: .\apps\templates\home\inventory_po_details.html:74
+
+#: .\apps\templates\home\order.html:265 .\apps\templates\home\orderold.html:94
+
+msgid "Delivery Fee"
+msgstr "運費"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:132
+
+#: .\apps\templates\home\delivery_details.html:411
+
+msgid "Deliver & Print"
+msgstr "出貨及列印"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:135
+
+#: .\apps\templates\home\category.html:58
+
+#: .\apps\templates\home\customer.html:221
+
+#: .\apps\templates\home\customer_details.html:235
+
+#: .\apps\templates\home\delivery_details.html:415
+
+#: .\apps\templates\home\delivery_details.html:451
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:464
+
+#: .\apps\templates\home\inventory_po.html:125
+
+#: .\apps\templates\home\inventory_po_details.html:102
+
+#: .\apps\templates\home\inventory_stockin_order.html:91
+
+#: .\apps\templates\home\order-deatils.html:220
+
+#: .\apps\templates\home\order.html:326 .\apps\templates\home\product.html:296
+
+#: .\apps\templates\home\product_details.html:299
+
+#: .\apps\templates\home\quotation-update.html:53
+
+#: .\apps\templates\home\supplier.html:158
+
+#: .\apps\templates\home\supplier_details.html:166
+
+#: .\apps\templates\home\system_parameter.html:94
+
+#: .\apps\templates\home\transaction_form.html:105
+
+#: .\apps\templates\home\transaction_form.html:108
+
+#: msgid "Save"
+#: msgstr "儲存"
+
+
+#: .\apps\templates\home\after_sales_delivery_details.html:138
+
+#: .\apps\templates\home\customer.html:227
+
+#: .\apps\templates\home\customer_details.html:248
+
+#: .\apps\templates\home\delivery_details.html:418
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:470
+
+#: .\apps\templates\home\inventory_po.html:131
+
+#: .\apps\templates\home\inventory_po_details.html:110
+
+#: .\apps\templates\home\inventory_stockin_order.html:97
+
+#: .\apps\templates\home\order.html:329 .\apps\templates\home\product.html:302
+
+#: .\apps\templates\home\product_details.html:312
+
+#: .\apps\templates\home\supplier.html:164
+
+#: .\apps\templates\home\supplier_details.html:179
+
+msgid "Exit"
+msgstr "離開"
+
+
+#: .\apps\templates\home\category.html:3
+
+msgid "Category - Subcategory"
+msgstr "類別 - 子類別"
+
+
+#: .\apps\templates\home\category.html:25
+
+msgid "Add Category - Subcategory"
+msgstr "新增類別 - 子類別"
+
+
+#: .\apps\templates\home\category.html:33
+
+#: .\apps\templates\home\category.html:73
+
+#: .\apps\templates\home\customer-detail.html:21
+
+#: .\apps\templates\home\customer-detail.html:27
+
+#: .\apps\templates\home\customer_old.html:24
+
+#: .\apps\templates\home\instock-details.html:22
+
+#: .\apps\templates\home\inventory-list.html:41
+
+#: .\apps\templates\home\inventory-stockin-list.html:44
+
+#: .\apps\templates\home\ordercart.html:73
+
+#: .\apps\templates\home\orderold.html:24
+
+#: .\apps\templates\home\product-detail.html:25
+
+#: .\apps\templates\home\purchase.html:25
+
+#: .\apps\templates\home\quotation.html:36
+
+#: .\apps\templates\home\supplier-detail.html:21
+
+#: .\apps\templates\home\supplier-detail.html:27
+
+#: .\apps\templates\home\supplier_old.html:23
+
+msgid "Name"
+msgstr "姓名"
+
+
+#: .\apps\templates\home\category.html:41
+
+#: .\apps\templates\home\category.html:74
+
+#: .\apps\templates\home\inventory-stockin-list.html:40
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:27
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:77
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:125
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:173
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:221
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:269
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:317
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:365
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:413
+
+#: .\apps\templates\home\order-approval-deatils.html:26
+
+#: .\apps\templates\home\order-approval-list.html:53
+
+#: .\apps\templates\home\order-deatils.html:26
+
+#: .\apps\templates\home\order-list.html:61
+
+#: .\apps\templates\home\order.html:131
+
+#: .\apps\templates\home\transaction_detail.html:48
+
+#: .\apps\templates\home\transaction_list.html:62
+
+#: .\apps\templates\home\voucher-details.html:162
+
+#: msgid "Type"
+#: msgstr "類型"
+
+
+#: .\apps\templates\home\category.html:49
+
+#: .\apps\templates\home\category.html:75
+
+msgid "Parent"
+msgstr "父母"
+
+
+#: .\apps\templates\home\category.html:65
+
+msgid "Category - Subcategory List"
+msgstr "類別 - 子類別列表"
+
+
+#: .\apps\templates\home\category.html:72
+
+#: .\apps\templates\home\customer-list.html:42
+
+#: .\apps\templates\home\customer.html:26
+
+#: .\apps\templates\home\customer_details.html:27
+
+#: .\apps\templates\home\inventory-list.html:39
+
+#: .\apps\templates\home\product-list.html:36
+
+#: .\apps\templates\home\supplier-list.html:34
+
+#: .\apps\templates\home\supplier.html:24
+
+#: .\apps\templates\home\supplier_details.html:25
+
+#: .\apps\templates\home\voucher-details.html:210
+
+#: .\apps\templates\home\voucher-list.html:34
+
+msgid "Created Date"
+msgstr "建立日期"
+
+
+#: .\apps\templates\home\category.html:77
+
+#: .\apps\templates\home\customer-detail.html:100
+
+#: .\apps\templates\home\customer-list.html:72
+
+#: .\apps\templates\home\delivery-list.html:62
+
+#: .\apps\templates\home\instock-list.html:30
+
+#: .\apps\templates\home\order-approval-list.html:54
+
+#: .\apps\templates\home\order-deatils.html:163
+
+#: .\apps\templates\home\order-list.html:62
+
+#: .\apps\templates\home\order.html:193 .\apps\templates\home\order.html:240
+
+#: .\apps\templates\home\ordercart.html:78
+
+#: .\apps\templates\home\product-list.html:59
+
+#: .\apps\templates\home\purchase-list.html:37
+
+#: .\apps\templates\home\purchase.html:71
+
+#: .\apps\templates\home\quotation.html:79
+
+#: .\apps\templates\home\quotationtopurchase.html:29
+
+#: .\apps\templates\home\supplier-list.html:56
+
+#: .\apps\templates\home\system_parameter_list.html:31
+
+#: .\apps\templates\home\transaction_list.html:76
+
+#: .\apps\templates\home\voucher-list.html:36
+
+#: .\apps\templates\home\voucher.html:208
+
+#: .\apps\templates\home\voucher.html:358
+
+#: .\apps\templates\includes\navigation.html:293
+
+msgid "Action"
+msgstr "編輯"
+
+
+#: .\apps\templates\home\coupon_form.html:43
+
+#: .\apps\templates\home\coupon_form.html:57
+
+msgid "Create/Edit Coupon"
+msgstr "創建/編輯優惠券"
+
+
+#: .\apps\templates\home\coupon_form.html:69
+
+#: .\apps\templates\home\discount_scheme_form.html:69
+
+#: .\apps\templates\home\promo_code_form.html:69
+
+#: .\apps\templates\home\promotion_form.html:69
+
+msgid "Save"
+msgstr "保存"
+
+
+#: .\apps\templates\home\coupon_form.html:70
+
+#: .\apps\templates\home\discount_scheme_form.html:70
+
+#: .\apps\templates\home\promo_code_form.html:70
+
+#: .\apps\templates\home\promotion_form.html:70
+
+msgid "Cancel"
+msgstr "取消"
+
+
+#: .\apps\templates\home\coupon_list.html:4
+
+#: .\apps\templates\home\coupon_list.html:19
+
+msgid "Coupon List"
+msgstr "優惠券列表"
+
+
+#: .\apps\templates\home\coupon_list.html:20
+
+msgid "Create Coupon"
+msgstr "創建優惠券"
+
+
+#: .\apps\templates\home\coupon_list.html:29
+
+#: .\apps\templates\home\promo_code_list.html:29
+
+msgid "Code"
+msgstr "代碼"
+
+
+#: .\apps\templates\home\coupon_list.html:33
+
+#: .\apps\templates\home\discount_scheme_list.html:32
+
+#: .\apps\templates\home\promo_code_list.html:31
+
+msgid "Validity Period"
+msgstr "有效期"
+
+
+#: .\apps\templates\home\coupon_list.html:34
+
+#: .\apps\templates\home\discount_scheme_list.html:34
+
+#: .\apps\templates\home\promo_code_list.html:32
+
+#: .\apps\templates\home\promotion_list.html:32
+
+msgid "Actions"
+msgstr "操作"
+
+
+#: .\apps\templates\home\coupon_list.html:46
+
+#: .\apps\templates\home\discount_scheme_list.html:46
+
+#: .\apps\templates\home\promo_code_list.html:42
+
+#: .\apps\templates\home\promotion_list.html:42
+
+msgid "Edit"
+msgstr "編輯"
+
+
+#: .\apps\templates\home\coupon_list.html:47
+
+#: .\apps\templates\home\discount_scheme_list.html:47
+
+#: .\apps\templates\home\promo_code_list.html:43
+
+#: .\apps\templates\home\promotion_list.html:43
+
+msgid "Are you sure you want to delete?"
+msgstr "確定要刪除嗎？"
+
+
+#: .\apps\templates\home\coupon_list.html:47
+
+#: .\apps\templates\home\discount_scheme_list.html:47
+
+#: .\apps\templates\home\promo_code_list.html:43
+
+#: .\apps\templates\home\promotion_list.html:43
+
+msgid "Delete"
+msgstr "刪除"
+
+
+#: .\apps\templates\home\coupon_list.html:51
+
+#: .\apps\templates\home\discount_scheme_list.html:51
+
+#: .\apps\templates\home\promo_code_list.html:47
+
+#: .\apps\templates\home\promotion_list.html:47
+
+msgid "No Data Available"
+msgstr "暫無數據"
+
+
+#: .\apps\templates\home\customer-detail.html:1
+
+#: .\apps\templates\home\customer-detail.html:12
+
+msgid "Customer Details"
+msgstr "客戶詳細信息"
+
+
+#: .\apps\templates\home\customer-detail.html:22
+
+#: .\apps\templates\home\product-detail.html:26
+
+#: .\apps\templates\home\supplier-detail.html:22
+
+#: .\apps\templates\home\system_parameter.html:56
+
+#: .\apps\templates\home\system_parameter.html:65
+
+#: .\apps\templates\home\system_parameter.html:70
+
+#: .\apps\templates\home\system_parameter.html:75
+
+#: .\apps\templates\home\system_parameter.html:80
+
+#: .\apps\templates\home\system_parameter.html:85
+
+#: .\apps\templates\home\system_parameter_list.html:29
+
+msgid "Value"
+msgstr "價值"
+
+
+#: .\apps\templates\home\customer-detail.html:31
+
+#: .\apps\templates\home\customer_old.html:34
+
+#: .\apps\templates\home\instock-details.html:23
+
+#: .\apps\templates\home\inventory-list.html:42
+
+#: .\apps\templates\home\inventory-stockin-list.html:45
+
+#: .\apps\templates\home\ordercart.html:74
+
+#: .\apps\templates\home\purchase-list.html:29
+
+#: .\apps\templates\home\purchase.html:26
+
+#: .\apps\templates\home\quotation-list.html:33
+
+#: .\apps\templates\home\quotation.html:37
+
+#: .\apps\templates\home\supplier-detail.html:31
+
+#: .\apps\templates\home\supplier_old.html:33
+
+#: .\apps\templates\home\voucher-details.html:42
+
+#: .\apps\templates\home\voucher-details.html:144
+
+#: .\apps\templates\home\voucher-list.html:29
+
+msgid "English Name"
+msgstr "英文名"
+
+
+#: .\apps\templates\home\customer-detail.html:35
+
+#: .\apps\templates\home\customer-list.html:45
+
+#: .\apps\templates\home\customer.html:34
+
+#: .\apps\templates\home\customer_details.html:35
+
+#: .\apps\templates\home\customer_old.html:44
+
+#: .\apps\templates\home\delivery-list.html:48
+
+#: .\apps\templates\home\delivery_details.html:35
+
+#: .\apps\templates\home\order-approval-deatils.html:42
+
+#: .\apps\templates\home\order-approval-list.html:38
+
+#: .\apps\templates\home\order-deatils.html:49
+
+#: .\apps\templates\home\order-list.html:47 .\apps\templates\home\order.html:36
+
+#: .\apps\templates\home\order.html:78 .\apps\templates\home\orderold.html:28
+
+#: .\apps\templates\home\supplier-list.html:35
+
+#: .\apps\templates\home\supplier.html:73
+
+#: .\apps\templates\home\supplier_details.html:71
+
+msgid "Company Name"
+msgstr "公司名稱"
+
+
+#: .\apps\templates\home\customer-detail.html:39
+
+#: .\apps\templates\home\customer-list.html:46
+
+msgid "Company English Name"
+msgstr "公司英文名稱"
+
+
+#: .\apps\templates\home\customer-detail.html:43
+
+#: .\apps\templates\home\customer_old.html:73
+
+msgid "Industry Category"
+msgstr "行業類別"
+
+
+#: .\apps\templates\home\customer-detail.html:47
+
+#: .\apps\templates\home\customer_old.html:64
+
+msgid "Contact 1"
+msgstr "聯繫 1"
+
+
+#: .\apps\templates\home\customer-detail.html:51
+
+#: .\apps\templates\home\customer_old.html:79
+
+msgid "Contact 2"
+msgstr "聯繫 2"
+
+
+#: .\apps\templates\home\customer-detail.html:55
+
+msgid "Area Code"
+msgstr "區號"
+
+
+#: .\apps\templates\home\customer-detail.html:59
+
+#: .\apps\templates\home\customer_old.html:94
+
+#: .\apps\templates\home\order.html:37 .\apps\templates\home\orderold.html:32
+
+#: .\apps\templates\home\supplier-detail.html:39
+
+#: .\apps\templates\home\supplier_old.html:53
+
+msgid "Phone Number"
+msgstr "電話號碼"
+
+
+#: .\apps\templates\home\customer-detail.html:63
+
+#: .\apps\templates\home\customer_old.html:103
+
+msgid "Phone Number 2"
+msgstr "電話號碼 2"
+
+
+#: .\apps\templates\home\customer-detail.html:67
+
+#: .\apps\templates\home\customer-list.html:70
+
+#: .\apps\templates\home\customer.html:55
+
+#: .\apps\templates\home\customer_details.html:56
+
+#: .\apps\templates\home\customer_old.html:123
+
+#: .\apps\templates\home\orderold.html:36
+
+#: .\apps\templates\home\supplier-detail.html:43
+
+#: .\apps\templates\home\supplier-list.html:48
+
+#: .\apps\templates\home\supplier.html:135
+
+#: .\apps\templates\home\supplier_details.html:144
+
+#: .\apps\templates\home\supplier_old.html:62
+
+msgid "Email"
+msgstr "電郵"
+
+
+#: .\apps\templates\home\customer-detail.html:71
+
+#: .\apps\templates\home\customer_old.html:132
+
+msgid "URL"
+msgstr "網址"
+
+
+#: .\apps\templates\home\customer-detail.html:75
+
+#: msgid "Landline"
+#: msgstr "電話"
+
+
+#: .\apps\templates\home\customer-detail.html:85
+
+#: .\apps\templates\home\product-detail.html:108
+
+#: .\apps\templates\home\quotation-deatils.html:52
+
+#: .\apps\templates\home\supplier-detail.html:88
+
+msgid "Update"
+msgstr "更新"
+
+
+#: .\apps\templates\home\customer-list.html:1
+
+msgid "Customer List"
+msgstr "客戶清單"
+
+
+#: .\apps\templates\home\customer-list.html:16
+
+msgid "Customers"
+msgstr "客戶"
+
+
+#: .\apps\templates\home\customer-list.html:19
+
+#: .\apps\templates\home\customer.html:3 .\apps\templates\home\customer.html:19
+
+#: .\apps\templates\home\customer_old.html:3
+
+msgid "Add Customer"
+msgstr "新增客戶"
+
+
+#: .\apps\templates\home\customer-list.html:22
+
+#: .\apps\templates\home\delivery-list.html:23
+
+#: .\apps\templates\home\inventory-list.html:28
+
+#: .\apps\templates\home\inventory-stockin-list.html:28
+
+#: .\apps\templates\home\order-list.html:22
+
+#: .\apps\templates\home\product-list.html:25
+
+#: .\apps\templates\home\supplier-list.html:23
+
+#: .\apps\templates\home\transaction_list.html:25
+
+msgid "Export"
+msgstr "導出"
+
+
+#: .\apps\templates\home\customer-list.html:23
+
+#: .\apps\templates\home\customer-list.html:154
+
+#: .\apps\templates\home\delivery-list.html:24
+
+#: .\apps\templates\home\inventory-list.html:29
+
+#: .\apps\templates\home\inventory-stockin-list.html:29
+
+#: .\apps\templates\home\order-list.html:23
+
+#: .\apps\templates\home\order-list.html:133
+
+#: .\apps\templates\home\product-list.html:26
+
+#: .\apps\templates\home\product-list.html:134
+
+#: .\apps\templates\home\supplier-list.html:24
+
+#: .\apps\templates\home\supplier-list.html:133
+
+#: .\apps\templates\home\transaction_list.html:23
+
+#: .\apps\templates\home\transaction_list.html:153
+
+msgid "Import"
+msgstr "導入"
+
+
+#: .\apps\templates\home\customer-list.html:44
+
+#: .\apps\templates\home\customer_old.html:54
+
+msgid "Customer English Name"
+msgstr "客戶英文名稱"
+
+
+#: .\apps\templates\home\customer-list.html:47
+
+#: .\apps\templates\home\supplier-list.html:38
+
+#: .\apps\templates\home\supplier.html:86
+
+#: .\apps\templates\home\supplier_details.html:84
+
+msgid "Contact Person 1"
+msgstr "聯絡人 1"
+
+
+#: .\apps\templates\home\customer-list.html:48
+
+#: .\apps\templates\home\customer.html:38
+
+#: .\apps\templates\home\customer_details.html:39
+
+#: .\apps\templates\home\supplier-list.html:39
+
+#: .\apps\templates\home\supplier.html:131
+
+#: .\apps\templates\home\supplier_details.html:140
+
+msgid "Phone 1"
+msgstr "電話 1"
+
+
+#: .\apps\templates\home\customer-list.html:49
+
+#: .\apps\templates\home\supplier-list.html:46
+
+#: .\apps\templates\home\supplier.html:52
+
+#: .\apps\templates\home\supplier_details.html:52
+
+msgid "Contact Person 2"
+msgstr "聯絡人 2"
+
+
+#: .\apps\templates\home\customer-list.html:50
+
+#: .\apps\templates\home\customer.html:166
+
+#: .\apps\templates\home\customer_details.html:180
+
+#: .\apps\templates\home\supplier-list.html:47
+
+#: .\apps\templates\home\supplier.html:90
+
+#: .\apps\templates\home\supplier_details.html:88
+
+msgid "Phone 2"
+msgstr "電話 2"
+
+
+#: .\apps\templates\home\customer-list.html:51
+
+#: .\apps\templates\home\customer.html:42
+
+#: .\apps\templates\home\customer_details.html:43
+
+#: .\apps\templates\home\customer_old.html:141
+
+msgid "Landline"
+msgstr "電話"
+
+
+#: .\apps\templates\home\customer-list.html:52
+
+#: .\apps\templates\home\customer.html:170
+
+#: .\apps\templates\home\customer_details.html:184
+
+msgid "18 District in HK"
+msgstr "香港18區"
+
+
+#: .\apps\templates\home\customer-list.html:53
+
+msgid "Main Address"
+msgstr "主要地址"
+
+
+#: .\apps\templates\home\customer-list.html:54
+
+msgid "Address 2"
+msgstr "地址2"
+
+
+#: .\apps\templates\home\customer-list.html:55
+
+msgid "Address 3"
+msgstr "地址3"
+
+
+#: .\apps\templates\home\customer-list.html:56
+
+#: .\apps\templates\home\customer.html:206
+
+#: .\apps\templates\home\customer_details.html:220
+
+#: .\apps\templates\home\customer_old.html:159
+
+#: .\apps\templates\home\delivery_details.html:92
+
+#: .\apps\templates\home\delivery_details.html:143
+
+#: .\apps\templates\home\delivery_details.html:270
+
+#: .\apps\templates\home\order-approval-deatils.html:50
+
+#: .\apps\templates\home\order-deatils.html:57
+
+#: .\apps\templates\home\order.html:123
+
+msgid "Delivery Comments"
+msgstr "送貨備註"
+
+
+#: .\apps\templates\home\customer-list.html:57
+
+#: .\apps\templates\home\customer.html:210
+
+#: .\apps\templates\home\customer_details.html:224
+
+#: .\apps\templates\home\customer_old.html:150
+
+#: .\apps\templates\home\order.html:100
+
+msgid "Customer Comments"
+msgstr "客戶評價"
+
+
+#: .\apps\templates\home\customer-list.html:58
+
+#: .\apps\templates\home\customer.html:59
+
+#: .\apps\templates\home\customer_details.html:60
+
+msgid "Salesperson"
+msgstr "銷售員"
+
+
+#: .\apps\templates\home\customer-list.html:59
+
+#: .\apps\templates\home\customer.html:138
+
+#: .\apps\templates\home\customer_details.html:151
+
+#: .\apps\templates\home\supplier-list.html:42
+
+#: .\apps\templates\home\supplier.html:94
+
+#: .\apps\templates\home\supplier_details.html:92
+
+msgid "No. of Order"
+msgstr "訂單數量"
+
+
+#: .\apps\templates\home\customer-list.html:60
+
+#: .\apps\templates\home\customer.html:77
+
+#: .\apps\templates\home\customer_details.html:78
+
+msgid "Accumulated Sales (HKD)"
+msgstr "累計銷售額（港幣）"
+
+
+#: .\apps\templates\home\customer-list.html:61
+
+#: .\apps\templates\home\customer.html:69
+
+#: .\apps\templates\home\customer_details.html:70
+
+msgid "First Order Date"
+msgstr "首次訂單日期"
+
+
+#: .\apps\templates\home\customer-list.html:62
+
+#: .\apps\templates\home\customer.html:73
+
+#: .\apps\templates\home\customer_details.html:74
+
+#: .\apps\templates\home\product-list.html:57
+
+#: .\apps\templates\home\product.html:254
+
+#: .\apps\templates\home\product_details.html:257
+
+msgid "Last Order Date"
+msgstr "最後訂單日期"
+
+
+#: .\apps\templates\home\customer-list.html:65
+
+#: .\apps\templates\home\customer.html:149
+
+#: .\apps\templates\home\customer_details.html:163
+
+msgid "Industry Type"
+msgstr "行業類型"
+
+
+#: .\apps\templates\home\customer-list.html:66
+
+#: .\apps\templates\home\customer.html:122
+
+#: .\apps\templates\home\customer_details.html:123
+
+msgid "Source"
+msgstr "來源"
+
+
+#: .\apps\templates\home\customer-list.html:67
+
+#: .\apps\templates\home\customer.html:104
+
+#: .\apps\templates\home\customer_details.html:105
+
+msgid "Country/District"
+msgstr "國家/地區"
+
+
+#: .\apps\templates\home\customer-list.html:68
+
+#: .\apps\templates\home\customer.html:46
+
+#: .\apps\templates\home\customer_details.html:47
+
+#: .\apps\templates\home\supplier-list.html:52
+
+#: .\apps\templates\home\supplier.html:122
+
+#: .\apps\templates\home\supplier_details.html:131
+
+msgid "Prefix"
+msgstr "區號"
+
+
+#: .\apps\templates\home\customer-list.html:71
+
+msgid "Name Card Preview"
+msgstr "片片預覽"
+
+
+#: .\apps\templates\home\customer-list.html:141
+
+msgid "Import Customers"
+msgstr "導入客戶"
+
+
+#: .\apps\templates\home\customer-list.html:155
+
+#: .\apps\templates\home\order-list.html:134
+
+#: .\apps\templates\home\product-list.html:135
+
+#: .\apps\templates\home\supplier-list.html:134
+
+msgid "Importing..."
+msgstr "導入中..."
+
+
+#: .\apps\templates\home\customer.html:88
+
+#: .\apps\templates\home\customer_details.html:89
+
+msgid "Customer Eng Name"
+msgstr "客戶英文姓名"
+
+
+#: .\apps\templates\home\customer.html:92
+
+#: .\apps\templates\home\customer_details.html:93
+
+msgid "Company Eng Name"
+msgstr "公司英文名稱"
+
+
+#: .\apps\templates\home\customer.html:96
+
+#: .\apps\templates\home\customer_details.html:97
+
+msgid "Contact Person 2 (English)"
+msgstr "聯絡人2（英文）"
+
+
+#: .\apps\templates\home\customer.html:100
+
+#: .\apps\templates\home\customer_details.html:101
+
+msgid "Contact Person 2 (Chinese)"
+msgstr "聯絡人2（中文）"
+
+
+#: .\apps\templates\home\customer.html:131
+
+#: .\apps\templates\home\customer_details.html:132
+
+#: .\apps\templates\home\supplier-list.html:54
+
+#: .\apps\templates\home\supplier.html:115
+
+#: .\apps\templates\home\supplier_details.html:112
+
+msgid "Name Card"
+msgstr "卡片"
+
+
+#: .\apps\templates\home\customer.html:158
+
+#: .\apps\templates\home\customer_details.html:172
+
+msgid "Contact Person 1 (English)"
+msgstr "聯絡人1（英文）"
+
+
+#: .\apps\templates\home\customer.html:162
+
+#: .\apps\templates\home\customer_details.html:176
+
+msgid "Contact Person 1 (Chinese)"
+msgstr "聯絡人1（中文）"
+
+
+#: .\apps\templates\home\customer.html:179
+
+#: .\apps\templates\home\customer_details.html:193
+
+msgid "Main Address (English)"
+msgstr "主要地址（英文）"
+
+
+#: .\apps\templates\home\customer.html:183
+
+#: .\apps\templates\home\customer_details.html:197
+
+msgid "Main Address (Chinese)"
+msgstr "主要地址（中文）"
+
+
+#: .\apps\templates\home\customer.html:187
+
+#: .\apps\templates\home\customer_details.html:201
+
+msgid "Address 2 (English)"
+msgstr "地址2（英文）"
+
+
+#: .\apps\templates\home\customer.html:191
+
+#: .\apps\templates\home\customer_details.html:205
+
+msgid "Address 2 (Chinese)"
+msgstr "地址2（中文）"
+
+
+#: .\apps\templates\home\customer.html:195
+
+#: .\apps\templates\home\customer_details.html:209
+
+msgid "Address 3 (English)"
+msgstr "地址3（英文）"
+
+
+#: .\apps\templates\home\customer.html:199
+
+#: .\apps\templates\home\customer_details.html:213
+
+msgid "Address 3 (Chinese)"
+msgstr "地址3（中文）"
+
+
+#: .\apps\templates\home\customer.html:224
+
+#: .\apps\templates\home\customer_details.html:239
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:467
+
+#: .\apps\templates\home\inventory_po.html:128
+
+#: .\apps\templates\home\inventory_po_details.html:106
+
+#: .\apps\templates\home\inventory_stockin_order.html:94
+
+#: .\apps\templates\home\product.html:299
+
+#: .\apps\templates\home\product_details.html:303
+
+#: .\apps\templates\home\supplier.html:161
+
+#: .\apps\templates\home\supplier_details.html:170
+
+msgid "Create"
+msgstr "創建"
+
+
+#: .\apps\templates\home\customer_details.html:3
+
+#: .\apps\templates\home\customer_details.html:20
+
+msgid "Update Customer"
+msgstr "更新客戶"
+
+
+#: .\apps\templates\home\customer_details.html:244
+
+#: .\apps\templates\home\inventory_po.html:81
+
+#: .\apps\templates\home\product_details.html:308
+
+#: .\apps\templates\home\supplier_details.html:175
+
+#: .\apps\templates\home\transaction_list.html:115
+
+#: msgid "Delete"
+#: msgstr "刪除"
+
+
+#: .\apps\templates\home\customer_old.html:16
+
+#: .\apps\templates\home\ordercart.html:29
+
+#: .\apps\templates\home\orderold.html:17
+
+#: .\apps\templates\includes\sidebar.html:73
+
+msgid "Customer"
+msgstr "客戶"
+
+
+#: .\apps\templates\home\customer_old.html:88
+
+msgid "Country Code"
+msgstr "國家/地區代碼"
+
+
+#: .\apps\templates\home\delivery-list.html:3
+
+#: .\apps\templates\home\delivery-list.html:19
+
+#: .\apps\templates\home\instock-list.html:15
+
+msgid "Delivery List"
+msgstr "送貨清單"
+
+
+#: .\apps\templates\home\delivery-list.html:22
+
+msgid "Export Breakdown"
+msgstr "導出明細"
+
+
+#: .\apps\templates\home\delivery-list.html:44
+
+msgid "Invoice Date"
+msgstr "發票日期"
+
+
+#: .\apps\templates\home\delivery-list.html:49
+
+#: .\apps\templates\home\delivery_details.html:39
+
+#: .\apps\templates\home\order-approval-deatils.html:28
+
+#: .\apps\templates\home\order-approval-list.html:41
+
+#: .\apps\templates\home\order-deatils.html:28
+
+#: .\apps\templates\home\order-list.html:49
+
+msgid "Phone"
+msgstr "電話"
+
+
+#: .\apps\templates\home\delivery-list.html:50
+
+#: .\apps\templates\home\delivery_details.html:88
+
+msgid "Delivery Area"
+msgstr "送貨區域"
+
+
+#: .\apps\templates\home\delivery-list.html:51
+
+#: .\apps\templates\home\delivery_details.html:96
+
+#: .\apps\templates\home\delivery_details.html:167
+
+#: .\apps\templates\home\delivery_details.html:282
+
+#: .\apps\templates\home\order-approval-deatils.html:32
+
+#: .\apps\templates\home\order-deatils.html:32
+
+#: .\apps\templates\home\order.html:70
+
+msgid "Delivery Address"
+msgstr "送貨地址"
+
+
+#: .\apps\templates\home\delivery-list.html:52
+
+#: .\apps\templates\home\delivery_details.html:339
+
+#: .\apps\templates\home\instock-details.html:27
+
+#: .\apps\templates\home\instock.html:25
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:55
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:105
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:153
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:201
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:249
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:297
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:345
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:393
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:441
+
+#: .\apps\templates\home\inventory_po.html:78
+
+#: .\apps\templates\home\inventory_po_details.html:33
+
+#: .\apps\templates\home\order-approval-deatils.html:136
+
+#: .\apps\templates\home\order-approval-list.html:45
+
+#: .\apps\templates\home\order-deatils.html:157
+
+#: .\apps\templates\home\order-list.html:53
+
+#: .\apps\templates\home\order.html:191 .\apps\templates\home\ordercart.html:76
+
+#: .\apps\templates\home\orderconfirmation.html:24
+
+#: .\apps\templates\home\orderold.html:62
+
+#: .\apps\templates\home\purchase-deatils.html:27
+
+#: .\apps\templates\home\purchase.html:64
+
+#: .\apps\templates\home\quotation-deatils.html:34
+
+#: .\apps\templates\home\quotation-update.html:32
+
+#: .\apps\templates\home\quotation.html:78
+
+#: .\apps\templates\home\quotationtopurchase.html:22
+
+#: .\apps\templates\home\voucher-details.html:86
+
+#: .\apps\templates\home\voucher.html:237
+
+msgid "Quantity"
+msgstr "數量"
+
+
+#: .\apps\templates\home\delivery-list.html:53
+
+msgid "Delivery Comment"
+msgstr "送貨備註"
+
+
+#: .\apps\templates\home\delivery-list.html:56
+
+#: .\apps\templates\home\delivery_details.html:47
+
+#: .\apps\templates\home\order-approval-deatils.html:111
+
+#: .\apps\templates\home\order-deatils.html:132
+
+msgid "Payment Date"
+msgstr "付款日期"
+
+
+#: .\apps\templates\home\delivery-list.html:57
+
+#: .\apps\templates\home\delivery_details.html:65
+
+#: .\apps\templates\home\order-approval-deatils.html:87
+
+#: .\apps\templates\home\order-approval-deatils.html:139
+
+#: .\apps\templates\home\order-deatils.html:103
+
+#: .\apps\templates\home\order-deatils.html:160
+
+msgid "Delivery Status"
+msgstr "出貨狀態"
+
+
+#: .\apps\templates\home\delivery-list.html:61
+
+#: .\apps\templates\home\order-approval-list.html:52
+
+#: .\apps\templates\home\order-list.html:3
+
+#: .\apps\templates\home\order-list.html:60
+
+msgid "Sales"
+msgstr "銷售量"
+
+
+#: .\apps\templates\home\delivery-list.html:65
+
+msgid "Inform Customer"
+msgstr "通知客戶"
+
+
+#: .\apps\templates\home\delivery_details.html:3
+
+#: .\apps\templates\home\delivery_details.html:15
+
+msgid "Delivery Details"
+msgstr "送貨詳情"
+
+
+#: .\apps\templates\home\delivery_details.html:15
+
+msgid "Partial Delivered"
+msgstr "部分送貨"
+
+
+#: .\apps\templates\home\delivery_details.html:20
+
+#: .\apps\templates\home\order-approval-deatils.html:18
+
+#: .\apps\templates\home\order-deatils.html:18
+
+msgid "General Information"
+msgstr "基本資訊"
+
+
+#: .\apps\templates\home\delivery_details.html:29
+
+#: .\apps\templates\home\order-approval-deatils.html:38
+
+#: .\apps\templates\home\order-approval-list.html:37
+
+#: .\apps\templates\home\order-deatils.html:45
+
+#: .\apps\templates\home\order-list.html:46 .\apps\templates\home\order.html:61
+
+msgid "Order Date"
+msgstr "訂單日期"
+
+
+#: .\apps\templates\home\delivery_details.html:60
+
+msgid "Basic Delivery Information"
+msgstr "基本送貨資料"
+
+
+#: .\apps\templates\home\delivery_details.html:109
+
+msgid "Delivery Information"
+msgstr "送貨資料"
+
+
+#: .\apps\templates\home\delivery_details.html:129
+
+#: .\apps\templates\home\delivery_details.html:431
+
+msgid "Cancel Delivery"
+msgstr "取消送貨"
+
+
+#: .\apps\templates\home\delivery_details.html:141
+
+#: .\apps\templates\home\delivery_details.html:268
+
+msgid "Handle By"
+msgstr "處理方式"
+
+
+#: .\apps\templates\home\delivery_details.html:246
+
+msgid "Cancelled Delivery Information"
+msgstr "已取消的送貨信息"
+
+
+#: .\apps\templates\home\delivery_details.html:286
+
+msgid "Delivered Order Status"
+msgstr "已送貨訂單狀態"
+
+
+#: .\apps\templates\home\delivery_details.html:288
+
+msgid "Cancel Delivery Reason"
+msgstr "取消送貨的原因"
+
+
+#: .\apps\templates\home\delivery_details.html:330
+
+#: .\apps\templates\home\import.html:1
+
+#: .\apps\templates\home\instock-details.html:16
+
+#: .\apps\templates\home\instock.html:16
+
+#: .\apps\templates\home\inventory_po.html:23
+
+#: .\apps\templates\home\order-approval-deatils.html:127
+
+#: .\apps\templates\home\order-deatils.html:148
+
+#: .\apps\templates\home\order.html:143 .\apps\templates\home\ordercart.html:41
+
+#: .\apps\templates\home\orderconfirmation.html:16
+
+#: .\apps\templates\home\orderold.html:53
+
+#: .\apps\templates\home\product-list.html:19
+
+#: .\apps\templates\home\purchase-deatils.html:16
+
+#: .\apps\templates\home\purchase.html:16
+
+#: .\apps\templates\home\quotation-deatils.html:23
+
+#: .\apps\templates\home\quotation-update.html:23
+
+#: .\apps\templates\home\quotation.html:27
+
+#: .\apps\templates\home\quotationtopurchase.html:16
+
+#: .\apps\templates\home\voucher.html:167
+
+#: .\apps\templates\home\voucher.html:317
+
+msgid "Product List"
+msgstr "產品列表"
+
+
+#: .\apps\templates\home\delivery_details.html:333
+
+msgid "Select All"
+msgstr "選擇全部"
+
+
+#: .\apps\templates\home\delivery_details.html:342
+
+#: .\apps\templates\home\order.html:155
+
+msgid "Stock"
+msgstr "庫存"
+
+
+#: .\apps\templates\home\delivery_details.html:343
+
+msgid "Deliver Quantity"
+msgstr "出貨數量"
+
+
+#: .\apps\templates\home\delivery_details.html:344
+
+msgid "Select"
+msgstr "選擇"
+
+
+#: .\apps\templates\home\delivery_details.html:440
+
+msgid "Cancel Reason"
+msgstr "取消原因"
+
+
+#: .\apps\templates\home\delivery_details.html:452
+
+#: .\apps\templates\home\transaction_detail.html:151
+
+#: .\apps\templates\home\transaction_list.html:152
+
+msgid "Close"
+msgstr "關閉"
+
+
+#: .\apps\templates\home\discount_scheme_form.html:43
+
+#: .\apps\templates\home\discount_scheme_form.html:57
+
+msgid "Create/Edit Discount Scheme"
+msgstr "創建/編輯優惠方案"
+
+
+#: .\apps\templates\home\discount_scheme_list.html:4
+
+#: .\apps\templates\home\discount_scheme_list.html:19
+
+msgid "Discount Scheme List"
+msgstr "優惠方案列表"
+
+
+#: .\apps\templates\home\discount_scheme_list.html:20
+
+msgid "Create Discount Scheme"
+msgstr "創建優惠方案"
+
+
+#: .\apps\templates\home\import.html:13
+
+#: .\apps\templates\home\product-list.html:121
+
+msgid "Import Products"
+msgstr "導入產品"
+
+
+#: .\apps\templates\home\instock-details.html:1
+
+#: .\apps\templates\home\instock-details.html:11
+
+msgid "In Stock Details"
+msgstr "庫存詳情"
+
+
+#: .\apps\templates\home\instock-details.html:21
+
+#: .\apps\templates\home\instock.html:21 .\apps\templates\home\order.html:149
+
+#: .\apps\templates\home\order.html:185 .\apps\templates\home\ordercart.html:45
+
+#: .\apps\templates\home\ordercart.html:72
+
+#: .\apps\templates\home\orderconfirmation.html:21
+
+#: .\apps\templates\home\orderconfirmation.html:53
+
+#: .\apps\templates\home\orderold.html:58
+
+#: .\apps\templates\home\product-detail.html:31
+
+#: .\apps\templates\home\purchase-deatils.html:21
+
+#: .\apps\templates\home\purchase.html:24
+
+#: .\apps\templates\home\purchase.html:62
+
+#: .\apps\templates\home\quotation-deatils.html:28
+
+#: .\apps\templates\home\quotation-update.html:28
+
+#: .\apps\templates\home\quotation.html:35
+
+#: .\apps\templates\home\quotation.html:76
+
+#: .\apps\templates\home\quotationtopurchase.html:20
+
+#: .\apps\templates\home\voucher-details.html:30
+
+#: .\apps\templates\home\voucher-details.html:66
+
+#: .\apps\templates\home\voucher.html:171
+
+#: .\apps\templates\home\voucher.html:202
+
+#: .\apps\templates\home\voucher.html:322
+
+#: .\apps\templates\home\voucher.html:355
+
+msgid "Product No"
+msgstr "產品編號"
+
+
+#: .\apps\templates\home\instock-details.html:24
+
+#: .\apps\templates\home\instock.html:24 .\apps\templates\home\product.html:187
+
+#: .\apps\templates\home\product_details.html:190
+
+#: .\apps\templates\home\purchase-deatils.html:24
+
+#: .\apps\templates\home\purchase-list.html:30
+
+#: .\apps\templates\home\purchase.html:27
+
+#: .\apps\templates\home\quotation-deatils.html:31
+
+#: .\apps\templates\home\quotation-list.html:34
+
+#: .\apps\templates\home\quotation-update.html:31
+
+#: .\apps\templates\home\quotation.html:38
+
+#: .\apps\templates\home\voucher-details.html:69
+
+#: .\apps\templates\home\voucher.html:174
+
+#: .\apps\templates\home\voucher.html:325
+
+msgid "Supplier Product Name"
+msgstr "供應商產品名稱"
+
+
+#: .\apps\templates\home\instock-details.html:25
+
+#: .\apps\templates\home\instock-list.html:25
+
+#: .\apps\templates\home\inventory-list.html:54
+
+#: .\apps\templates\home\product.html:181
+
+#: .\apps\templates\home\product_details.html:184
+
+#: .\apps\templates\home\purchase-deatils.html:25
+
+#: .\apps\templates\home\purchase.html:31
+
+#: .\apps\templates\home\quotation-deatils.html:32
+
+#: .\apps\templates\home\quotation-list.html:36
+
+#: .\apps\templates\home\quotation.html:42
+
+msgid "Supplier Name"
+msgstr "供應商名稱"
+
+
+#: .\apps\templates\home\instock-details.html:26
+
+#: .\apps\templates\home\product-detail.html:83
+
+#: .\apps\templates\home\purchase-deatils.html:26
+
+#: .\apps\templates\home\purchase.html:32
+
+#: .\apps\templates\home\quotation-deatils.html:33
+
+#: .\apps\templates\home\quotation-list.html:37
+
+#: .\apps\templates\home\quotation.html:43
+
+msgid "Supplier Code"
+msgstr "供應商編號"
+
+
+#: .\apps\templates\home\instock-details.html:29
+
+#: .\apps\templates\home\instock.html:27
+
+msgid "Remaining Quantity"
+msgstr "剩餘數量"
+
+
+#: .\apps\templates\home\instock-details.html:31
+
+#: .\apps\templates\home\instock.html:30
+
+#: .\apps\templates\home\orderconfirmation.html:28
+
+msgid "Damage Quantity"
+msgstr "損壞數量"
+
+
+#: .\apps\templates\home\instock-details.html:76
+
+msgid "Confirm Delivery"
+msgstr "確認出貨"
+
+
+#: .\apps\templates\home\instock-list.html:3
+
+msgid "In Stock List"
+msgstr "庫存清單"
+
+
+#: .\apps\templates\home\instock-list.html:23
+
+#: .\apps\templates\home\purchase-list.html:27
+
+#: .\apps\templates\home\quotation-list.html:30
+
+msgid "No"
+msgstr "不"
+
+
+#: .\apps\templates\home\instock-list.html:24
+
+#: .\apps\templates\home\purchase-list.html:28
+
+#: .\apps\templates\home\quotation-list.html:32
+
+#: .\apps\templates\home\voucher-details.html:36
+
+#: .\apps\templates\home\voucher-details.html:138
+
+#: .\apps\templates\home\voucher-list.html:28
+
+msgid "Chinese Name"
+msgstr "中文名稱"
+
+
+#: .\apps\templates\home\instock-list.html:26
+
+#: .\apps\templates\home\inventory_po_list.html:33
+
+#: .\apps\templates\home\purchase-list.html:31
+
+#: .\apps\templates\home\quotation-list.html:35
+
+msgid "Purchase Quantity"
+msgstr "採購數量"
+
+
+#: .\apps\templates\home\instock.html:1 .\apps\templates\home\instock.html:11
+
+#: .\apps\templates\includes\sidebar.html:154
+
+msgid "In Stock"
+msgstr "有存貨"
+
+
+#: .\apps\templates\home\instock.html:74
+
+#: .\apps\templates\home\orderconfirmation.html:104
+
+msgid "Actual Delivery Date"
+msgstr "實際交貨日期"
+
+
+#: .\apps\templates\home\inventory-list.html:3
+
+#: .\apps\templates\home\inventory-list.html:19
+
+msgid "Product List (Inventory)"
+msgstr "產品清單（庫存）"
+
+
+#: .\apps\templates\home\inventory-list.html:22
+
+#: .\apps\templates\home\inventory_po.html:3
+
+#: .\apps\templates\home\inventory_po.html:18
+
+#: .\apps\templates\home\purchase-list.html:18
+
+#: .\apps\templates\home\purchase.html:1 .\apps\templates\home\purchase.html:11
+
+#: .\apps\templates\home\quotationtopurchase.html:1
+
+#: .\apps\templates\home\quotationtopurchase.html:11
+
+msgid "Create Purchase Order"
+msgstr "建立採購訂單"
+
+
+#: .\apps\templates\home\inventory-list.html:25
+
+#: .\apps\templates\home\inventory_po_list.html:3
+
+#: .\apps\templates\home\inventory_po_list.html:18
+
+msgid "View Purchase Orders"
+msgstr "查看採購單"
+
+
+#: .\apps\templates\home\inventory-list.html:43
+
+msgid "Main Category"
+msgstr "主要類別"
+
+
+#: .\apps\templates\home\inventory-list.html:44
+
+#: .\apps\templates\home\product-detail.html:51
+
+#: .\apps\templates\home\product-list.html:41
+
+msgid "Sub Category"
+msgstr "子類別"
+
+
+#: .\apps\templates\home\inventory-list.html:45
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:60
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:109
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:157
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:205
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:253
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:301
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:349
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:397
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:445
+
+#: .\apps\templates\home\inventory_po.html:30
+
+#: .\apps\templates\home\inventory_po.html:74
+
+#: .\apps\templates\home\inventory_po_details.html:32
+
+#: .\apps\templates\home\inventory_po_list.html:32
+
+#: .\apps\templates\home\inventory_stockin_order.html:32
+
+#: .\apps\templates\home\inventory_stockin_order.html:71
+
+#: .\apps\templates\home\order.html:152
+
+#: .\apps\templates\home\product-detail.html:55
+
+#: .\apps\templates\home\product-list.html:42
+
+msgid "Specification"
+msgstr "規格"
+
+
+#: .\apps\templates\home\inventory-list.html:47
+
+#: .\apps\templates\home\inventory_po.html:31
+
+msgid "Current Inventory Quantity"
+msgstr "目前庫存數量"
+
+
+#: .\apps\templates\home\inventory-list.html:48
+
+msgid "Current Inventory Quantity After Sales"
+msgstr "售後庫存"
+
+
+#: .\apps\templates\home\inventory-list.html:49
+
+#: .\apps\templates\home\inventory_po.html:33
+
+#: .\apps\templates\home\product-list.html:50
+
+#: .\apps\templates\home\product.html:284
+
+#: .\apps\templates\home\product_details.html:287
+
+msgid "Last Purchase Date"
+msgstr "上次購買日期"
+
+
+#: .\apps\templates\home\inventory-list.html:50
+
+msgid "Quantity to be Received"
+msgstr "待入庫量"
+
+
+#: .\apps\templates\home\inventory-list.html:51
+
+#: .\apps\templates\home\product.html:220
+
+#: .\apps\templates\home\product_details.html:223
+
+msgid "Total Loss"
+msgstr "全損"
+
+
+#: .\apps\templates\home\inventory-list.html:52
+
+#: .\apps\templates\home\purchase.html:30
+
+#: .\apps\templates\home\quotation.html:41
+
+msgid "Recommended Purchase Quantity"
+msgstr "建議採購數量"
+
+
+#: .\apps\templates\home\inventory-list.html:53
+
+#: .\apps\templates\home\inventory_po_list.html:37
+
+#: .\apps\templates\home\product-list.html:52
+
+#: .\apps\templates\home\product.html:175
+
+#: .\apps\templates\home\product_details.html:178
+
+#: .\apps\templates\home\supplier-list.html:53
+
+#: .\apps\templates\home\supplier.html:68
+
+#: .\apps\templates\home\supplier_details.html:67
+
+msgid "Supplier ID"
+msgstr "供應商 ID"
+
+
+#: .\apps\templates\home\inventory-list.html:55
+
+msgid "Last Sales Day"
+msgstr "最後銷售日"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:3
+
+#: .\apps\templates\home\inventory-stockin-list.html:19
+
+msgid "Inventory - Stock In"
+msgstr "庫存 - 入庫"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:22
+
+#: .\apps\templates\home\inventory_stockin_order.html:3
+
+#: .\apps\templates\home\inventory_stockin_order.html:18
+
+msgid "New Stock In Order"
+msgstr "新採購單"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:25
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:3
+
+#: .\apps\templates\home\inventory_edit_stockin_order.html:18
+
+msgid "Edit Inventory"
+msgstr "編輯庫存"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:39
+
+msgid "Stock In Date"
+msgstr "入庫日期"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:41
+
+msgid "Stock In ID"
+msgstr "庫存編號"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:42
+
+#: .\apps\templates\home\inventory_po_details.html:28
+
+#: .\apps\templates\home\inventory_po_list.html:28
+
+#: .\apps\templates\home\inventory_stockin_order.html:28
+
+#: .\apps\templates\home\inventory_stockin_order.html:67
+
+msgid "Purchase Order ID"
+msgstr "採購訂單編號"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:46
+
+#: .\apps\templates\home\inventory_stockin_order.html:33
+
+#: .\apps\templates\home\inventory_stockin_order.html:72
+
+msgid "Expected Stock In Quantity"
+msgstr "預計庫存數量"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:47
+
+#: .\apps\templates\home\inventory_stockin_order.html:73
+
+msgid "Depreciation"
+msgstr "折舊"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:48
+
+#: .\apps\templates\home\inventory_stockin_order.html:74
+
+msgid "Actual Stock In"
+msgstr "實際庫存"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:49
+
+msgid "Staff"
+msgstr "員工"
+
+
+#: .\apps\templates\home\inventory-stockin-list.html:52
+
+#: .\apps\templates\home\inventory_po_list.html:40
+
+#: .\apps\templates\home\transaction_detail.html:126
+
+#: .\apps\templates\home\transaction_list.html:108
+
+#: msgid "Edit"
+#: msgstr "編輯"
+
+
+#: .\apps\templates\home\inventory_po.html:32
+
+msgid "Current Inventory after Sales"
+msgstr "售後庫存"
+
+
+#: .\apps\templates\home\inventory_po.html:34
+
+msgid "Suggested Purchase"
+msgstr "建議採購"
+
+
+#: .\apps\templates\home\inventory_po.html:35
+
+#: .\apps\templates\home\inventory_po.html:75
+
+#: .\apps\templates\home\inventory_po_details.html:38
+
+#: .\apps\templates\home\inventory_po_list.html:38
+
+#: .\apps\templates\home\product-detail.html:79
+
+#: .\apps\templates\home\product-list.html:51
+
+#: .\apps\templates\home\supplier-list.html:17
+
+#: .\apps\templates\home\supplier_old.html:17
+
+#: .\apps\templates\includes\sidebar.html:57
+
+msgid "Supplier"
+msgstr "供應商"
+
+
+#: .\apps\templates\home\inventory_po.html:36
+
+#: .\apps\templates\home\inventory_stockin_order.html:34
+
+#: .\apps\templates\home\order.html:38 .\apps\templates\home\order.html:156
+
+#: .\apps\templates\home\ordercart.html:49
+
+#: .\apps\templates\home\purchase.html:33
+
+#: .\apps\templates\home\quotation.html:44
+
+msgid "Add"
+msgstr "添加"
+
+
+#: .\apps\templates\home\inventory_po.html:67
+
+#: .\apps\templates\home\inventory_po_details.html:23
+
+#: .\apps\templates\home\inventory_po_list.html:23
+
+#: .\apps\templates\home\inventory_stockin_order.html:23
+
+#: .\apps\templates\home\purchase.html:57
+
+#: .\apps\templates\home\quotation.html:68
+
+msgid "Purchase Order List"
+msgstr "採購訂單清單"
+
+
+#: .\apps\templates\home\inventory_po.html:77
+
+msgid "Purchase Cost"
+msgstr "採購成本"
+
+
+#: .\apps\templates\home\inventory_po.html:79
+
+#: .\apps\templates\home\order.html:192 .\apps\templates\home\ordercart.html:77
+
+#: .\apps\templates\home\orderconfirmation.html:26
+
+#: .\apps\templates\home\orderold.html:63
+
+#: .\apps\templates\home\purchase.html:70
+
+#: .\apps\templates\home\quotationtopurchase.html:28
+
+msgid "Sub Total"
+msgstr "小計"
+
+
+#: .\apps\templates\home\inventory_po.html:91
+
+#: .\apps\templates\home\inventory_po_details.html:80
+
+msgid "Total Purchase Cost"
+msgstr "總採購成本"
+
+
+#: .\apps\templates\home\inventory_po.html:98
+
+#: .\apps\templates\home\inventory_po_details.html:84
+
+#: .\apps\templates\home\order.html:207 .\apps\templates\home\order.html:279
+
+msgid "Special Discount"
+msgstr "特別折扣"
+
+
+#: .\apps\templates\home\inventory_po.html:107
+
+msgid "Total Cost After Discount"
+msgstr "折扣後總成本"
+
+
+#: .\apps\templates\home\inventory_po_details.html:3
+
+#: .\apps\templates\home\inventory_po_details.html:18
+
+msgid "View/Edit Purchase Order Details"
+msgstr "查看/編輯採購單"
+
+
+#: .\apps\templates\home\inventory_po_details.html:27
+
+#: .\apps\templates\home\inventory_po_list.html:27
+
+#: .\apps\templates\home\inventory_stockin_order.html:27
+
+#: .\apps\templates\home\inventory_stockin_order.html:66
+
+msgid "Purchase Date"
+msgstr "採購日期"
+
+
+#: .\apps\templates\home\inventory_po_details.html:35
+
+#: .\apps\templates\home\inventory_po_list.html:34
+
+msgid "Purchse Cost"
+msgstr "採購成本"
+
+
+#: .\apps\templates\home\inventory_po_details.html:37
+
+msgid "Subtotal"
+msgstr "小計"
+
+
+#: .\apps\templates\home\inventory_po_details.html:65
+
+#: .\apps\templates\home\inventory_po_list.html:36
+
+msgid "Expected Arrival Date"
+msgstr "預計抵達日期"
+
+
+#: .\apps\templates\home\inventory_po_details.html:88
+
+msgid "Total Cost after Discount"
+msgstr "折扣後總成本"
+
+
+#: .\apps\templates\home\inventory_po_list.html:35
+
+msgid "Actual Arrived Quantity"
+msgstr "實際到貨數量"
+
+
+#: .\apps\templates\home\inventory_stockin_order.html:62
+
+msgid "Purchase Order Product List"
+msgstr "採購訂單產品清單"
+
+
+#: .\apps\templates\home\inventory_stockin_order.html:75
+
+msgid "Stock In Remark"
+msgstr "庫存備註"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:1
+
+msgid "Pending Order details"
+msgstr "待處理訂單詳情"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:14
+
+msgid "Pending Order Details"
+msgstr "待處理訂單詳情"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:46
+
+#: .\apps\templates\home\order-deatils.html:53
+
+msgid "Order Amount"
+msgstr "訂單金額"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:57
+
+#: .\apps\templates\home\order-approval-list.html:51
+
+#: .\apps\templates\home\order-deatils.html:64
+
+#: .\apps\templates\home\order-list.html:59
+
+msgid "Order Status"
+msgstr "訂單狀態"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:65
+
+#: .\apps\templates\home\order-deatils.html:81
+
+msgid "Total Unit"
+msgstr "總件數"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:93
+
+#: .\apps\templates\home\order-deatils.html:109
+
+msgid "Upload Payment Record"
+msgstr "已上傳付款紀錄"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:137
+
+#: .\apps\templates\home\order-approval-list.html:47
+
+#: .\apps\templates\home\order-deatils.html:158
+
+#: .\apps\templates\home\order-list.html:55
+
+msgid "Unit Price"
+msgstr "單價"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:138
+
+#: .\apps\templates\home\order-approval-list.html:48
+
+#: .\apps\templates\home\order-deatils.html:159
+
+#: .\apps\templates\home\order-list.html:56
+
+#: .\apps\templates\home\order-list.html:168
+
+#: .\apps\templates\home\orderold.html:119
+
+#: .\apps\templates\home\purchase-list.html:34
+
+#: .\apps\templates\home\voucher-details.html:101
+
+#: .\apps\templates\home\voucher.html:238
+
+msgid "Total Price"
+msgstr "總價"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:140
+
+#: .\apps\templates\home\order-deatils.html:161
+
+msgid "Delivery Quantity"
+msgstr "出貨數量"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:172
+
+#: .\apps\templates\home\order-deatils.html:199
+
+msgid "Discount Details"
+msgstr "折扣詳情"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:195
+
+#: .\apps\templates\home\transaction_detail.html:119
+
+msgid "Approve"
+msgstr "核准"
+
+
+#: .\apps\templates\home\order-approval-deatils.html:198
+
+#: .\apps\templates\home\order-approval-deatils.html:203
+
+msgid "Reject"
+msgstr "拒絕"
+
+
+#: .\apps\templates\home\order-approval-list.html:3
+
+msgid "Pending Order"
+msgstr "待處理訂單"
+
+
+#: .\apps\templates\home\order-approval-list.html:18
+
+msgid "Pending Order List"
+msgstr "待處理訂單列表"
+
+
+#: .\apps\templates\home\order-approval-list.html:40
+
+msgid "Old Invoice ID"
+msgstr "舊發票ID"
+
+
+#: .\apps\templates\home\order-deatils.html:1
+
+#: .\apps\templates\home\orderconfirmation.html:1
+
+msgid "Order details"
+msgstr "訂單詳情"
+
+
+#: .\apps\templates\home\order-deatils.html:14
+
+#: .\apps\templates\home\orderconfirmation.html:11
+
+msgid "Order Details"
+msgstr "訂單詳情"
+
+
+#: .\apps\templates\home\order-deatils.html:224
+
+msgid "Resubmit"
+msgstr "重新提交"
+
+
+#: .\apps\templates\home\order-deatils.html:233
+
+#: .\apps\templates\home\order-deatils.html:238
+
+msgid "Cancel Order"
+msgstr "取消訂單"
+
+
+#: .\apps\templates\home\order-list.html:18
+
+#: .\apps\templates\home\order.html:181 .\apps\templates\home\ordercart.html:67
+
+msgid "Order List"
+msgstr "訂單列表"
+
+
+#: .\apps\templates\home\order-list.html:20 .\apps\templates\home\order.html:3
+
+#: .\apps\templates\home\order.html:19 .\apps\templates\home\ordercart.html:4
+
+#: .\apps\templates\home\ordercart.html:22
+
+#: .\apps\templates\home\orderold.html:3 .\apps\templates\home\orderold.html:12
+
+msgid "Create Order"
+msgstr "建立訂單"
+
+
+#: .\apps\templates\home\order-list.html:45
+
+#: .\apps\templates\home\system_parameter_list.html:27
+
+#: .\apps\templates\includes\navigation.html:289
+
+msgid "Created On"
+msgstr "建立日期"
+
+
+#: .\apps\templates\home\order-list.html:63
+
+#: .\apps\templates\home\order-list.html:144
+
+msgid "Download Order"
+msgstr "下載訂單"
+
+
+#: .\apps\templates\home\order-list.html:120
+
+msgid "Import Order"
+msgstr "匯入訂單"
+
+
+#: .\apps\templates\home\order-list.html:157
+
+msgid "File Type"
+msgstr "文件類型"
+
+
+#: .\apps\templates\home\order-list.html:172
+
+msgid "Language"
+msgstr "語言"
+
+
+#: .\apps\templates\home\order-list.html:185
+
+#: .\apps\templates\home\quotation-deatils.html:57
+
+#: .\apps\templates\home\transaction_detail.html:108
+
+msgid "Download"
+msgstr "下載"
+
+
+#: .\apps\templates\home\order-list.html:186
+
+msgid "Downloading..."
+msgstr "正在下載中"
+
+
+#: .\apps\templates\home\order.html:25
+
+msgid "Create Customer"
+msgstr "創建客戶"
+
+
+#: .\apps\templates\home\order.html:29
+
+msgid "Basic Information"
+msgstr "基本資訊"
+
+
+#: .\apps\templates\home\order.html:154 .\apps\templates\home\order.html:190
+
+#: .\apps\templates\home\ordercart.html:48
+
+#: .\apps\templates\home\ordercart.html:75
+
+#: .\apps\templates\home\orderold.html:61
+
+#: .\apps\templates\home\product-detail.html:67
+
+#: .\apps\templates\home\product-list.html:44
+
+#: .\apps\templates\home\product.html:156
+
+#: .\apps\templates\home\product_details.html:159
+
+msgid "Selling Price"
+msgstr "售價"
+
+
+#: .\apps\templates\home\order.html:200 .\apps\templates\home\orderold.html:86
+
+msgid "Total Product Price"
+msgstr "產品總價"
+
+
+#: .\apps\templates\home\order.html:217 .\apps\templates\home\order.html:286
+
+msgid "Total Price(After Discount)"
+msgstr "總價（折扣後）"
+
+
+#: .\apps\templates\home\order.html:230
+
+msgid "Voucher Option"
+msgstr "優惠券選項"
+
+
+#: .\apps\templates\home\order.html:233
+
+msgid "Voucher Code"
+msgstr "優惠碼"
+
+
+#: .\apps\templates\home\order.html:234
+
+msgid "Voucher Name"
+msgstr "優惠名稱"
+
+
+#: .\apps\templates\home\order.html:235
+
+msgid "Voucher English Name"
+msgstr "優惠券英文名稱"
+
+
+#: .\apps\templates\home\order.html:236
+
+#: .\apps\templates\home\voucher-list.html:30
+
+msgid "Voucher Type"
+msgstr "優惠類型"
+
+
+#: .\apps\templates\home\order.html:237
+
+#: .\apps\templates\home\voucher-details.html:168
+
+#: .\apps\templates\home\voucher-list.html:31
+
+#: .\apps\templates\home\voucher.html:206
+
+msgid "Discount Type"
+msgstr "折扣類型"
+
+
+#: .\apps\templates\home\order.html:238
+
+#: .\apps\templates\home\voucher-details.html:174
+
+#: .\apps\templates\home\voucher.html:207
+
+#: msgid "Discount Value"
+#: msgstr "折扣價值"
+
+
+#: .\apps\templates\home\order.html:239
+
+msgid "Valid Date"
+msgstr "有效日期"
+
+
+#: .\apps\templates\home\order.html:272 .\apps\templates\home\orderold.html:101
+
+msgid "Other Fee"
+msgstr "其他費用"
+
+
+#: .\apps\templates\home\order.html:306
+
+#: .\apps\templates\includes\navigation.html:292
+
+msgid "Approval Comments"
+msgstr "審批備注"
+
+
+#: .\apps\templates\home\ordercart.html:91
+
+msgid "Next"
+msgstr "下一步"
+
+
+#: .\apps\templates\home\orderconfirmation.html:25
+
+msgid "Sellinh Price"
+msgstr "售價"
+
+
+#: .\apps\templates\home\orderconfirmation.html:48
+
+#: .\apps\templates\home\voucher-details.html:62
+
+#: .\apps\templates\home\voucher.html:236
+
+msgid "Gift List"
+msgstr "禮物清單"
+
+
+#: .\apps\templates\home\orderconfirmation.html:76
+
+#: .\apps\templates\home\purchase-deatils.html:71
+
+#: .\apps\templates\home\purchase-list.html:33
+
+#: .\apps\templates\home\purchase.html:95
+
+#: .\apps\templates\home\quotationtopurchase.html:72
+
+msgid "Delivery Cost"
+msgstr "運費"
+
+
+#: .\apps\templates\home\orderconfirmation.html:80
+
+#: .\apps\templates\home\product.html:211
+
+#: .\apps\templates\home\product_details.html:214
+
+#: .\apps\templates\home\purchase-deatils.html:31
+
+#: .\apps\templates\home\purchase-deatils.html:75
+
+#: .\apps\templates\home\purchase.html:68
+
+#: .\apps\templates\home\purchase.html:102
+
+#: .\apps\templates\home\quotationtopurchase.html:26
+
+#: .\apps\templates\home\quotationtopurchase.html:79
+
+msgid "Other Cost"
+msgstr "其他成本"
+
+
+#: .\apps\templates\home\orderconfirmation.html:84
+
+#: .\apps\templates\home\product.html:215
+
+#: .\apps\templates\home\product_details.html:218
+
+#: .\apps\templates\home\purchase-deatils.html:83
+
+#: .\apps\templates\home\purchase.html:109
+
+#: .\apps\templates\home\quotationtopurchase.html:86
+
+msgid "Total Cost"
+msgstr "總成本"
+
+
+#: .\apps\templates\home\orderold.html:108 .\apps\templates\home\voucher.html:9
+
+msgid "Voucher"
+msgstr "優惠券"
+
+
+#: .\apps\templates\home\orderold.html:152
+
+msgid "Gifts"
+msgstr "禮物"
+
+
+#: .\apps\templates\home\page-404.html:17
+
+msgid "Oops Page Not Found"
+msgstr "哎呀，未能找到頁面"
+
+
+#: .\apps\templates\home\page-404.html:18
+
+msgid "The page you are looking for does not exist or has been moved."
+msgstr "您正在尋找的頁面不存在或已被移動。"
+
+
+#: .\apps\templates\home\page-404.html:20
+
+#: .\apps\templates\home\page-500.html:20
+
+msgid "Go to Home"
+msgstr "返回首頁"
+
+
+#: .\apps\templates\home\page-500.html:17
+
+msgid "Internal server error"
+msgstr "內部伺服器錯誤"
+
+
+#: .\apps\templates\home\page-500.html:18
+
+msgid "Something goes wrong with our servers, please try again later"
+msgstr "伺服器出現問題，請稍後重試"
+
+
+#: .\apps\templates\home\product-detail.html:11
+
+msgid "Product Details"
+msgstr "產品詳情"
+
+
+#: .\apps\templates\home\product-detail.html:35
+
+#: .\apps\templates\home\voucher-details.html:67
+
+#: .\apps\templates\home\voucher.html:17 .\apps\templates\home\voucher.html:172
+
+#: .\apps\templates\home\voucher.html:203
+
+#: .\apps\templates\home\voucher.html:323
+
+#: .\apps\templates\home\voucher.html:356
+
+msgid "Chinese name"
+msgstr "中文名稱"
+
+
+#: .\apps\templates\home\product-detail.html:39
+
+#: .\apps\templates\home\voucher-details.html:68
+
+#: .\apps\templates\home\voucher.html:25 .\apps\templates\home\voucher.html:173
+
+#: .\apps\templates\home\voucher.html:324
+
+#: .\apps\templates\home\voucher.html:357
+
+msgid "English name"
+msgstr "英文名"
+
+
+#: .\apps\templates\home\product-detail.html:43
+
+msgid "Supplier Product name"
+msgstr "供應商產品名稱"
+
+
+#: .\apps\templates\home\product-detail.html:47
+
+#: .\apps\templates\home\product-list.html:40
+
+#: .\apps\templates\home\product.html:56
+
+#: .\apps\templates\home\product_details.html:57
+
+#: .\apps\templates\home\voucher-details.html:115
+
+#: .\apps\templates\home\voucher.html:283
+
+#: .\apps\templates\includes\sidebar.html:95
+
+msgid "Category"
+msgstr "類別"
+
+
+#: .\apps\templates\home\product-detail.html:59
+
+msgid "Sales Currency"
+msgstr "銷售貨幣"
+
+
+#: .\apps\templates\home\product-detail.html:63
+
+#: .\apps\templates\home\product-list.html:43
+
+#: .\apps\templates\home\product.html:142
+
+#: .\apps\templates\home\product_details.html:145
+
+msgid "Retail Price"
+msgstr "零售價"
+
+
+#: .\apps\templates\home\product-detail.html:71
+
+msgid "Cost of sales"
+msgstr "銷售成本"
+
+
+#: .\apps\templates\home\product-detail.html:75
+
+msgid "Shelf Date"
+msgstr "保存期限"
+
+
+#: .\apps\templates\home\product-detail.html:87
+
+msgid "Ingredients List"
+msgstr "成分表"
+
+
+#: .\apps\templates\home\product-detail.html:91
+
+#: .\apps\templates\home\product.html:88
+
+#: .\apps\templates\home\product_details.html:83
+
+msgid "Shelf Life"
+msgstr "保存期限"
+
+
+#: .\apps\templates\home\product-list.html:21
+
+#: .\apps\templates\home\product.html:3 .\apps\templates\home\product.html:15
+
+msgid "Add Product"
+msgstr "新增產品"
+
+
+#: .\apps\templates\home\product-list.html:38
+
+#: .\apps\templates\home\product.html:37
+
+#: .\apps\templates\home\product_details.html:37
+
+msgid "Product Chinese Name"
+msgstr "產品中文名稱"
+
+
+#: .\apps\templates\home\product-list.html:45
+
+#: .\apps\templates\home\product.html:150
+
+#: .\apps\templates\home\product_details.html:153
+
+msgid "Cost of Retail"
+msgstr "零售成本"
+
+
+#: .\apps\templates\home\product-list.html:46
+
+#: .\apps\templates\home\product.html:272
+
+#: .\apps\templates\home\product_details.html:275
+
+msgid "Total Stock Out"
+msgstr "總出貨量"
+
+
+#: .\apps\templates\home\product-list.html:47
+
+#: .\apps\templates\home\product.html:224
+
+#: .\apps\templates\home\product_details.html:227
+
+msgid "Total Shipment Quantity"
+msgstr "總出貨數量"
+
+
+#: .\apps\templates\home\product-list.html:48
+
+#: .\apps\templates\home\product.html:246
+
+#: .\apps\templates\home\product_details.html:249
+
+msgid "Current Inventory"
+msgstr "目前庫存"
+
+
+#: .\apps\templates\home\product-list.html:49
+
+#: .\apps\templates\home\product.html:276
+
+#: .\apps\templates\home\product_details.html:279
+
+msgid "Total Order Quantity"
+msgstr "訂單總數"
+
+
+#: .\apps\templates\home\product-list.html:54
+
+msgid "Actual Cost"
+msgstr "實際成本"
+
+
+#: .\apps\templates\home\product-list.html:55
+
+#: .\apps\templates\home\product.html:264
+
+#: .\apps\templates\home\product_details.html:267
+
+msgid "Currency of Cost"
+msgstr "成本貨幣"
+
+
+#: .\apps\templates\home\product-list.html:56
+
+msgid "Inventory After Sales"
+msgstr "售後庫存"
+
+
+#: .\apps\templates\home\product-list.html:58
+
+#: .\apps\templates\home\product.html:99
+
+#: .\apps\templates\home\product_details.html:94
+
+msgid "Product Image"
+msgstr "產品圖片"
+
+
+#: .\apps\templates\home\product.html:20
+
+#: .\apps\templates\home\product_details.html:20
+
+msgid "Basic Info"
+msgstr "基本資訊"
+
+
+#: .\apps\templates\home\product.html:24
+
+#: .\apps\templates\home\product_details.html:24
+
+msgid "Brand"
+msgstr "品牌"
+
+
+#: .\apps\templates\home\product.html:41
+
+#: .\apps\templates\home\product_details.html:41
+
+msgid "Unit of Measurement"
+msgstr "計量單位"
+
+
+#: .\apps\templates\home\product.html:50
+
+#: .\apps\templates\home\product_details.html:50
+
+msgid "Product Status"
+msgstr "產品狀態"
+
+
+#: .\apps\templates\home\product.html:65
+
+#: .\apps\templates\home\product_details.html:61
+
+msgid "Barcode"
+msgstr "條碼"
+
+
+#: .\apps\templates\home\product.html:73
+
+#: .\apps\templates\home\product_details.html:69
+
+msgid "Weight"
+msgstr "重量"
+
+
+#: .\apps\templates\home\product.html:83
+
+#: .\apps\templates\home\product_details.html:79
+
+msgid "Sub-Category"
+msgstr "子類別"
+
+
+#: .\apps\templates\home\product.html:106
+
+#: .\apps\templates\home\product_details.html:113
+
+msgid "Onboarding Date"
+msgstr "入職日期"
+
+
+#: .\apps\templates\home\product.html:120
+
+#: .\apps\templates\home\product_details.html:123
+
+msgid "Sales Info"
+msgstr "銷售資料"
+
+
+#: .\apps\templates\home\product.html:132
+
+#: .\apps\templates\home\product_details.html:135
+
+msgid "Bundle Product ID"
+msgstr "捆綁產品 ID"
+
+
+#: .\apps\templates\home\product.html:136
+
+#: .\apps\templates\home\product_details.html:139
+
+msgid "Pics of Bundle Product"
+msgstr "捆綁產品圖片"
+
+
+#: .\apps\templates\home\product.html:146
+
+#: .\apps\templates\home\product_details.html:149
+
+msgid "Name of Bundle Product"
+msgstr "捆綁產品名稱"
+
+
+#: .\apps\templates\home\product.html:160
+
+#: .\apps\templates\home\product_details.html:163
+
+msgid "Bundle Product Price"
+msgstr "捆綁產品價格"
+
+
+#: .\apps\templates\home\product.html:169
+
+#: .\apps\templates\home\product_details.html:172
+
+msgid "Supply Information"
+msgstr "供應資訊"
+
+
+#: .\apps\templates\home\product.html:195
+
+#: .\apps\templates\home\product_details.html:198
+
+msgid "Ingredient"
+msgstr "成分"
+
+
+#: .\apps\templates\home\product.html:201
+
+#: .\apps\templates\home\product_details.html:204
+
+msgid "Product Remark"
+msgstr "產品備註"
+
+
+#: .\apps\templates\home\product.html:207
+
+#: .\apps\templates\home\product_details.html:210
+
+msgid "Raw Cost"
+msgstr "原材料成本"
+
+
+#: .\apps\templates\home\product.html:228
+
+#: .\apps\templates\home\product_details.html:231
+
+msgid "Last Stock In date"
+msgstr "最後入庫日期"
+
+
+#: .\apps\templates\home\product.html:234
+
+#: .\apps\templates\home\product_details.html:237
+
+#: .\apps\templates\home\purchase-deatils.html:30
+
+#: .\apps\templates\home\purchase.html:67
+
+#: .\apps\templates\home\quotationtopurchase.html:25
+
+msgid "Packaging Cost"
+msgstr "包裝成本"
+
+
+#: .\apps\templates\home\product.html:238
+
+#: .\apps\templates\home\product_details.html:241
+
+msgid "Delivery Fee to HK"
+msgstr "去香港運費"
+
+
+#: .\apps\templates\home\product.html:242
+
+#: .\apps\templates\home\product_details.html:245
+
+msgid "Total Stock in"
+msgstr "總入庫量"
+
+
+#: .\apps\templates\home\product.html:250
+
+#: .\apps\templates\home\product_details.html:253
+
+msgid "Safe Number"
+msgstr "安全量"
+
+
+#: .\apps\templates\home\product.html:260
+
+#: .\apps\templates\home\product_details.html:263
+
+#: .\apps\templates\home\purchase-deatils.html:29
+
+#: .\apps\templates\home\purchase.html:66
+
+#: .\apps\templates\home\quotationtopurchase.html:24
+
+msgid "Processing Cost"
+msgstr "加工成本"
+
+
+#: .\apps\templates\home\product.html:280
+
+#: .\apps\templates\home\product_details.html:283
+
+msgid "Purchasing Amount"
+msgstr "採購金額"
+
+
+#: .\apps\templates\home\product_details.html:3
+
+#: .\apps\templates\home\product_details.html:15
+
+msgid "Update Product"
+msgstr "更新產品"
+
+
+#: .\apps\templates\home\promo_code_form.html:43
+
+#: .\apps\templates\home\promo_code_form.html:57
+
+msgid "Create/Edit Promo Code"
+msgstr "創建/編輯促銷碼"
+
+
+#: .\apps\templates\home\promo_code_list.html:4
+
+#: .\apps\templates\home\promo_code_list.html:19
+
+msgid "Promo Code List"
+msgstr "促銷碼列表"
+
+
+#: .\apps\templates\home\promo_code_list.html:20
+
+msgid "Create Promo Code"
+msgstr "創建促銷碼"
+
+
+#: .\apps\templates\home\promotion_form.html:43
+
+#: .\apps\templates\home\promotion_form.html:57
+
+msgid "Create/Edit Promotional Event"
+msgstr "創建/編輯促銷活動"
+
+
+#: .\apps\templates\home\promotion_list.html:4
+
+#: .\apps\templates\home\promotion_list.html:19
+
+msgid "Promotional Event List"
+msgstr "促銷活動列表"
+
+
+#: .\apps\templates\home\promotion_list.html:20
+
+msgid "Create Promotional Event"
+msgstr "創建促銷活動"
+
+
+#: .\apps\templates\home\promotion_list.html:31
+
+msgid "Time Range"
+msgstr "時間範圍"
+
+
+#: .\apps\templates\home\purchase-deatils.html:1
+
+msgid "Purchase details"
+msgstr "採購詳情"
+
+
+#: .\apps\templates\home\purchase-deatils.html:11
+
+msgid "Purchase Order Details"
+msgstr "採購訂單詳情"
+
+
+#: .\apps\templates\home\purchase-deatils.html:28
+
+#: .\apps\templates\home\purchase.html:65
+
+#: .\apps\templates\home\quotationtopurchase.html:23
+
+msgid "Raw Material Cost"
+msgstr "原料成本"
+
+
+#: .\apps\templates\home\purchase-deatils.html:32
+
+#: .\apps\templates\home\purchase.html:69
+
+#: .\apps\templates\home\quotationtopurchase.html:27
+
+msgid "Freight Cost"
+msgstr "運費"
+
+
+#: .\apps\templates\home\purchase-deatils.html:33
+
+msgid "Sub Total Cost"
+msgstr "小計費用"
+
+
+#: .\apps\templates\home\purchase-deatils.html:79
+
+#: .\apps\templates\home\purchase.html:88
+
+#: .\apps\templates\home\quotationtopurchase.html:65
+
+msgid "Total Product Cost"
+msgstr "產品總成本"
+
+
+#: .\apps\templates\home\purchase-list.html:3
+
+msgid "purchase List"
+msgstr "採購清單"
+
+
+#: .\apps\templates\home\purchase-list.html:15
+
+msgid "Purchase List"
+msgstr "採購清單"
+
+
+#: .\apps\templates\home\purchase-list.html:36
+
+msgid "Payment Methods"
+msgstr "付款方式"
+
+
+#: .\apps\templates\home\purchase.html:28
+
+#: .\apps\templates\home\quotation.html:39
+
+msgid "Current Quantity"
+msgstr "目前數量"
+
+
+#: .\apps\templates\home\purchase.html:29
+
+#: .\apps\templates\home\quotation.html:40
+
+msgid "Safety Quantity"
+msgstr "安全量"
+
+
+#: .\apps\templates\home\quotation-deatils.html:1
+
+#: .\apps\templates\home\quotation-update.html:1
+
+msgid "Quotation details"
+msgstr "報價詳情"
+
+
+#: .\apps\templates\home\quotation-deatils.html:18
+
+#: .\apps\templates\home\quotation-update.html:18
+
+msgid "Quotation Details"
+msgstr "報價詳情"
+
+
+#: .\apps\templates\home\quotation-deatils.html:60
+
+msgid "Create Purchase"
+msgstr "創建採購"
+
+
+#: .\apps\templates\home\quotation-list.html:3
+
+#: .\apps\templates\home\quotation-list.html:15
+
+msgid "Quotation List"
+msgstr "報價單"
+
+
+#: .\apps\templates\home\quotation-list.html:18
+
+#: .\apps\templates\home\quotation.html:4
+
+#: .\apps\templates\home\quotation.html:22
+
+msgid "Create Quotation"
+msgstr "生成報價"
+
+
+#: .\apps\templates\home\quotation-list.html:31
+
+msgid "Quotation No"
+msgstr "報價單號"
+
+
+#: .\apps\templates\home\supplier-detail.html:1
+
+#: .\apps\templates\home\supplier-detail.html:12
+
+msgid "Supplier Details"
+msgstr "供應商詳細信息"
+
+
+#: .\apps\templates\home\supplier-detail.html:35
+
+#: .\apps\templates\home\supplier_old.html:44
+
+#: msgid "Code"
+#: msgstr "程式碼"
+
+
+#: .\apps\templates\home\supplier-detail.html:47
+
+#: .\apps\templates\home\supplier_old.html:71
+
+msgid "Address Line 1"
+msgstr "地址第一行"
+
+
+#: .\apps\templates\home\supplier-detail.html:51
+
+#: .\apps\templates\home\supplier_old.html:80
+
+msgid "Address Line 2"
+msgstr "地址第二行"
+
+
+#: .\apps\templates\home\supplier-detail.html:55
+
+#: .\apps\templates\home\supplier_old.html:89
+
+msgid "Pincode"
+msgstr "郵遞區號"
+
+
+#: .\apps\templates\home\supplier-detail.html:59
+
+#: .\apps\templates\home\supplier_old.html:98
+
+msgid "Landmark"
+msgstr "地標"
+
+
+#: .\apps\templates\home\supplier-detail.html:63
+
+#: .\apps\templates\home\supplier_old.html:107
+
+msgid "Town"
+msgstr "鎮"
+
+
+#: .\apps\templates\home\supplier-detail.html:67
+
+#: .\apps\templates\home\supplier_old.html:116
+
+msgid "City"
+msgstr "城市"
+
+
+#: .\apps\templates\home\supplier-detail.html:71
+
+#: .\apps\templates\home\supplier_old.html:125
+
+msgid "State"
+msgstr "狀態"
+
+
+#: .\apps\templates\home\supplier-detail.html:75
+
+#: .\apps\templates\home\supplier_old.html:134
+
+msgid "Country"
+msgstr "國家"
+
+
+#: .\apps\templates\home\supplier-list.html:1
+
+msgid "Supplier List"
+msgstr "供應商名單"
+
+
+#: .\apps\templates\home\supplier-list.html:20
+
+#: .\apps\templates\home\supplier.html:3 .\apps\templates\home\supplier.html:17
+
+#: .\apps\templates\home\supplier_old.html:3
+
+msgid "Add Supplier"
+msgstr "新增供應商"
+
+
+#: .\apps\templates\home\supplier-list.html:36
+
+#: .\apps\templates\home\supplier.html:106
+
+#: .\apps\templates\home\supplier_details.html:103
+
+msgid "Supplier Type"
+msgstr "供應商類型"
+
+
+#: .\apps\templates\home\supplier-list.html:37
+
+#: .\apps\templates\home\supplier.html:29
+
+#: .\apps\templates\home\supplier_details.html:29
+
+msgid "Product Type"
+msgstr "產品類型"
+
+
+#: .\apps\templates\home\supplier-list.html:40
+
+#: .\apps\templates\home\supplier.html:60
+
+#: .\apps\templates\home\supplier_details.html:60
+
+msgid "Last Purchase Order Date"
+msgstr "上次採購訂單日期"
+
+
+#: .\apps\templates\home\supplier-list.html:41
+
+msgid "Accumulated"
+msgstr "累積"
+
+
+#: .\apps\templates\home\supplier-list.html:43
+
+#: .\apps\templates\home\supplier.html:147
+
+#: .\apps\templates\home\supplier_details.html:155
+
+msgid "Purchasing Comments"
+msgstr "採購評論"
+
+
+#: .\apps\templates\home\supplier-list.html:45
+
+#: .\apps\templates\home\supplier.html:43
+
+#: .\apps\templates\home\supplier_details.html:43
+
+msgid "Contact Type"
+msgstr "聯絡方式"
+
+
+#: .\apps\templates\home\supplier-list.html:49
+
+#: .\apps\templates\home\supplier.html:56
+
+#: .\apps\templates\home\supplier_details.html:56
+
+msgid "Website"
+msgstr "網站"
+
+
+#: .\apps\templates\home\supplier-list.html:50
+
+#: .\apps\templates\home\supplier.html:34
+
+#: .\apps\templates\home\supplier_details.html:34
+
+msgid "Location"
+msgstr "地點"
+
+
+#: .\apps\templates\home\supplier-list.html:120
+
+msgid "Import Suppliers"
+msgstr "導入供應商"
+
+
+#: .\apps\templates\home\supplier.html:139
+
+#: .\apps\templates\home\supplier_details.html:148
+
+msgid "Accumulated Sales"
+msgstr "累計銷售額"
+
+
+#: .\apps\templates\home\supplier_details.html:3
+
+#: .\apps\templates\home\supplier_details.html:18
+
+msgid "Update Supplier"
+msgstr "更新供應商"
+
+
+#: .\apps\templates\home\system_parameter.html:3
+
+#: .\apps\templates\home\system_parameter.html:30
+
+msgid "Add System Parameter"
+msgstr "新增系統參數"
+
+
+#: .\apps\templates\home\system_parameter.html:38
+
+#: .\apps\templates\home\system_parameter_list.html:3
+
+#: .\apps\templates\home\system_parameter_list.html:28
+
+msgid "System Parameter"
+msgstr "系統參數"
+
+
+#: .\apps\templates\home\system_parameter_list.html:15
+
+msgid "System Parameters List"
+msgstr "系統參數列表"
+
+
+#: .\apps\templates\home\transaction_detail.html:3
+
+#: .\apps\templates\home\transaction_detail.html:20
+
+msgid "Transaction Details"
+msgstr "交易詳情"
+
+
+#: .\apps\templates\home\transaction_detail.html:21
+
+#: .\apps\templates\home\transaction_form.html:26
+
+msgid "Back to Transactions"
+msgstr "返回交易"
+
+
+#: .\apps\templates\home\transaction_detail.html:32
+
+#: .\apps\templates\home\transaction_list.html:58
+
+msgid "Order ID"
+msgstr "訂單編號"
+
+
+#: .\apps\templates\home\transaction_detail.html:107
+
+msgid "View Attachment"
+msgstr "查看附件"
+
+
+#: .\apps\templates\home\transaction_detail.html:110
+
+msgid "No attachment"
+msgstr "無附件"
+
+
+#: .\apps\templates\home\transaction_detail.html:123
+
+#: .\apps\templates\home\transaction_form.html:110
+
+#: msgid "Cancel"
+#: msgstr "取消"
+
+
+#: .\apps\templates\home\transaction_detail.html:128
+
+msgid "Back"
+msgstr "返回"
+
+
+#: .\apps\templates\home\transaction_detail.html:141
+
+#: .\apps\templates\home\transaction_detail.html:148
+
+msgid "Attachment Preview"
+msgstr "附件預覽"
+
+
+#: .\apps\templates\home\transaction_detail.html:165
+
+#: .\apps\templates\home\transaction_list.html:270
+
+msgid "Are you sure? This will delete the transaction."
+msgstr "你確定要刪除此交易嗎。"
+
+
+#: .\apps\templates\home\transaction_detail.html:192
+
+msgid "An error occurred while approving the transaction."
+msgstr "審批交易時發生錯誤。"
+
+
+#: .\apps\templates\home\transaction_detail.html:235
+
+msgid "Failed to load PDF."
+msgstr "無法載入 PDF。"
+
+
+#: .\apps\templates\home\transaction_detail.html:241
+
+msgid "Unsupported file type. Only PDF and images (PNG, JPG, JPEG) are supported."
+msgstr "不支援的文件類型。僅支援 PDF 和圖像（PNG、JPG、JPEG）。"
+"Unsupported file type. Only PDF and images (PNG, JPG, JPEG) are supported."
+
+
+
+#: .\apps\templates\home\transaction_form.html:3
+
+#: .\apps\templates\home\transaction_form.html:21
+
+msgid "Edit Transaction"
+msgstr "編輯交易"
+
+
+#: .\apps\templates\home\transaction_form.html:3
+
+#: .\apps\templates\home\transaction_form.html:23
+
+#: .\apps\templates\home\transaction_list.html:22
+
+msgid "Create Transaction"
+msgstr "生成交易"
+
+
+#: .\apps\templates\home\transaction_form.html:35
+
+msgid "Select Order"
+msgstr "訂單ID"
+
+
+#: .\apps\templates\home\transaction_form.html:37
+
+msgid "Select an order"
+msgstr "選擇訂單"
+
+
+#: .\apps\templates\home\transaction_form.html:99
+
+msgid "This transaction is awaiting approval and cannot be edited."
+msgstr "此交易正在等待批准，無法編輯。"
+
+
+#: .\apps\templates\home\transaction_form.html:101
+
+msgid "This transaction has been approved and cannot be edited."
+msgstr "此交易已被批准，無法編輯。"
+
+
+#: .\apps\templates\home\transaction_form.html:152
+
+msgid "An error occurred while saving the transaction."
+msgstr "保存交易時發生錯誤。"
+
+
+#: .\apps\templates\home\transaction_list.html:3
+
+#: .\apps\templates\home\transaction_list.html:20
+
+#: .\apps\templates\includes\sidebar.html:145
+
+msgid "Transaction List"
+msgstr "交易清單"
+
+
+#: .\apps\templates\home\transaction_list.html:44
+
+msgid "All"
+msgstr "全部"
+
+
+#: .\apps\templates\home\transaction_list.html:50
+
+msgid "Search"
+msgstr "搜尋"
+
+
+#: .\apps\templates\home\transaction_list.html:104
+
+msgid "View Details"
+msgstr "查看詳情"
+
+
+#: .\apps\templates\home\transaction_list.html:138
+
+msgid "Import Transactions"
+msgstr "導入交易"
+
+
+#: .\apps\templates\home\transaction_list.html:147
+
+msgid "Upload Excel File"
+msgstr "上傳 Excel 文件"
+
+
+#: .\apps\templates\home\transaction_list.html:214
+
+msgid "An error occurred while importing transactions."
+msgstr "導入交易時發生錯誤。"
+
+
+#: .\apps\templates\home\voucher-details.html:1
+
+#: .\apps\templates\home\voucher.html:33
+
+msgid "Voucher details"
+msgstr "優惠券詳情"
+
+
+#: .\apps\templates\home\voucher-details.html:23
+
+msgid "Voucher Details"
+msgstr "優惠券詳情"
+
+
+#: .\apps\templates\home\voucher-details.html:48
+
+#: .\apps\templates\home\voucher.html:204
+
+msgid "Minimum Quantity"
+msgstr "最低訂購數量"
+
+
+#: .\apps\templates\home\voucher-details.html:54
+
+#: .\apps\templates\home\voucher.html:205
+
+msgid "Maximum Quantity"
+msgstr "最大訂購數量"
+
+
+#: .\apps\templates\home\voucher-details.html:62
+
+#: .\apps\templates\home\voucher.html:236
+
+msgid "Eligible Products"
+msgstr "符合條件的產品"
+
+
+#: .\apps\templates\home\voucher-details.html:86
+
+#: .\apps\templates\home\voucher.html:237
+
+msgid "Total Quantity"
+msgstr "總數量"
+
+
+#: .\apps\templates\home\voucher-details.html:92
+
+#: .\apps\templates\home\voucher.html:251
+
+msgid "Quantity Condition"
+msgstr "數量條件"
+
+
+#: .\apps\templates\home\voucher-details.html:101
+
+#: .\apps\templates\home\voucher.html:238
+
+msgid "Price"
+msgstr "價錢"
+
+
+#: .\apps\templates\home\voucher-details.html:107
+
+#: .\apps\templates\home\voucher.html:270
+
+msgid "Price Condition"
+msgstr "價錢條件"
+
+
+#: .\apps\templates\home\voucher-details.html:123
+
+#: .\apps\templates\home\voucher.html:311
+
+msgid "No of Gifts"
+msgstr "禮品數量"
+
+
+#: .\apps\templates\home\voucher-details.html:131
+
+#: .\apps\templates\home\voucher-list.html:27
+
+msgid "Voucher ID"
+msgstr "優惠碼"
+
+
+#: .\apps\templates\home\voucher-details.html:150
+
+msgid "Highlights"
+msgstr "亮點"
+
+
+#: .\apps\templates\home\voucher-details.html:156
+
+msgid "Details"
+msgstr "詳情"
+
+
+#: .\apps\templates\home\voucher-details.html:180
+
+#: .\apps\templates\home\voucher.html:80
+
+msgid "Quota"
+msgstr "限額"
+
+
+#: .\apps\templates\home\voucher-details.html:186
+
+#: msgid "Start Date"
+#: msgstr "開始日期"
+
+
+#: .\apps\templates\home\voucher-details.html:192
+
+#: msgid "End Date"
+#: msgstr "結束日期"
+
+
+#: .\apps\templates\home\voucher-details.html:216
+
+msgid "Last Modified"
+msgstr "上次修改"
+
+
+#: .\apps\templates\home\voucher-list.html:3
+
+#: .\apps\templates\home\voucher-list.html:15
+
+msgid "Voucher List"
+msgstr "優惠券列表"
+
+
+#: .\apps\templates\home\voucher-list.html:17
+
+msgid "Create voucher"
+msgstr "創建優惠券"
+
+
+#: .\apps\templates\home\voucher-list.html:26
+
+msgid "No."
+msgstr "數量"
+
+
+#: .\apps\templates\home\voucher-list.html:32
+
+#: .\apps\templates\home\voucher.html:56 .\apps\templates\home\voucher.html:225
+
+#: .\apps\templates\home\voucher.html:304
+
+msgid "Discount value"
+msgstr "折扣價值"
+
+
+#: .\apps\templates\home\voucher.html:1
+
+msgid "Vocuher"
+msgstr "優惠券"
+
+
+#: .\apps\templates\home\voucher.html:41
+
+msgid "Voucher highlights"
+msgstr "優惠券亮點"
+
+
+#: .\apps\templates\home\voucher.html:48 .\apps\templates\home\voucher.html:217
+
+#: .\apps\templates\home\voucher.html:294
+
+msgid "Discount type"
+msgstr "折扣類型"
+
+
+#: .\apps\templates\home\voucher.html:64
+
+msgid "Amount trigger"
+msgstr "金額觸發"
+
+
+#: .\apps\templates\home\voucher.html:72
+
+msgid "Discount trigger"
+msgstr "折扣條件"
+
+
+#: .\apps\templates\home\voucher.html:88
+
+msgid "One time use only"
+msgstr "只限一次使用"
+
+
+#: .\apps\templates\home\voucher.html:96
+
+msgid "Start date"
+msgstr "開始日期"
+
+
+#: .\apps\templates\home\voucher.html:109
+
+msgid "End date(optional)"
+msgstr "結束日期（可選）"
+
+
+#: .\apps\templates\home\voucher.html:130
+
+msgid "Voucher type"
+msgstr "優惠類型"
+
+
+#: .\apps\templates\home\voucher.html:198
+
+msgid "Combo"
+msgstr "組合"
+
+
+#: .\apps\templates\includes\navigation.html:274
+
+msgid "Notifications"
+msgstr "通知"
+
+
+#: .\apps\templates\includes\navigation.html:291
+
+msgid "User Name"
+msgstr "使用者名稱"
+
+
+#: .\apps\templates\includes\sidebar.html:65
+
+msgid "Product"
+msgstr "產品"
+
+
+#: .\apps\templates\includes\sidebar.html:81
+
+msgid "Inventory"
+msgstr "存貨"
+
+
+#: .\apps\templates\includes\sidebar.html:85
+
+msgid "Purchasing"
+msgstr "採購中"
+
+
+#: .\apps\templates\includes\sidebar.html:86
+
+msgid "Stock Manage"
+msgstr "庫存管理"
+
+
+#: .\apps\templates\includes\sidebar.html:87
+
+msgid "Delivery"
+msgstr "送貨"
+
+
+#: .\apps\templates\includes\sidebar.html:129
+
+msgid "Sales Order"
+msgstr "銷售單"
+
+
+#: .\apps\templates\includes\sidebar.html:137
+
+msgid "Pending Reapproval Order"
+msgstr "待重新審批訂單"
+
+
+#: .\apps\templates\includes\sidebar.html:163
+
+msgid "Discount Management"
+msgstr "折扣管理"
+
+
+#: .\apps\templates\includes\sidebar.html:167
+
+msgid "Discount Schemes"
+msgstr "折扣方案"
+
+
+#: .\apps\templates\includes\sidebar.html:168
+
+msgid "Coupons"
+msgstr "優惠券"
+
+
+#: .\apps\templates\includes\sidebar.html:169
+
+msgid "Promotions"
+msgstr "優惠"
+
+
+#: .\apps\templates\includes\sidebar.html:170
+
+msgid "Promo Codes"
+msgstr "優惠碼"
+
+
+#: .\apps\templates\includes\sidebar.html:178
+
+msgid "System Parameters"
+msgstr "系統參數"
+
+
+#: .\core\settings.py:129
+
+msgid "English"
+msgstr "英文"
+
+
+#: .\core\settings.py:130
+
+msgid "hong kong Chinese"
+msgstr "中文(香港)"
