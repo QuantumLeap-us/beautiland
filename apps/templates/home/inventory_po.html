@@ -1,0 +1,396 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'Create Purchase Order' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Create Purchase Order' %}</h3>
+        <form id="inventoryPoForm" method="post" action="/inventory-purchase-order/" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Product List'%}:</label>
+                    <div class="row" style="margin-top: 10px;">
+                        <table id="dataTable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                                <th>{% trans 'Product ID' %}</th>
+                                <th>{% trans 'Product Name' %}</th>
+                                <th>{% trans 'Product English Name' %}</th>
+                                <th>{% trans 'Specification' %}</th>
+                                <th>{% trans 'Current Inventory Quantity' %}</th>
+                                <th>{% trans 'Current Inventory after Sales' %}</th>
+                                <th>{% trans 'Last Purchase Date' %}</th>
+                                <th>{% trans 'Suggested Purchase' %}</th>
+                                <th>{% trans 'Supplier' %}</th>
+                                <th>{% trans 'Add' %}</th>
+                            </thead>
+                            <tbody id="productList">
+                                {% for product in products_data %}
+                                <tr>
+                                    <td>{{ product.product_id }}</td>
+                                    <td>{{ product.product_chinese_name }}</td>
+                                    <td>{{ product.product_english_name }}</td>
+                                    <td>{{ product.specification }}</td>
+                                    <td>{{ product.currenct_inventory }}</td>
+                                    <td>{{ product.currenct_inventory_after_sales }}</td>
+                                    <td>{{ product.Last_Purchase_date }}</td>
+                                    <td>{{ product.suggested_purchase }}</td>
+                                    <td>{{ product.supplier }}</td>
+                                    <td>
+                                        <button type="button" id="addProduct_{{product.id}}" onclick="addToProductList('{{product.id}}', 
+                                        '{{ product.product_id }}', '{{product.product_chinese_name}}', '{{product.product_english_name}}', '{{ product.specification }}',
+                                        '{{ product.currenct_inventory }}', '{{ product.currenct_inventory_after_sales }}', '{{ product.Last_Purchase_date }}', '{{ product.suggested_purchase }}', '{{ product.supplier }}',
+                                        '{{ product.total_cost }}')"
+                                        class="btn btn-primary btn-sm" style="pointer-events: auto;"><i class="ti-plus" style="color: white;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Purchase Order List'%}:</label>
+                    <div style="border-top: 1px solid; margin-top: 10px;">
+                      <table class="table">
+                          <thead>
+                            <th>{% trans 'Product ID' %}</th>
+                            <th>{% trans 'Product Name' %}</th>
+                            <th>{% trans 'Product English Name' %}</th>
+                            <th>{% trans 'Specification' %}</th>
+                            <th>{% trans 'Supplier' %}</th>
+                            <th></th>
+                            <th>{% trans 'Purchase Cost' %}</th>
+                            <th>{% trans 'Quantity' %}</th>
+                            <th>{% trans 'Sub Total' %}</th>
+                            <th>{% trans 'Remark' %}</th>
+                            <th>{% trans 'Delete' %}</th>
+                          </thead>
+                          <tbody id="poList">
+                            <tr id="noDataMsg">
+                                <td colspan="11" style="text-align: center;"><span>Add to view data.</span></td>
+                            </tr>
+                          </tbody>
+                          <tfoot>
+                            <tr>
+                                <th colspan="7"></th>
+                                <th>{% trans 'Total Purchase Cost' %}</th>
+                                <td>$ <span id="totalProductPrice"></span></td>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th colspan="7"></th>
+                                <th>{% trans 'Special Discount' %}</th>
+                                <td>
+                                  <input type="text" id="id_special_discount" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control inputField" name="special_discount" value="">
+                                </td>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th colspan="7"></th>
+                                <th>{% trans 'Total Cost After Discount' %}</th>
+                                <td>
+                                  $ <span id="id_total_cost"></span>
+                                </td>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+                    <div style="display: flex; justify-content: center;">
+                    <button type="button" id="saveBtn" onclick="createInventoryPo('save')" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                    {% trans 'Save' %}
+                    </button>
+                    <button type="button" id="submitBtn" onclick="createInventoryPo('submit')" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                    {% trans 'Create' %}
+                    </button>
+                    <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitInvPo()">
+                    {% trans 'Exit' %}
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  var changed = false;
+  $(document).ready(function() {
+      if ($.fn.DataTable.isDataTable('#dataTable')) {
+        // If DataTable is already initialized, destroy it
+        $('#dataTable').DataTable().destroy();
+      }
+
+      // Reinitialize DataTable with default sorting
+      $('#dataTable').DataTable({
+        "order": [[0, "desc"]],
+        // "pageLength": 100,
+      });
+
+      $(document).on("change keyup", '.po-purchase-cost', function(e) {
+        setTimeout(() => {
+          autoCalcSubTotalProductTotal();
+          }, 0);
+      });
+
+      $(document).on("change keyup", '.po-quantity', function(e) {
+        setTimeout(() => {
+          autoCalcSubTotalProductTotal();
+        }, 0);
+      }); 
+
+      $('#id_special_discount').on("keyup", function () {
+        updateTotalCost();
+      })
+
+      checkFormValueChange();
+  });
+
+  $('.btn-click').click(function () {
+      changed = false;
+  })
+
+  window.addEventListener('beforeunload', function(event) {
+      if (changed) {
+          var confirmationMessage = 'Are you sure you want to leave this page?';
+          (event || window.event).returnValue = confirmationMessage;
+          return confirmationMessage;
+      }
+  });
+
+  function checkFormValueChange() {
+      // Get the form and input fields
+      var form = document.getElementById('inventoryPoForm');
+      var inputFields = document.getElementsByClassName('inputField');
+
+      // Store the initial values of the input fields
+      var initialValues = [];
+      for (var i = 0; i < inputFields.length; i++) {
+          initialValues.push(inputFields[i].value);
+      }
+
+      // Add event listener for input changes
+      for (var i = 0; i < inputFields.length; i++) {
+          inputFields[i].addEventListener('input', function() {
+              for (var j = 0; j < inputFields.length; j++) {
+                  if (inputFields[j].value !== initialValues[j]) {
+                      changed = true;
+                      break;
+                  }
+              }
+          });
+      }
+    }
+
+  function addToProductList(id, product_id, product_chinese_name, product_english_name, specification, currenct_inventory, currenct_inventory_after_sales, Last_Purchase_date, suggested_purchase, supplier, total_cost) {
+      changed = true;
+      $('#noDataMsg').hide();
+      $('#addProduct_' + id).hide();
+  
+      var orderList = document.getElementById("poList");
+      orderList.insertAdjacentHTML(
+          "beforeend",
+          `<tr id="inventoryPoLine_${id}">
+            <td>${product_id}</td>
+            <td id="prod_chinese_name_${id}">${product_chinese_name}</td>
+            <td id="prod_english_name_${id}">${product_english_name}</td>
+            <td id="prod_spec_${id}">${specification}</td>
+            <td id="prod_supplier_${id}">${supplier}</td>
+            <td>$</td>
+            <td style="width: 12%;"><input type="text" id="purchase_cost_${id}" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control po-purchase-cost inputField" name="purchase_cost" value="${total_cost}"></td>
+            <td style="width: 12%;" id="quantity_td_${id}"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control po-quantity inputField" name="quantity" id="quantity_${id}"></input></td>
+            <td>$ <span id="sub_total_${id}"></span></td>
+            <td><input type="text" class="form-control inputField" name="remarks" id="remarks_${id}"></td>
+            <td>
+              <div class="display: flex; justify-content: space-evenly;">
+                <button style="margin: 2px;" type="button" class="btn btn-danger btn-sm" onclick=deleteProduct('${id}')>
+                  <i class="ti-trash" style="color: white;"></i>
+                </button>
+              </div>
+            </td>
+          </tr>`
+      );
+    }
+
+    function deleteProduct(id) {
+      changed = true;
+      $('#inventoryPoLine_' + id).remove();
+      $('#addProduct_' + id).show();
+    } 
+
+    function autoCalcSubTotalProductTotal() {
+      var total_price = 0;
+      $('#poList tr').slice(1).each(function(index, element) {
+        var productId = $(this).attr('id').split('_')[1];
+        var purchase_cost = $('#purchase_cost_' + productId).val() || 0;
+        var qty = $('#quantity_' + productId).val() || 0;
+        var subtotal = parseFloat(purchase_cost) * parseInt(qty);
+        if (subtotal) {
+          $('#sub_total_' + productId).text(subtotal.toFixed(1));
+          total_price += parseFloat(subtotal);
+        } else {
+          $('#sub_total_' + productId).text((0).toFixed(1));
+        }
+      });
+      $('#totalProductPrice').text(total_price.toFixed(1));
+      updateTotalCost();
+    }
+
+    function updateTotalCost() {
+      var special_disc = $('#id_special_discount').val() || 0;
+      var total_price = $('#totalProductPrice').text() || 0;
+      if (special_disc) {
+        var total_cost_after_disc = parseFloat(total_price) - parseFloat(special_disc);
+        if (total_cost_after_disc > 0) {
+          $('#id_total_cost').text(total_cost_after_disc.toFixed(1));
+        } else {
+          $('#id_total_cost').text((0).toFixed(1));
+        }
+      } else {
+        $('#id_total_cost').text(total_price);
+      }
+    }
+
+    function createInventoryPo(button) {
+      var product_items = []
+      var error_occurred = false;
+      $('#poList tr').slice(1).each(function(index, element) {
+        var productId = $(this).attr('id').split('_')[1];
+        var purchase_cost = $('#purchase_cost_' + productId).val() || 0;
+        if (purchase_cost <= 0) {
+          alert("Purchase Cost cannot be negetive, zero or blank.");
+          error_occurred = true;
+          return false;
+        }
+        var qty = $('#quantity_' + productId).val() || 0;
+        if (qty <= 0) {
+          alert("Quantity cannot be negetive, zero or blank.");
+          error_occurred = true;
+          return false;
+        }
+        var remark = $('#remarks_' + productId).val();
+        var subtotal = parseFloat(purchase_cost) * parseInt(qty);
+        var prod_chinese_name = $('#prod_chinese_name_' + productId).text();
+        var prod_english_name = $('#prod_english_name_' + productId).text();
+        var prod_spec = $('#prod_spec_' + productId).text();
+        var prod_supplier = $('#prod_supplier_' + productId).text();
+
+        product_items.push({
+          "product_id": productId,
+          "purchase_cost": purchase_cost,
+          "qty": qty,
+          "subtotal": subtotal,
+          "remark": remark,
+          "prod_chinese_name": prod_chinese_name,
+          "prod_english_name": prod_english_name,
+          "prod_spec": prod_spec,
+          "prod_supplier": prod_supplier,
+        })
+      });
+
+      if (error_occurred) {
+        return;
+      }
+      
+      var total_purchase_cost = $('#totalProductPrice').text() || 0;
+      var special_disc = $('#id_special_discount').val() || 0;
+      var total_cost_after_disc = $('#id_total_cost').text() || 0;
+
+      if (parseFloat(special_disc) > parseFloat(total_purchase_cost)) {
+        alert("Special Discount cannot be greater than Total Product Cost.");
+        return;
+      }
+
+      var formData = new FormData();
+      formData.append('product_items', JSON.stringify(product_items));
+      formData.append('total_purchase_cost', total_purchase_cost);
+      formData.append('special_disc', special_disc);
+      formData.append('total_cost_after_disc', total_cost_after_disc);
+      formData.append('button', button);
+      setTimeout(() => {
+          $('#loader_spin').show();
+      }, 0);
+      $.ajax({
+          type: "POST",
+          url: "{% url 'create_inventory_purchase_order' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      $('#loader_spin').hide();
+                  }, 0);
+                  window.location = '/inventory-purchase-order-list/';
+              } else {
+                  setTimeout(() => {
+                      $('#loader_spin').hide();
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 10000);
+          },
+          error: function(error) {
+              console.error('Error:', error);
+              setTimeout(() => {
+                  $('#loader_spin').hide();
+              }, 0);
+          }
+      });
+    }
+
+    function exitInvPo() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/inventory-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/inventory-list/';
+        }
+    }
+
+
+</script>
+{% endblock javascripts %}

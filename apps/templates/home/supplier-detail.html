@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Supplier Details'%}
+ {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: space-between">
+        <h3 class="c-grey-900 mB-20" style="text-align: center">
+          {% trans 'Supplier Details' %}
+        </h3>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table class="table">
+              <thead class="table-dark">
+                <tr>
+                  <th>{% trans 'Name' %}</th>
+                  <th>{% trans 'Value' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{% trans 'Name' %}</td>
+                  <td>{{ supplier.name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'English Name' %}</td>
+                  <td>{{ supplier.english_name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Code' %}</td>
+                  <td>{{ supplier.code }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Phone Number' %}</td>
+                  <td>{{ supplier.phone_number }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Email' %}</td>
+                  <td>{{ supplier.email }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Address Line 1' %}</td>
+                  <td>{{ supplier.address_line1 }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Address Line 2' %}</td>
+                  <td>{{ supplier.address_line2 }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Pincode' %}</td>
+                  <td>{{ supplier.pincode }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Landmark' %}</td>
+                  <td>{{ supplier.landmark }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Town' %}</td>
+                  <td>{{ supplier.town }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'City' %}</td>
+                  <td>{{ supplier.city }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'State' %}</td>
+                  <td>{{ supplier.state }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Country' %}</td>
+                  <td>{{ supplier.country }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end">
+        <a
+          class="btn btn-primary btn-sm mR-10"
+          href="{% url 'supplier-update' supplier.id %}"
+        >
+          {% trans 'Update' %}
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

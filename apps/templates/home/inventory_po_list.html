@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'View Purchase Orders' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'View Purchase Orders' %}</h3>
+        <form id="inventoryPoForm" method="post" action="/inventory-purchase-order-details/" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Purchase Order List'%}:</label>
+                    <div style="margin-top: 10px;">
+                        <table id="dataTable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                                <th>{% trans 'Purchase Date' %}</th>
+                                <th>{% trans 'Purchase Order ID' %}</th>
+                                <th>{% trans 'Product ID' %}</th>
+                                <th>{% trans 'Product Name' %}</th>
+                                <th>{% trans 'Product English Name' %}</th>
+                                <th>{% trans 'Specification' %}</th>
+                                <th>{% trans 'Purchase Quantity' %}</th>
+                                <th>{% trans 'Purchse Cost' %}</th>
+                                <th>{% trans 'Actual Arrived Quantity' %}</th>
+                                <th>{% trans 'Expected Arrival Date' %}</th>
+                                <th>{% trans 'Supplier ID' %}</th>
+                                <th>{% trans 'Supplier' %}</th>
+                                <th>{% trans 'Status' %}</th>
+                                <th>{% trans 'Edit' %}</th>
+                            </thead>
+                            <tbody id="productList">
+                                {% for inventory_po in inventory_po_data %}
+                                <tr>
+                                    <td>{{ inventory_po.created_date }}</td>
+                                    <td>{{ inventory_po.inventory_po_id }}</td>
+                                    <td>{{ inventory_po.product__product_id }}</td>
+                                    <td>{{ inventory_po.item_name_chinese }}</td>
+                                    <td>{{ inventory_po.item_name_english }}</td>
+                                    <td>{{ inventory_po.item_specification }}</td>
+                                    <td>{{ inventory_po.quantity }}</td>
+                                    <td>{{ inventory_po.subtotal }}</td>
+                                    <td>{{ inventory_po.actual_arrival_quantity }}</td>
+                                    <td>{{inventory_po.expected_arrival_date}}</td>
+                                    <td>{{ inventory_po.supplier__supplier_id }}</td>
+                                    <td>{{ inventory_po.supplier_name }}</td>
+                                    <td>{{ inventory_po.status }}</td>
+                                    <td>
+                                      <div style="display: flex; justify-content: center">
+                                        <a class="btn btn-primary btn-sm mR-10" href="{% url 'inventory_purchase_order_details' inventory_po.inv_po_id %}" >
+                                        <i class="ti-pencil-alt"></i>
+                                        </a>
+                                      </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+      if ($.fn.DataTable.isDataTable('#dataTable')) {
+        // If DataTable is already initialized, destroy it
+        $('#dataTable').DataTable().destroy();
+      }
+
+      // Reinitialize DataTable with default sorting
+      $('#dataTable').DataTable({
+        "order": [[0, "desc"]],
+        // "pageLength": 100,
+      });
+  });
+</script>
+{% endblock javascripts %}

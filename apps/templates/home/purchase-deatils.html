@@ -1,0 +1,98 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Purchase details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container-fluid">
+            <div style="align-items: center">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Purchase Order Details'%}
+                </h3>
+            </div>
+            <div >
+                <div class="m 2px">
+                    <label>{% trans 'Product List'%}:</label>
+                </div>
+
+                <table class="table" cellspacing="0" width="100%">
+                    <thead>
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                        <th>{% trans 'Supplier Product Name' %}</th>
+                        <th>{% trans 'Supplier Name' %}</th>
+                        <th>{% trans 'Supplier Code'%}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                        <th>{% trans 'Raw Material Cost' %}</th>
+                        <th>{% trans 'Processing Cost' %}</th>
+                        <th>{% trans 'Packaging Cost' %}</th>
+                        <th>{% trans 'Other Cost' %}</th>
+                        <th>{% trans 'Freight Cost' %}</th>
+                        <th>{% trans 'Sub Total Cost' %}</th>
+                    </thead>
+                    <tbody>
+                        {% for product in order.purchaseitems %}
+                        <tr>
+                            <td>{% if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                            <td>{% if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                            <td>{% if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                            <td>{% if product.supplier_product_name %}{{ product.supplier_product_name }}{% else %}-{% endif %}</td>
+                            <td>{% if product.supplier_name %}{{ product.supplier_name }}{% else %}-{% endif %}</td>
+                            <td>{% if product.supplier_code %}{{ product.supplier_code }}{% else %}-{% endif %}</td>
+                            <td>{% if product.purchase_quantity %}{{ product.purchase_quantity }}{% else %}-{% endif %}</td>
+                            <td>{% if product.raw_material_cost %}{{ product.raw_material_cost }}{% else %}-{% endif %}</td>
+                            <td>{% if product.packaging_cost %}{{ product.packaging_cost }}{% else %}-{% endif %}</td>
+                            <td>{% if product.packaging_cost %}{{ product.packaging_cost }}{% else %}-{% endif %}</td>
+                            <td>{% if product.product_other_cost %}{{ product.product_other_cost }}{% else %}-{% endif %}</td>
+                            <td>{% if product.freight_cost %}{{ product.freight_cost }}{% else %}-{% endif %}</td>
+                            <td>{% if product.sub_total %}{{ product.sub_total }}{% else %}-{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>{% trans 'Status'%}</td>
+                            <td>{% if order.status %}{{order.status}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Delivery Date'%}</td>
+                            <td>{% if order.delivery_date %}{{order.delivery_date}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Remarks'%}</td>
+                            <td>{% if order.remarks %}{{order.remarks}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Delivery Cost' %}</td>
+                            <td>{% if order.delivery_cost %}{{order.delivery_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Other Cost'%}</td>
+                            <td>{% if order.other_cost %}{{order.other_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Total Product Cost'%}</td>
+                            <td>{% if order.total_product_cost %}{{order.total_product_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Total Cost'%}</td>
+                            <td>{% if order.total_cost %}{{order.total_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Payment Method'%}</td>
+                            <td>{% if order.payment_method %}{{order.payment_method}}{% else %}-{% endif %}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {{ msg }}
+        </div>
+    </div>
+</main>
+{% endblock content %} {% block javascripts %}
+{% endblock javascripts %}

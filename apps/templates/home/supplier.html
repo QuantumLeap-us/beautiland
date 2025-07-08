@@ -1,0 +1,325 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Add Supplier'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+{% endblock stylesheets %}
+{% block content %}
+<main class='main-content bgc-grey-100'>
+    <div id='mainContent'>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            {% if error_msg %}
+            <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+            {% endif %}
+            <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Add Supplier'%}</h3>
+            <form id="supplierForm" method="post" action="/supplier/" enctype="multipart/form-data" style="margin-top: 35px;">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    {% csrf_token %}
+                    <div class="row gx-4">
+                        <div class="col-md-4">
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_created_date" class="text-normal text-dark">{% trans 'Created Date'%}</label>
+                                <!-- <span id="id_created_date" class="auto-generate-fields">{{created_date}}</span> -->
+                                <input type="text" class="form-control" id="id_created_date" value="{{created_date}}" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_product_type" class="text-normal text-dark">{% trans 'Product Type'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="product_type" id="id_product_type" multiple required>
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_location" class="text-normal text-dark">{% trans 'Location'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="location" id="id_location" required>
+                                    <option value="">-------</option>
+                                    {% for location in locations %}
+                                        <option value="{{location}}">{{location}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_type" class="text-normal text-dark">{% trans 'Contact Type'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="contact_type" id="id_contact_type" required>
+                                    <option value="">-------</option>
+                                    {% for contact_type in contact_types %}
+                                        <option value="{{contact_type}}">{{contact_type}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_person_2" class="text-normal text-dark">{% trans 'Contact Person 2'%}</label>
+                                <input type="text" class="form-control inputField" name="contact_person_2", id="id_contact_person_2">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_website" class="text-normal text-dark">{% trans 'Website'%}</label>
+                                <input type="text" class="form-control inputField" name="website" id="id_website">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_last_order_date" class="text-normal text-dark">{% trans 'Last Purchase Order Date'%}</label>
+                                <!-- <span id="id_last_order_date" class="auto-generate-fields">{{last_po_date}}</span> -->
+                                <input type="text" class="form-control" id="id_last_order_date" disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_supplier_id" class="text-normal text-dark">{% trans 'Supplier ID'%}</label>
+                                <!-- <span id="id_supplier_id" class="auto-generate-fields">-</span> -->
+                                <input type="text" class="form-control" id="id_supplier_id" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_company_name" class="text-normal text-dark">{% trans 'Company Name'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="company_name" id="id_company_name" required>    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_currency" class="text-normal text-dark">{% trans 'Currency'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="currency" id="id_currency" required>
+                                    <option value="">-------</option>
+                                    {% for curr in currency %}
+                                        <option value="{{curr}}">{{curr}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_person_1" class="text-normal text-dark">{% trans 'Contact Person 1'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="contact_person_1" id="id_contact_person_1" required>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_phone_2" class="text-normal text-dark">{% trans 'Phone 2'%}</label>
+                                <input type="tel" class="form-control inputField" name="phone_2" id="id_phone_2" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_no_of_order" class="text-normal text-dark">{% trans 'No. of Order'%}</label>
+                                <!-- <span id="id_no_of_order" class="auto-generate-fields">-</span> -->
+                                <input type="text" class="form-control" id="id_no_of_order" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_remark" class="text-normal text-dark">{% trans 'Remark'%}</label>
+                                <input type="text" class="form-control inputField" name="remark" id="id_remark">    
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_supplier_type" class="text-normal text-dark">{% trans 'Supplier Type'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="supplier_type" id="id_supplier_type" required>
+                                    <option value="">-------</option>
+                                    {% for supp_type in supplier_types_li %}
+                                    <option value="{{supp_type}}">{{supp_type}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_name_card_file" class="text-normal text-dark">{% trans 'Name Card'%}</label>
+                                <div id="name_card_preview_img" style="width: 100%;">
+                                    <img id="imagePreview" src="#" class="preview-image" alt="Image Preview" style="display: none;">
+                                    <input type="file" class="form-control inputField" name="name_card_file" id="id_name_card_file" style="width: 100%;height: fit-content;" accept=".jpg, .jpeg, .png" onchange="previewImage(event)">
+                                </div>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_prefix" class="text-normal text-dark">{% trans 'Prefix'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="prefix" id="id_prefix" required>
+                                    <option value="">-------</option>
+                                    {% for prefix in prefixes %}
+                                    <option value="{{prefix}}">{{prefix}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_phone_1" class="text-normal text-dark">{% trans 'Phone 1'%}</label>
+                                <input type="tel" class="form-control inputField" name="phone_1" id="id_phone_1" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_email" class="text-normal text-dark">{% trans 'Email'%}</label>
+                                <input type="email" class="form-control inputField" name="email" id="id_email">    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_accumlated_sales" class="text-normal text-dark">{% trans 'Accumulated Sales'%}</label>
+                                <!-- <span id="id_accumlated_sales" class="auto-generate-fields">-</span> -->
+                                <input type="text" class="form-control" id="id_accumlated_sales" disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="mb-3 div-css">
+                                <label class="form-label" for="id_purchasing_comments" class="text-normal text-dark">{% trans 'Purchasing Comments'%}</label>
+                                <textarea class="form-control inputField" name="purchasing_comments" id="id_purchasing_comments"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+                </div>
+                <div class="col-md-12">
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <div style="display: flex; justify-content: center;">
+                        <button type="submit" id="saveBtn" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                        {% trans 'Save' %}
+                        </button>
+                        <button type="submit" id="submitBtn" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                        {% trans 'Create' %}
+                        </button>
+                        <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitSupplier()">
+                        {% trans 'Exit' %}
+                        </button>
+                    </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    var supplier_wise_product = JSON.parse('{{supplier_wise_product | safe}}');
+    var changed = false;
+
+    $(document).ready(function() {
+        $("#id_product_type").select2({
+            width: "100%",
+            closeOnSelect: false
+        });
+
+        productTypeDropdown();
+
+        $('#id_supplier_type').on("change", function () {
+            productTypeDropdown();
+        })
+
+        $('#saveBtn, #submitBtn').click(function() {
+            $('#buttonClicked').val($(this).attr('id'));  // Set the value of hidden input to the ID of the clicked button
+        });
+
+        // $(document).on("click", '.sidebar-link', function(e) {
+        //   confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+        //   if (!confirmed) {
+        //     return false;
+        //   }
+        // })
+
+        checkFormValueChange();
+    });
+
+    $('.btn-click').click(function () {
+        changed = false;
+    })
+
+    function checkFormValueChange() {
+        // Get the form and input fields
+        var form = document.getElementById('supplierForm');
+        var inputFields = document.getElementsByClassName('inputField');
+
+        // Store the initial values of the input fields
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+
+        // Add event listener for input changes
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    function productTypeDropdown() {
+        var selected_supplier_type = $('#id_supplier_type').val();
+        if (supplier_wise_product.hasOwnProperty(selected_supplier_type)) {
+            var product_types_html = ""
+            var product_types = supplier_wise_product[selected_supplier_type]
+            
+            var product_types_length = product_types.length;
+            for (let index = 0; index < product_types_length; index++) {
+                product_types_html += `<option value="${product_types[index]}">${product_types[index]}</option>`;
+            }
+            $('#id_product_type').html(product_types_html);
+        } else {
+            $('#id_product_type').html("");
+        }
+    }
+
+    function previewImage(event) {
+        var fileInput = event.target;
+        var imagePreview = document.getElementById('imagePreview');
+        
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+            if (file && file.size > maxSize) {
+                event.target.value = "";
+                imagePreview.style.display = 'none';
+                $('#id_name_card_file').css("width", "100%");
+                $('#name_card_preview_img').css("display", "block");
+                alert("File size exceeds the maximum limit of 2 MB.");
+                return false;
+            }
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                $('#id_name_card_file').css("width", "80%");
+                $('#name_card_preview_img').css("display", "flex");
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            imagePreview.style.display = 'none';
+            $('#id_name_card_file').css("width", "100%");
+            $('#name_card_preview_img').css("display", "block");
+        }
+    }
+
+    window.addEventListener('beforeunload', function(event) {
+        if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function exitSupplier() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/supplier-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/supplier-list/';
+        }
+    }
+
+    $('#supplierForm').on('submit', function(event) {
+        event.preventDefault();
+
+        if (this.checkValidity()) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            this.submit();
+        }
+    });
+
+
+</script>
+{% endblock javascripts %}

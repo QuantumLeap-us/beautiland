@@ -1,0 +1,85 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Voucher List'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Voucher List'%}</h4>
+        <div>
+            <a class="btn btn-primary rounded btn-send" href="{% url 'voucher'%}" style="color: white;">{% trans 'Create voucher'%}</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>{% trans 'No.' %}
+                  <th>{% trans 'Voucher ID' %}</th>
+                  <th>{% trans 'Chinese Name' %}</th>
+                  <th>{% trans 'English Name' %}</th>
+                  <th>{% trans 'Voucher Type' %}</th>
+                  <th>{% trans 'Discount Type' %}</th>
+                  <th>{% trans 'Discount value' %}</th>
+                  <th>{% trans 'Status' %}</th>
+                  <th>{% trans 'Created Date' %}</th>
+                  <th>{% trans 'Created By' %}</th>
+                  <th>{% trans 'Action' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for voucher in vouchers %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{voucher.voucherid}}</td>
+                  <td>{{voucher.chinese_name}}</td>
+                  <td>{{voucher.english_name}}</td>
+                  <td>{{voucher.voucher_type}}</td>
+                  <td>{{voucher.discount_type}}</td>
+                  <td>{{voucher.discount_value}}</td>
+                  <td>{{voucher.status}}</td>
+                  <td>{{voucher.created_date}}</td>
+                  <td>{{voucher.created_by}}</td>
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'voucher-details' voucher.id %}">
+                        <i class="ti-eye" style="color: white;"></i>
+                      </a>
+                      <a class="btn btn-danger btn-sm mR-10" href="{% url 'voucher-delete' voucher.id %}">
+                        <i class="ti-trash" style="color: white;"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+    $('#dataTable2').DataTable({
+      "scrollX": true
+      // Add other DataTables options as needed
+    });
+  });
+</script>
+{% endblock javascripts %}

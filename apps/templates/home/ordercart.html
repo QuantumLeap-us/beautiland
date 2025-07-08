@@ -1,0 +1,247 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} 
+{% trans 'Create Order'%}
+{% endblock title %}
+
+{% block stylesheets %}
+<style>
+  .select2-selection .select2-selection--single{
+    margin-top: 10px;
+    margin-bottom: 35px;
+  }
+</style>
+{% endblock stylesheets %} 
+
+{% block content %}
+<main class="main-content bgc-grey-100" id="main_content" style="display: block;">
+    <div id="mainContent">
+        <div class="container">
+            <div style="align-items: center; ">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Create Order'%}
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="m 2px">
+          <label style="margin-bottom: 10px">{% trans 'Customer'%}:</label>
+
+          <select class="form-control" name="customer" id="id_customer">
+            {% for customer in customers %}
+              <option value="{{customer.id}}">{{customer.name}} | {{customer.english_name}} |
+                {{customer.company_name}} | {{customer.company_english_name}} | {{customer.phone_number}} |
+                {{customer.phone_number_2}} | {{customer.contact_1}} | {{customer.contact_2}} | {{customer.email}}</option>
+            {% endfor %}
+          </select>
+
+        </div>
+        <div style="margin-top: 10px;">
+            <label>{% trans 'Product List'%}:</label>
+        </div>
+        <table id="dataTable" class="table" cellspacing="0" width="100%">
+            <thead>
+              <th>{% trans 'Product No' %}</th>
+              <th>{% trans 'Product Name' %}</th>
+              <th>{% trans 'Product English Name' %}</th>
+              <th>{% trans 'Selling Price' %}</th>
+              <th>{% trans 'Add' %}</th>
+            </thead>
+            <tbody>
+              {% for product in products %}
+              <tr>
+                <td>{% if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                <td>{% if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                <td>{% if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                <td>{% if product.selling_price %}{{ product.selling_price }}{% else %}-{% endif %}</td>
+                <td><button type="button" onclick="addToProductList('{{product.id}}', '{{ product.product_id }}', '{{product.product_chinese_name}}', '{{product.product_english_name}}', '{{product.selling_price}}')"
+                    class="btn btn-primary btn-sm"><i class="ti-plus" style="color: white;"></i></button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="mb-3 mt-3">
+          <label>{% trans 'Order List'%}:</label>
+        </div>
+  
+        <table class="table">
+            <thead>
+              <th>{% trans 'Product No' %}</th>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'English Name' %}</th>
+              <th>{% trans 'Selling Price' %}</th>
+              <th>{% trans 'Quantity' %}</th>
+              <th>{% trans 'Sub Total' %}</th>
+              <th>{% trans 'Action' %}</th>
+            </thead>
+            <tbody id="orderList">
+            </tbody>
+        </table>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="productDetails" id="orderDetailsInput" value="" />
+            <input type="hidden" name="total_quantity" id="totalQuantityInput" value="" />
+            <input type="hidden" name="total_product_cost" id="totalCostInput" value="" />
+            <input type="hidden" name="selected_customer" id="selectedCustomerInput" value="">
+            <div class="mb-3 mt-3" style="display: flex; justify-content: center">
+              <button type="submit" id="submitBtn" class="btn btn-primary btn-send" style="color: white;" >{% trans 'Next'%}</button>
+            </div>
+        </form>
+        {{msg}}
+    </div>
+</main>
+    
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    var productDetails = [];
+    var total_quantity = 0;
+    var total_product_cost = 0;
+    var total_cost = 0;
+
+    function addToProductList(productId, productNo, ProductName, productEnglishName, sellingPrice) {
+        var existingRow = document.getElementById(`${productId}_row`);
+        if (existingRow) {
+          alert("Product is already in the order list.");
+          return;
+        }
+    
+        var orderList = document.getElementById("orderList");
+        orderList.insertAdjacentHTML(
+            "beforeend",
+            `<tr id="${productId}_row">
+              <td>${productNo}</td>
+              <td>${ProductName}</td>
+              <td>${productEnglishName}</td>
+              <td>${sellingPrice}</td>
+              <td style="width: 12%;" id="${productId}_quantity_div"><input type="number" class="form-control" name="quantity" id="${productId}_quantity"></input></td>
+              <td id="${productId}_sub_total_div"></td>
+              <td>
+                <div class="display: flex; justify-content: space-evenly;">
+                  <button style="margin: 2px;" id="${productId}_confirmproduct" type="button" class="btn btn-success btn-sm" onclick="createOrderList('${productId}', '${sellingPrice}')">
+                    <i style="color: white;" class="ti-check"></i>
+                  </button>
+                  <button style="margin: 2px;" type="button" class="btn btn-danger btn-sm" onclick=deleteProduct('${productId}')>
+                    <i class="ti-trash" style="color: white;"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>`
+          );
+    
+    }
+
+    function createOrderList(productId, sellingPrice) {
+        var quantity = parseFloat(document.getElementById(productId + "_quantity").value);
+
+        if (isNaN(quantity) || quantity === 0 || quantity < 0) {
+                alert("You can't put 0, negative value, or None in Quantity!");
+                return;
+            }
+        total_quantity = quantity + total_quantity;
+        total_cost = quantity * sellingPrice;
+        total_product_cost = total_cost + total_product_cost;
+
+        var quantity_div = document.getElementById(productId + "_quantity_div");
+        quantity_div.innerHTML = '';
+        quantity_div.insertAdjacentHTML('beforeend', `<label>${quantity}</label>`);
+
+        var subtotat_div = document.getElementById(productId + "_sub_total_div");
+        subtotat_div.innerHTML = '';
+        subtotat_div.insertAdjacentHTML('beforeend', `<label>${total_cost}</label>`);
+
+        var details = {
+            product_id: productId,
+            quantity: quantity,
+            total_cost: total_cost,
+            selling_price: sellingPrice,
+        };
+        productDetails.push(details);
+        document.getElementById(productId + "_confirmproduct").disabled = true;
+
+    }
+
+    function deleteProduct(product_id) {
+        // Find the product to be deleted
+        const deletedProduct = productDetails.find((product) => product.product_id === product_id);
+    
+        
+        if (deletedProduct) {
+          // Subtract the subtotalCost of the deleted product from total_product_cost
+          total_product_cost -= deletedProduct.total_cost;
+    
+          // Remove the product from the productDetails array
+          productDetails = productDetails.filter((product) => product.product_id !== product_id);
+    
+        }
+    
+        
+        var row = document.getElementById(product_id + "_row");
+        row.parentNode.removeChild(row);
+    }
+
+  function nextPage() {
+
+      var quantityInputs = document.querySelectorAll('input[name="quantity"]');
+
+      // Check if any of the quantity inputs is empty
+      var anyEmpty = Array.from(quantityInputs).some(function (input) {
+          return input.value.trim() === '';
+      });
+
+      // If any input is empty, show an alert
+      if (anyEmpty) {
+          alert('Please fill in quantity field.');
+          return false;
+      }
+      // Check if productDetails is empty
+      if (productDetails.length === 0) {
+        // Show an alert or any other validation message
+        alert('Please add at least one product to the order list.');
+        return false;
+      }
+      // Create an object with the data to be sent to the backend
+      document.getElementById('orderDetailsInput').value = JSON.stringify(productDetails);
+      document.getElementById('totalQuantityInput').value = JSON.stringify(total_quantity);
+      document.getElementById('totalCostInput').value = JSON.stringify(total_product_cost); 
+      document.getElementById('selectedCustomerInput').value = JSON.stringify(document.getElementById('id_customer').value); 
+      return true;
+    }
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+      // Prevent the form from submitting by default
+      event.preventDefault();
+
+      // Call createData function and submit the form if it returns true
+      if (nextPage()) {
+          this.submit();
+      }
+  });
+
+    $(document).ready(function () {
+        // Initialize DataTables for the product list table
+        $('#dataTable2').DataTable({
+        "scrollX": true
+        // Add other DataTables options as needed
+        });
+
+        // Initialize Select2 for the 'customer' field
+        $('#id_customer').select2({
+        width: '100%',
+        });
+
+        $('#id_customer').on('change', function () {
+          // Update the value of the hidden input with the selected customer ID
+          $('#selectedCustomerInput').val($(this).val());
+        });
+
+    });
+
+
+</script>
+{% endblock javascripts %}

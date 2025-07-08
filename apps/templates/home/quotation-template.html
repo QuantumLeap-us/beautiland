@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+        {% block title %}Beautiland{% endblock %} 
+    </title>
+    <!-- Specific Page CSS goes HERE -->
+    {% block stylesheets %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400&display=swap');
+
+        body {
+            font-family: 'Noto Sans HK', sans-serif !important;
+        }
+    </style>
+    {% endblock stylesheets %}
+
+  </head>
+  {% block content %}
+  <body style="display: flex; justify-content: center;">
+    <div>
+        <div>
+        <center><h1><b>Quotation</b></h1></center>
+        </div>
+        <div style="margin-bottom: 2%" >
+            <div>
+                <label><b>Quotation No:</b></label>
+                {{order.id}}
+            </div>
+        </div>
+        <table style="border-collapse: collapse; text-align: center;" border="1">
+            <thead style="background-color: black; color: white;">
+                <tr>
+                    <th style="padding: 5px">Product No.</th>
+                    <th style="padding: 5px">Name</th>
+                    <th style="padding: 5px">English Name</th>
+                    <th style="padding: 5px">Quantity</th>
+                    <th style="padding: 3px">Supplier Name</th>
+                    <th style="padding: 3px">Supplier Code</th>
+                    <th style="padding: 5px">Raw Material Cost</th>
+                    <th style="padding: 5px">Packaging Cost</th>
+                    <th style="padding: 5px">Processing Cost</th>
+                    <th style="padding: 5px">Other Cost</th>
+                    <th style="padding: 5px">Freight Cost</th>
+                    <th style="padding: 5px">Sub Total Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in order.purchaseitems %}
+                <tr>
+                    <td>{{product.product_id}}</td>
+                    <td>{{product.product_chinese_name}}</td>
+                    <td>{% if product.product_english_name %}{{product.product_english_name}}{% endif %}</td>
+                    <td>{{product.purchase_quantity}}</td>
+                    <td>{{product.supplier_name}}</td>
+                    <td>{{product.supplier_code}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> 
+        <div style="margin-top: 5%">
+            <table border="0" >
+                {% comment %} <tr>
+                    <td style="
+                    padding: 5px">
+                        <b>Other Cost:</b>
+                    </td>
+                    <td style="padding: 5px">
+                        ____________________
+                    </td>
+                </tr>
+                <tr>
+                    <td style="
+                    padding: 5px">
+                        <b> Delivery Cost:</b>
+                    </td>
+                    <td style="padding: 5px">
+                        ____________________
+                    </td>
+                </tr> {% endcomment %}
+                <tr>
+                    <td style="
+                    padding: 5px">
+                        <b>Total Cost:</b>
+                    </td>
+                    <td style="padding: 5px">
+                        ____________________
+                    </td>
+                </tr>
+            </table>
+        </div> 
+    </div>
+  </body>
+  {% endblock content %}
+</html>

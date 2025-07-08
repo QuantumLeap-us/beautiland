@@ -1,0 +1,247 @@
+{% load i18n %}
+<style>
+  .active {
+    background-color: #e1f3ff;
+    border-radius: 0px 10px 10px 0px;
+    color: #0f9aee !important;
+  }
+  .active span.icon-holder {
+    color: #0f9aee;
+  }
+
+  .sidebar .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 20px 5px 20px;
+    margin: 5px 0 8px 0;
+  }
+
+  .sidebar .logo-container .logo {
+    flex-shrink: 0;
+  }
+  @media (max-width: 768px) {
+    .sidebar .logo-container {
+      padding: 6px 15px 4px 15px;
+      margin: 3px 0 6px 0;
+    }
+    .sidebar .logo-container .logo img {
+      max-width: 150px;
+      max-height: 50px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .sidebar .logo-container {
+      padding: 5px 12px 3px 12px;
+      margin: 2px 0 5px 0;
+    }
+    .sidebar .logo-container .logo img {
+      max-width: 130px;
+      max-height: 45px;
+    }
+  }
+</style>
+<div class="sidebar">
+  <div class="sidebar-inner">
+    <!-- ### $Sidebar Header ### -->
+    <div class="sidebar-logo">
+      <div class="peers ai-c fxw-nw">
+        <div class="peer peer-greed">
+          <a class=" td-n" style="border-radius: 10px !important;" href="{% url 'supplier-list' %}">
+            <div class="logo-container">
+              <div class="logo">
+                <img src="/static/assets/images/beautiland_logo.png" alt="Beautiland Logo"
+                     style="max-width: 180px;
+                            max-height: 60px;
+                            width: auto;
+                            height: auto;
+                            object-fit: contain;
+                            display: block;">
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="peer">
+          <div class="mobile-toggle sidebar-toggle">
+            <a href="" class="td-n">
+              <i class="ti-arrow-circle-left"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ### $Sidebar Menu ### -->
+    <ul class="sidebar-menu scrollable pos-r">
+      <!-- <li class="nav-item mT-30 actived">
+        <a class="sidebar-link" href="/product-list.html">
+          <span class="icon-holder">
+            <i class="c-blue-500 ti-home"></i>
+          </span>
+
+          <span class="title">Dashboard</span>
+        </a>
+      </li> -->
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'supplier-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-truck"></i>
+          </span>
+          <span class="title">{% trans 'Supplier'%}</span>
+        </a>
+      </li> 
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'product-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-box-open"></i>
+          </span>
+          <span class="title">{% trans 'Product'%}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'customer-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-user"></i>
+          </span>
+          <span class="title">{% trans 'Customer'%}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' data-bs-toggle="collapse" href="#submenu1">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-warehouse"></i>
+          </span>
+          <span class="title">{% trans 'Inventory'%} <span class="icon-holder" style="font-size: 15px;"><i class="c-brown fas fa-angle-down"></i></span>
+          </span>
+        </a>
+        <li class="show icon-holder" id="submenu1" data-bs-parent="#menu" style="margin-left: 50px;">
+          <a href="{% url 'inventory-list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Purchasing'%}</span> </a>
+          <a href="{% url 'inventory_stockin_list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Stock Manage'%}</span></a>
+          <a href="{% url 'delivery-list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Delivery'%}</span></a>
+        </li>
+      </li>
+      <li class="nav-item" style="display: none;">
+        <a class='sidebar-link' href="{% url 'category-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown ti-view-list-alt"></i>
+          </span>
+          <span class="title">{% trans 'Category'%}</span>
+        </a>
+      </li>
+      {% comment %} <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'voucher-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-ticket"></i>
+          </span>
+          <span class="title">{% trans 'Vouchers' %}</span>
+        </a>
+      </li> {% endcomment %}
+      <li class="nav-item" style="display: none;">
+        <a class='sidebar-link' href="{%url 'quotation-list'%}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown ti-clipboard"></i>
+          </span>
+          <span class="title">{% trans 'Quotation' %}</span>
+        </a>
+      </li>
+      {% comment %} <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'purchase-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-shopping-cart"></i>
+          </span>
+          <span class="title">{% trans 'Purchase'%}</span>
+        </a>
+      </li> {% endcomment %}
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'order-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-file-invoice-dollar"></i>
+          </span>
+          <span class="title">{% trans 'Sales Order'%}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'order-approval-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-hourglass-half"></i>
+          </span>
+          <span class="title">{% trans 'Pending Reapproval Order' %}</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'transaction-list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-wallet"></i>
+          </span>
+          <span class="title">{% trans 'Transaction List' %}</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'in-stock-list' %}">
+          <span class="icon-holder" style="font-size: 16px;">
+            <i class="c-brown ti-arrow-right"></i>
+            <i class="c-brown ti-package"></i>
+          </span>
+          <span class="title">{% trans 'In Stock' %}</span>
+        </a>
+      </li> -->
+            <!-- 新增優惠管理模塊的下拉菜單 -->
+      <li class="nav-item">
+        <a class='sidebar-link' data-bs-toggle="collapse" href="#submenu_discount">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="c-brown fas fa-tags"></i>
+          </span>
+          <span class="title">{% trans 'Discount Management' %} <span class="icon-holder" style="font-size: 15px;"><i class="c-brown fas fa-angle-down"></i></span>
+          </span>
+        </a>
+        <li class="show icon-holder" id="submenu_discount" data-bs-parent="#menu" style="margin-left: 50px;">
+          <a href="{% url 'discount_scheme_list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Discount Schemes' %}</span></a>
+          <a href="{% url 'coupon_list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Coupons' %}</span></a>
+          <a href="{% url 'promotion_list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Promotions' %}</span></a>
+          <a href="{% url 'promo_code_list' %}" class="sidebar-link"><span class="title" style="font-size: 14px;">{% trans 'Promo Codes' %}</span></a>
+        </li>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="{% url 'system_parameters_list' %}">
+          <span class="icon-holder" style="font-size: 18px;">
+            <i class="fas fa-cogs"></i>
+          </span>
+          <span class="title">{% trans 'System Parameters' %}</span>
+        </a>
+      </li>
+      <!--<li class="nav-item">
+        <a class='sidebar-link' href="/compose.html">
+          <span class="icon-holder">
+            <i class="c-blue-500 ti-share"></i>
+          </span>
+          <span class="title">Compose</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="/chat.html">
+          <span class="icon-holder">
+            <i class="c-deep-purple-500 ti-comment-alt"></i>
+          </span>
+          <span class="title">Chat</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="/calendar.html">
+          <span class="icon-holder">
+            <i class="c-deep-orange-500 ti-calendar"></i>
+          </span>
+          <span class="title">Calendar</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class='sidebar-link' href="/forms.html">
+          <span class="icon-holder">
+            <i class="c-deep-orange-500 ti-view-list-alt"></i>
+          </span>
+          <span class="title">Forms</span>
+        </a>
+      </li> -->
+    </ul>
+  </div>
+</div>

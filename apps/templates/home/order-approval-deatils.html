@@ -1,0 +1,229 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Pending Order details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container-fluid">
+            <div style="align-items: center">
+                {% if error_msg %}
+                    <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+                {% endif %}
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Pending Order Details'%}
+                </h3>
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <div class="m 2px">
+                        <label style="font-size: 15.7px;">{% trans 'General Information'%}:</label>
+                    </div>
+                    <div style="border-top: 1px solid;margin-top: 5px;">
+                        <table class='table' style="margin-top: 5px;">
+                            <tbody>
+                                <tr>
+                                <th>{%trans 'Invoice ID'%}</th>
+                                <td>{{order.order_id}}</td>
+                                <th>{%trans 'Type'%}</th>
+                                <td>{{order.type}}</td>
+                                <th>{%trans 'Phone'%}</th>
+                                <td>
+                                    {{order.phone}}
+                                </td>
+                                <th>{%trans 'Delivery Address'%}</th>
+                                <td>
+                                    {{order.delivery_address}}
+                                </td>
+                                </tr>
+                                <tr>
+                                <th>{%trans 'Order Date'%}</th>
+                                <td>
+                                    {{order.order_date}}
+                                </td>
+                                <th>{%trans 'Company Name'%}</th>
+                                <td>
+                                    {{order.company_name}}
+                                </td>
+                                <th>{%trans 'Order Amount'%}</th>
+                                <td>
+                                    {{order.order_amount}}
+                                </td>
+                                <th>{%trans 'Delivery Comments'%}</th>
+                                <td>
+                                    {{order.delivery_comment}}
+                                </td>
+                                </tr>
+                                <tr>
+                                
+                                <th>{%trans 'Order Status'%}</th>
+                                <td>
+                                    {{order.order_status}}
+                                </td>
+                                <th>{%trans 'Customer ID'%}</th>
+                                <td>
+                                    {{order.customer_id}}
+                                </td>
+                                <th>{%trans 'Total Unit'%}</th>
+                                <td>
+                                    {{order.total_qty}}
+                                </td>
+                                <th>{%trans 'Delivery Date'%}</th>
+                                <td>
+                                    {{order.delivery_date}}
+                                </td>
+                                </tr>
+                                <tr>
+                                    <th>{%trans 'Payment Status'%}</th>
+                                    <td>
+                                        {{order.payment_status}}
+                                    </td>
+                                    <th>{%trans 'Customer Name'%}</th>
+                                    <td>
+                                        {{order.customer_name}}
+                                    </td>
+                                    <th>{%trans 'Payment Method'%}</th>
+                                    <td>
+                                    {{order.payment_method}}
+                                    </td>
+                                    <th>{%trans 'Delivery Status'%}</th>
+                                    <td>
+                                    {{order.delivery_status}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{%trans 'Upload Payment Record'%}</th>
+                                    <td>
+                                        <!-- <span id="uploadedFile" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 80%; display: block;margin-top: 5px;" title="{{order.payment_record}}">
+                                            {{order.payment_record}}
+                                        </span> -->
+                                        <div>
+                                            <div style="display: flex;">
+                                                <span id="uploadedFile" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: block;margin-top: 5px; width: 90%;" title="{{order.payment_record}}">
+                                                    {{order.payment_record}}
+                                                </span>
+                                                <a href="{% url 'download-payment-record' order.id %}" id="id_downloadAttachment" style="margin: 5px 0px 0px auto;display: none;" title="Download"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <th>{%trans 'Sales Person'%}</th>
+                                    <td>
+                                        {{order.sales_person}}
+                                    </td>
+                                    <th>{%trans 'Payment Date'%}</th>
+                                    <td>
+                                    {{order.payment_date}}
+                                    </td>
+                                    <th>{%trans 'Delivery Method'%}</th>
+                                    <td>
+                                    {{order.delivery_method}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="bgc-white bd bdrs-3 p-20 mB-20" style="margin-top: 25px;">
+                <div class="m 2px">
+                    <label style="font-size: 15.7px;">{% trans 'Product List'%}:</label>
+                </div>
+                <div style="border-top: 1px solid;margin-top: 5px;">
+                    <table class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                        <thead>
+                            <th>{% trans 'Product ID' %}</th>
+                            <th>{% trans 'Product Name' %}</th>
+                            <th>{% trans 'Product English Name' %}</th>
+                            <th>{% trans 'Remark' %}</th>
+                            <th>{% trans 'Quantity' %}</th>
+                            <th>{% trans 'Unit Price' %}</th>
+                            <th>{% trans 'Total Price' %}</th>
+                            <th>{% trans 'Delivery Status' %}</th>
+                            <th>{% trans 'Delivery Quantity' %}</th>
+                        </thead>
+                        <tbody id="orderItems">
+                            {% for product in order.orderitems %}
+                            <tr id="orderItem_{{product.product_id}}" product_id="{{product.product_id}}">
+                                <td>{% if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                                <td>{% if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                                <td>{% if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                                <td>{% if product.remark %}{{product.remark}}{% else %}-{% endif %}</td>
+                                <td>{% if product.purchase_quantity %}{{product.purchase_quantity}}{% else %}-{% endif %}</td>
+                                <td id="unitPrice_{{product.product_id}}">{% if product.selling_price %}{{ product.selling_price }}{% else %}-{% endif %}</td>
+                                <td id="totalPrice_{{product.product_id}}">{% if product.sub_total %}{{ product.sub_total }}{% else %}-{% endif %}</td>
+                                <td>{% if order.delivery_status %}{{ order.delivery_status }}{% else %}-{% endif %}</td>
+                                <td>{% if order.delivered_quantity %}{{ product.delivered_quantity }}{% else %}-{% endif %}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <!-- <tfoot>
+                            <tr>
+                                <th colspan="5"></th>
+                                <th>Special Discount</th>
+                                <td><span>{{order.manual_cost}}</span></td>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot> -->
+                    </table>
+                </div>
+            </div>
+
+            <div class="bgc-white bd bdrs-3 p-20 mB-20" style="margin-top: 25px;">
+                <div class="m 2px">
+                    <label style="font-size: 15.7px;">{% trans 'Discount Details'%}:</label>
+                </div>
+                <div style="border-top: 1px solid;margin-top: 5px;">
+                    <table class="table" style="width: 20%;">
+                        <tbody>
+                            <tr>
+                                <th>Special Discount</th>
+                                <td><span>{{order.manual_cost}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span id="id_Msg">{{ msg }}</span>
+            <input type="hidden" name="productDetails" id="orderDetailsInput" value="" />
+            <input type="hidden" name="total_quantity" id="totalQuantityInput" value="" />
+            <input type="hidden" name="total_product_cost" id="totalCostInput" value="" />
+            <input type="hidden" name="selected_customer" id="selectedCustomerInput" value="">
+            {% if role == 'admin' or role == 'staff' %}
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <div style="display: flex; justify-content: center;">
+                        <a type="button" id="submitBtn" class="btn btn-primary btn-send" style="color: white; margin-right: 20px;" href="{% url 'pending-order-approve' order.id %}">
+                            {% trans 'Approve'%}
+                        </a>
+                        <!-- <a type="button" id="submitBtn" class="btn btn-danger" style="color: white" href="{% url 'pending-order-reject' order.id %}">
+                            {% trans 'Reject'%}
+                        </a> -->
+                        <form action="{% url 'pending-order-reject' order.id %}" method="post" onsubmit="return confirmDelete('Are you sure want to reject order?')" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" style="color: white">
+                            {% trans 'Reject'%}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endblock content %} {% block javascripts %}
+<script>
+    setTimeout(() => {
+        $('#id_downloadAttachment').hide();
+        if ('{{order.payment_record}}' != '-' && '{{order.payment_record}}' != '') {
+            $('#id_downloadAttachment').show();
+        }
+    }, 0);
+
+    function confirmDelete(msg) {
+        var confirmed = confirm(msg)
+        if (!confirmed) {
+            event.preventDefault(); // Prevent the form from submitting
+        }
+    }
+</script>
+{% endblock javascripts %}

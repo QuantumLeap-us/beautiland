@@ -1,0 +1,523 @@
+{% load i18n %}
+
+<style>
+    .tab-button {
+        cursor: pointer;
+        padding: 8px 10px;
+        /* background-color: #f5f5f5; */
+        border-radius: 5px 5px 0 0;
+        font-size: 15px;
+        font-weight: 500;
+    }
+    .active-tab {
+      background-color: #e1f3ff;
+      border-bottom: 2px solid #2196f3;
+    }
+    .tab-button:hover {
+      background-color: #e1f3ff;
+      border-bottom: 2px solid #2196f3;
+    }
+    .parent-active-tab {
+      background-color: #f5f5f5;
+      border-bottom: 2px solid;
+    }
+    .parent-tab-button {
+        cursor: pointer;
+        padding: 8px 10px;
+        /* background-color: #f5f5f5; */
+        border-radius: 5px 5px 0 0;
+        font-size: 15px;
+        font-weight: 500;
+    }
+    .table-container {
+        max-height: 400px; 
+        overflow-y: auto;
+    }
+
+    .sticky-thead th {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: #ffffff;
+    }
+</style>
+<div class="header navbar">
+    <div class="header-container">
+      <ul class="nav-left">
+        <li>
+          <a id='sidebar-toggle' class="sidebar-toggle" href="javascript:void(0);">
+            <i class="fas fa-bars"></i>
+          </a>
+        </li>
+        <li class="search-box">
+          <a class="search-toggle no-pdd-right" href="javascript:void(0);">
+            <!-- <i class="search-icon ti-search pdd-right-10"></i> -->
+            <i class="search-icon-close ti-close pdd-right-10"></i>
+          </a>
+        </li>
+        <!-- <li class="search-input">
+          <input class="form-control" type="text" placeholder="Search...">
+        </li> -->
+      </ul>
+      <ul class="nav-right">
+        <!-- <li class="notifications dropdown">
+          <span class="counter bgc-red">3</span>
+          <a href="" class="dropdown-toggle no-after" data-bs-toggle="dropdown">
+            <i class="ti-bell"></i>
+          </a>
+
+          <ul class="dropdown-menu">
+            <li class="pX-20 pY-15 bdB">
+              <i class="ti-bell pR-10"></i>
+              <span class="fsz-sm fw-600 c-grey-900">Notifications</span>
+            </li>
+            <li>
+              <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                <li>
+                  <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                    <div class="peer mR-15">
+                      <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/1.jpg" alt="">
+                    </div>
+                    <div class="peer peer-greed">
+                      <span>
+                        <span class="fw-500">John Doe</span>
+                        <span class="c-grey-600">liked your <span class="text-dark">post</span>
+                        </span>
+                      </span>
+                      <p class="m-0">
+                        <small class="fsz-xs">5 mins ago</small>
+                      </p>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                    <div class="peer mR-15">
+                      <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/2.jpg" alt="">
+                    </div>
+                    <div class="peer peer-greed">
+                      <span>
+                        <span class="fw-500">Moo Doe</span>
+                        <span class="c-grey-600">liked your <span class="text-dark">cover image</span>
+                        </span>
+                      </span>
+                      <p class="m-0">
+                        <small class="fsz-xs">7 mins ago</small>
+                      </p>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                    <div class="peer mR-15">
+                      <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/3.jpg" alt="">
+                    </div>
+                    <div class="peer peer-greed">
+                      <span>
+                        <span class="fw-500">Lee Doe</span>
+                        <span class="c-grey-600">commented on your <span class="text-dark">video</span>
+                        </span>
+                      </span>
+                      <p class="m-0">
+                        <small class="fsz-xs">10 mins ago</small>
+                      </p>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="pX-20 pY-15 ta-c bdT">
+              <span>
+                <a href="" class="c-grey-600 cH-blue fsz-sm td-n">View All Notifications <i class="ti-angle-right fsz-xs mL-10"></i></a>
+              </span>
+            </li>
+          </ul>
+        </li> -->
+        <!-- <li class="notifications dropdown">
+          <span class="counter bgc-blue">3</span>
+          <a href="" class="dropdown-toggle no-after" data-bs-toggle="dropdown">
+            <i class="ti-email"></i>
+          </a>
+
+          <ul class="dropdown-menu">
+            <li class="pX-20 pY-15 bdB">
+              <i class="ti-email pR-10"></i>
+              <span class="fsz-sm fw-600 c-grey-900">Emails</span>
+            </li>
+            <li>
+              <ul class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                <li>
+                  <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                    <div class="peer mR-15">
+                      <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/1.jpg" alt="">
+                    </div>
+                    <div class="peer peer-greed">
+                      <div>
+                        <div class="peers jc-sb fxw-nw mB-5">
+                          <div class="peer">
+                            <p class="fw-500 mB-0">John Doe</p>
+                          </div>
+                          <div class="peer">
+                            <small class="fsz-xs">5 mins ago</small>
+                          </div>
+                        </div>
+                        <span class="c-grey-600 fsz-sm">
+                          Want to create your own customized data generator for your app...
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                    <div class="peer mR-15">
+                      <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/2.jpg" alt="">
+                    </div>
+                    <div class="peer peer-greed">
+                      <div>
+                        <div class="peers jc-sb fxw-nw mB-5">
+                          <div class="peer">
+                            <p class="fw-500 mB-0">Moo Doe</p>
+                          </div>
+                          <div class="peer">
+                            <small class="fsz-xs">15 mins ago</small>
+                          </div>
+                        </div>
+                        <span class="c-grey-600 fsz-sm">
+                          Want to create your own customized data generator for your app...
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a href="" class='peers fxw-nw td-n p-20 bdB c-grey-800 cH-blue bgcH-grey-100'>
+                    <div class="peer mR-15">
+                      <img class="w-3r bdrs-50p" src="https://randomuser.me/api/portraits/men/3.jpg" alt="">
+                    </div>
+                    <div class="peer peer-greed">
+                      <div>
+                        <div class="peers jc-sb fxw-nw mB-5">
+                          <div class="peer">
+                            <p class="fw-500 mB-0">Lee Doe</p>
+                          </div>
+                          <div class="peer">
+                            <small class="fsz-xs">25 mins ago</small>
+                          </div>
+                        </div>
+                        <span class="c-grey-600 fsz-sm">
+                          Want to create your own customized data generator for your app...
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="pX-20 pY-15 ta-c bdT">
+              <span>
+                <a href="email.html" class="c-grey-600 cH-blue fsz-sm td-n">View All Email <i class="fs-xs ti-angle-right ms-10"></i></a>
+              </span>
+            </li>
+          </ul>
+        </li> -->
+        <li class="notifications dropdown" id="id_notification" style="display: none;">
+          <div style="padding: 18px 12px 0px 0px;font-size: 20px;cursor: pointer;" onclick="openNotificationModal()">
+            <span class="counter bgc-red" style="margin-top: 2px;display: none;" id="notificationCount"></span>
+              <i class="fas fa-bell"></i>
+            </div>
+        </li>
+        <li class="dropdown">
+          <a href="" class="dropdown-toggle no-afusernameter peers fxw-nw ai-c lh-1" data-bs-toggle="dropdown">
+            <!-- <div class="peer mR-10">
+              <img class="w-2r bdrs-50p" src="https://randomuser.me/api/portraits/men/10.jpg" alt="">
+            </div> -->
+            <div class="peer">
+              <span class="fsz-sm c-grey-900">{{request.session.username}}</span>
+            </div>
+          </a>
+          <ul class="dropdown-menu fsz-sm">
+            <li>
+              <!-- <a href="" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
+                <i class="ti-settings mR-10"></i>
+                <span>Setting</span>
+              </a>
+            </li>
+            <li>
+              <a href="" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
+                <i class="ti-user mR-10"></i>
+                <span>Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="email.html" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">  
+                <i class="ti-email mR-10"></i>
+                <span>Messages</span>
+              </a>
+            </li>
+            <li role="separator" class="divider"></li> -->
+            <li>
+              <a href="{% url 'logout' %}" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
+                <i class="ti-power-off mR-10"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="modal fade" id="notificationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" style="--bs-modal-width: 50%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Notifications'%}</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div style="margin-bottom: 10px;display: flex;">
+            <span class="parent-tab-button parent-tab parent-active-tab" >Requests</span>
+          </div>
+          <div style="margin-bottom: 15px;display: flex;">
+            <span class="tab-button child-tab" id="salesOrderReq" onclick="notificationData('sales_order')">Approve sales order</span>
+            <span class="tab-button child-tab" id="salesPersonReq" style="margin-left: 5px;" onclick="notificationData('sales_person')">Update sales person</span>
+          </div>
+          <div class="table-container">
+            <table class="table" cellspacing="0" width="100%">
+              <thead class="sticky-thead">
+                <tr>
+                  <th>{% trans 'Created On' %}</th>
+                  <th>{% trans 'Invoice ID' %}</th>
+                  <th>{% trans 'User Name' %}</th>
+                  <th id="approvalCmnt">{% trans 'Approval Comments' %}</th>
+                  <th>{% trans 'Action' %}</th>
+                </tr>
+              </thead>
+              <tbody id="notificationTableBody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+  <script>
+
+    $(document).ready(function() {
+      $('#id_notification').hide();
+      $('#notificationCount').hide();
+      get_notification_count();
+    })
+    
+    function get_notification_count() {
+      $.ajax({
+          type: "GET",
+          url: "{% url 'get_notification_count' %}",
+          data: "",
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (["admin", "staff"].includes(response.role)) {
+                $('#id_notification').show();
+              }
+              if (response.code == 1) {
+                  setTimeout(() => {
+                    var notification_count = response.notification_count;
+                    if (notification_count > 0) {
+                      $('#notificationCount').show();
+                      $('#notificationCount').text(notification_count);
+                    } else {
+                      $('#notificationCount').hide();
+                    }
+                  }, 0);
+              }
+            },
+            error: function(error) {
+              console.error('Error:', error);
+            }
+        });
+    }
+
+    setInterval(() => {
+      get_notification_count();
+    }, 10000);
+
+    $('.child-tab').on("click", function () {
+      $('.child-tab').removeClass("active-tab");
+      $(this).addClass("active-tab");
+    })
+
+    function openNotificationModal() {
+      $('#notificationModal').modal('show');
+      notificationData('sales_order');
+      $("#salesOrderReq").addClass("active-tab");
+      $("#salesPersonReq").removeClass("active-tab");
+    }
+
+    function notificationData(keyword) {
+      $.ajax({
+          type: "POST",
+          url: "{% url 'get_notification' %}",
+          data: JSON.stringify({
+            keyword: keyword,
+          }),
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                    var notification_count = response.notification_count;
+                    if (notification_count > 0) {
+                      $('#notificationCount').show();
+                      $('#notificationCount').text(notification_count);
+                    } else {
+                      $('#notificationCount').hide();
+                    }
+                    var order_notify_html = "";
+                    var keyword = response.keyword;
+                    var order_notification_data = response.order_notification_data;
+                    var order_notification_data_length = order_notification_data.length;
+                    // $('#approvalCmnt').show();
+                    // if (keyword == "sales_order") {
+                    //   $('#approvalCmnt').hide();
+                    // }
+                    for (let index = 0; index < order_notification_data_length; index++) {
+                      var order_id = order_notification_data[index].order_id;
+                      var requested_user_name = order_notification_data[index].requested_user_name;
+                      var invoice_id = order_notification_data[index].invoice_id;
+                      var requested_on = order_notification_data[index].requested_on;
+                      var approval_comments = order_notification_data[index].approval_comments;
+                      order_notify_html += `<tr id="req_${order_id}">
+                                      <td>${requested_on}</td>
+                                      <td><a href="/order-get/${order_id}/" target="_blank">${invoice_id}</a></td>
+                                      <td>${requested_user_name}</td>
+                                      <td id="approve_cmnt_${order_id}" class="approval-comment">${approval_comments}</td>
+                                      <td>
+                                          <div class="display: flex; justify-content: space-evenly;">
+                                            <button type="button" style="margin: 2px;" id="approve_req_${order_id}" title="Approve request" class="btn btn-success btn-sm" onclick="approveReq('${order_id}', '${keyword}')">
+                                              <i style="color: white;" class="ti-check"></i>
+                                            </button>
+                                            <button type="button" style="margin: 2px;" id="reject_req_${order_id}" class="btn btn-danger btn-sm" title="Reject request" onclick="rejectReq('${order_id}', '${keyword}')">
+                                              <i class="ti-trash" style="color: white;"></i>
+                                            </button>
+                                          </div>
+                                      </td>
+                                      </tr>`
+                    }
+                    if (order_notify_html == "") {
+                      order_notify_html = `<tr><td colspan="5" style="text-align: center;">Data is not available.</td></tr>`
+                    }
+                    $('#notificationTableBody').html(order_notify_html);
+
+                    // $('.approval-comment').show();
+                    //   if (keyword == "sales_order") {
+                    //     $('.approval-comment').hide();
+                    //   }
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 5000);
+            },
+            error: function(error) {
+              console.error('Error:', error);
+            }
+        });
+    }
+
+    function approveReq(order_id, keyword) {
+      var formData = new FormData();
+      formData.append('order_id', order_id);
+      formData.append('keyword', keyword);
+      $.ajax({
+          type: "POST",
+          url: "{% url 'approve_request' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      $('#req_' + order_id).remove();
+                      var exist_notifi_count = parseInt($('#notificationCount').text()) || 0;
+                      var current_count = exist_notifi_count - 1;
+                      if (current_count > 0) {
+                        $('#notificationCount').show();
+                        $('#notificationCount').text(current_count);
+                      } else {
+                        $('#notificationCount').hide();
+                        order_notify_html = `<tr><td colspan="5" style="text-align: center;">Data is not available.</td></tr>`
+                        $('#notificationTableBody').html(order_notify_html);
+                      }
+                      // $('#id_Msg').show();
+                      // $('#id_Msg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 5000);
+            },
+            error: function(error) {
+              console.error('Error:', error);
+            }
+      });
+    }
+
+    function rejectReq(order_id, keyword) {
+      var formData = new FormData();
+      formData.append('order_id', order_id);
+      formData.append('keyword', keyword);
+      $.ajax({
+          type: "POST",
+          url: "{% url 'reject_request' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                    $('#req_' + order_id).remove();
+                    var exist_notifi_count = parseInt($('#notificationCount').text()) || 0;
+                    var current_count = exist_notifi_count - 1;
+                    if (current_count > 0) {
+                      $('#notificationCount').show();
+                      $('#notificationCount').text(current_count);
+                    } else {
+                      $('#notificationCount').hide();
+                      order_notify_html = `<tr><td colspan="5" style="text-align: center;">Data is not available.</td></tr>`
+                      $('#notificationTableBody').html(order_notify_html);
+                    }
+                      // $('#id_Msg').show();
+                      // $('#id_Msg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 5000);
+            },
+            error: function(error) {
+              console.error('Error:', error);
+            }
+      });
+    }
+
+  </script>
+  

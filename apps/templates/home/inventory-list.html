@@ -1,0 +1,107 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'Product List (Inventory)' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+      {% endif %}
+      <span id="id_Msg" style="display: none;"></span>
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Product List (Inventory)'%}</h4>
+        <div>
+          <a class="btn btn-primary rounded btn-send" href="{% url 'inventory_purchase_order' %}">
+            {% trans 'Create Purchase Order'%}
+          </a>
+          <a class="btn btn-primary rounded btn-send" href="{% url 'inventory_purchase_order_list' %}">
+            {% trans 'View Purchase Orders'%}
+          </a>
+          {% if role != 'seller' %}
+            <a class="btn btn-info rounded btn-send" href="{% url 'inventory_list_export' %}" >{% trans 'Export'%}</a>
+            <!-- <button class="btn btn-secondary rounded btn-send" onclick="importInventoryModal()">{% trans 'Import'%}</button> -->
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table" cellspacing="0" width="100%">
+              <thead style="text-align: center" >
+                <tr>
+                  <th>{% trans 'Created Date' %}</th>
+                  <th>{% trans 'Product ID' %}</th>
+                  <th>{% trans 'Name' %}</th>
+                  <th>{% trans 'English Name' %}</th>
+                  <th>{% trans 'Main Category' %}</th>
+                  <th>{% trans 'Sub Category' %}</th>
+                  <th>{% trans 'Specification' %}</th>
+                  <th>{% trans 'Status' %}</th>
+                  <th>{% trans 'Current Inventory Quantity' %}</th>
+                  <th>{% trans 'Current Inventory Quantity After Sales' %}</th>
+                  <th>{% trans 'Last Purchase Date' %}</th>
+                  <th>{% trans 'Quantity to be Received' %}</th>
+                  <th>{% trans 'Total Loss' %}</th>
+                  <th>{% trans 'Recommended Purchase Quantity' %}</th>
+                  <th>{% trans 'Supplier ID' %}</th>
+                  <th>{% trans 'Supplier Name' %}</th>
+                  <th>{% trans 'Last Sales Day' %}</th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                {% for inventory in inventory_data %}
+                <tr>
+                  <td>{{inventory.created_date}}</td>
+                  <td>{{inventory.product__product_id}}</td>
+                  <td>{{inventory.product_chinese_name}}</td>
+                  <td>{{inventory.product_english_name}}</td>
+                  <td>{{inventory.category}}</td>
+                  <td>{{inventory.sub_category}}</td>
+                  <td>{{inventory.specification}}</td>
+                  <td>{{inventory.product_status}}</td>
+                  <td>{{inventory.current_quantity}}</td>
+                  <td>{{inventory.current_inventory_after_sales}}</td>
+                  <td>{{inventory.last_purchase_date}}</td>
+                  <td>{{inventory.qty_tobe_received}}</td>
+                  <td>{{inventory.total_loss}}</td>
+                  <td>{{inventory.safe_number}}</td>
+                  <td>{{inventory.supplier_id}}</td>
+                  <td>{{inventory.supplier_company_name}}</td>
+                  <td>{{inventory.last_sales_day}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+   if ($.fn.DataTable.isDataTable('#dataTable')) {
+     // If DataTable is already initialized, destroy it
+     $('#dataTable').DataTable().destroy();
+   }
+
+   // Reinitialize DataTable with default sorting
+   $('#dataTable').DataTable({
+     "order": [[0, "desc"]],
+    //  "pageLength": 100,
+   });
+  });
+</script>
+{% endblock javascripts %}

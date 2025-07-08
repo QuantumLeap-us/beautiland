@@ -1,0 +1,439 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'After Sales'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'After Sales' %}</h3>
+        <form id="productForm" method="post" action="/product/" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                {% comment %} <label style="font-size: 15.7px;">{% trans 'General Information' %}</label> {% endcomment %}
+                <div style="border-top: 1px solid;margin-top: 5px;">
+                    <table class='table' style="margin-top: 5px;">
+                        <tbody>
+                            <tr>
+                                <th>{%trans 'Order Type'%} <span class="text-danger">*</span></th>
+                                <td>
+                                    <div id="orderTypeDropdown">
+                                        <select class="form-control inputField" name="order_type" id="id_order_type" required>
+                                            <option value="">-------</option>
+                                            <option value="Redlivery">Redlivery</option>
+                                            <option value="Redlivery - Broken">Redlivery - Broken</option>
+                                            <option value="Redelivery & Return">Redelivery & Return</option>
+                                            <option value="Return">Return</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <th>{%trans 'Delivery ID'%}</th>
+                                <td>{{delivered_data.delivery_id}}</td>
+                                <th>{%trans 'Invoice ID'%}</th>
+                                <td>{{delivered_data.invoice_id}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+                <div class="bgc-white bd bdrs-3 p-20 mB-20" id="DeliveryInfo">
+                    <label style="font-size: 15.7px;">{% trans 'Delivered Product List' %}</label>
+                    <div style="border-top: 1px solid;margin-top: 5px;">
+                        <table class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">{% trans 'Product ID' %}</th>
+                                    <th rowspan="2">{% trans 'Product Name' %}</th>
+                                    <th rowspan="2">{% trans 'Product English Name' %}</th>
+                                    <th rowspan="2">{% trans 'Remark' %}</th>
+                                    <th rowspan="2">{% trans 'Delivery Date' %}</th>
+                                    <th rowspan="2">{% trans 'Delivered Quantity' %}</th>
+                                    <th colspan="4" style="text-align: center;">{% trans 'After Sales Arrangement' %}</th> <!-- New grouped column -->
+                                </tr>
+                                <tr>
+                                    <th>{% trans 'Failed to Delivery Quantity' %}</th>
+                                    <th>{% trans 'Redelivery Quantity' %}</th>
+                                    <th>{% trans 'Overdelivery Quantity' %}</th>
+                                    <th>{% trans 'Return Quantity' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody id="id_product_list">
+                                {% for deliver_item in delivered_data.delivered_order_items %}
+                                    <tr item-id="{{ deliver_item.id }}">
+                                        <td>{{ deliver_item.product_id }}</td>
+                                        <td>{{ deliver_item.product_chinese_name }}</td>
+                                        <td>{{ deliver_item.product_english_name }}</td>
+                                        <td>{{ deliver_item.remarks }}</td>
+                                        <td>{{ deliver_item.item_delivery_date }}</td>
+                                        <td id="item_delivered_qty_{{deliver_item.id}}">{{ deliver_item.item_delivered_qty }}</td>
+                                        <td style="width: 12%;" id="failTodeliveryQty_td_{{deliver_item.id}}"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control after-sales-qty inputField" name="failTodeliveryQty" id="failTodeliveryQty_{{deliver_item.id}}" value=""></td>
+                                        <td style="width: 12%;" id="redeliveryQty_td_{{deliver_item.id}}"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control after-sales-qty inputField" name="redeliveryQty" id="redeliveryQty_{{deliver_item.id}}" value=""></td>
+                                        <td style="width: 12%;" id="overdeliveryQty_td_{{deliver_item.id}}"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control after-sales-qty inputField" name="overdeliveryQty" id="overdeliveryQty_{{deliver_item.id}}" value=""></td>
+                                        <td style="width: 12%;" id="returnQty_td_{{deliver_item.id}}"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control after-sales-qty inputField" name="returnQty" id="returnQty_{{deliver_item.id}}" value=""></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <div class="row gx-4" style="margin-top: 20px; justify-content: space-between;">
+                            <div class="col-md-4">
+                                <div class="div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_note" class="text-normal text-dark label-css">{% trans 'Delivery Note'%}</label>
+                                    <textarea name="delivery_note" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_delivery_note">{{ delivered_data.delivery_note }}</textarea>
+                                </div>
+                                <div class="div-css" style="justify-content: end;">
+                                    <div id="copyMsg" style="margin-right: 10px;"></div>
+                                    <button type="button" class="btn btn-info btn-send btn-click" style="color: white; padding: 3px 5px 3px 5px;" onclick="copyText()" > <i class="ti-files" style="margin-right: 5px;"></i>{% trans 'Copy' %}</button>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_warehouse_comment" class="text-normal text-dark label-css">{% trans 'Warehouse Comment'%}</label>
+                                    <textarea name="warehouse_comment" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_warehouse_comment">{{ delivered_data.warehouse_comment }}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_date" class="text-normal text-dark label-css">{% trans 'Delivery Date'%} <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-text bgc-white bd bdwR-0">
+                                          <i class="ti-calendar"></i>
+                                        </div>
+                                        <input type="text" name="date" class="form-control bdc-grey-200 start-date inputField" placeholder="Delivery Date" id="id_delivery_date" value="{{ delivered_data.delivery_date }}" {% if role == "seller" %} disabled {% endif %}>
+                                    </div>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_method" class="text-normal text-dark label-css">{% trans 'Delivery Method'%}</label>
+                                    <input id="id_delivery_method" class="form-control inputField" value="{{ delivered_data.delivery_method }}" disabled>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_fee" class="text-normal text-dark label-css">{% trans 'Delivery Fee'%}</label>
+                                    <input type="text" id="id_delivery_fee" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control inputField" name="delivery_fee" value="{{ delivered_data.delivery_fee }}">
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+          </div>
+          
+          <div class="col-md-12">
+           <div class="bgc-white bd bdrs-3 p-20 mB-20">
+             <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+             <div style="display: flex; justify-content: center;">
+                <button type="button" id="submitBtn" onclick="saveAfterSalesDelivery('{{ delivered_data.id }}', '{{ delivered_data.order_id }}', 'deliver_and_print')" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                {% trans 'Deliver & Print' %}
+                </button>
+                <button type="button" id="saveBtn" onclick="saveAfterSalesDelivery('{{ delivered_data.id }}', '{{ delivered_data.order_id }}', 'save')" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                {% trans 'Save' %}
+                </button>
+                <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitDelivery()">
+                {% trans 'Exit' %}
+                </button>
+             </div>
+           </div>
+         </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    {% comment %} var item_ids = JSON.parse('{{delivered_data.item_ids | safe}}'); {% endcomment %}
+    var changed = false;
+    var role = '{{role}}';
+
+    $(document).ready(function() {
+        {% comment %} var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+
+        var todayDate = yyyy + '-' + mm + '-' + dd;
+
+        // Set the min attribute to today's date
+        document.getElementById('id_delivery_date').setAttribute('min', todayDate); {% endcomment %}
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+        var formattedToday = dd + '/' + mm + '/' + yyyy; // Adjust format as per your requirement
+
+        // Initialize the datepicker and restrict past dates
+        if (role !== 'admin') {
+            $('#id_delivery_date').datepicker({
+                startDate: today,   // Disable past dates
+                autoclose: true,    // Close the datepicker after date selection
+                todayHighlight: true // Highlight today's date
+            });
+        } else {
+            $('#id_delivery_date').datepicker({
+                autoclose: true,    // Close the datepicker after date selection
+                todayHighlight: true // Highlight today's date
+            });
+        }
+
+        checkFormValueChange();
+    });
+
+    function copyText() {
+        // Get the text input element
+        var inputElement = document.getElementById("id_delivery_note");
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+                var copyText = inputElement.value;
+                navigator.clipboard.writeText(copyText).then(function() {
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = `<span style="color: green;">Text copied!</span>`;
+            }).catch(function(error) {
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = `<span style="color: red;">Failed to copy text.</span>`;
+            });
+        } else {
+            // Fallback for older browsers
+            inputElement.select(); // Select the text field
+            inputElement.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                // Execute the copy command
+                var successful = document.execCommand('copy');
+                var message = successful ? `<span style="color: green;">Text copied!</span>` : `<span style="color: red;">Failed to copy text.</span>`;
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = message;
+            } catch (err) {
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = `<span style="color: red;">Failed to copy text.</span>`;
+            }
+        }
+        setTimeout(() => {
+            $('#copyMsg').hide();
+        }, 5000);
+    }
+
+    $('.btn-click').click(function () {
+        changed = false;
+    })
+
+    window.addEventListener('beforeunload', function(event) {
+        if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function checkFormValueChange() {
+        // Get the form and input fields
+        var form = document.getElementById('productForm');
+        var inputFields = document.getElementsByClassName('inputField');
+
+        // Store the initial values of the input fields
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+
+        // Add event listener for input changes
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    function exitDelivery() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/delivery-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/delivery-list/';
+        }
+    }
+
+    $('.after-sales-qty').on("change keyup", function(e) {
+        var event_id = e.target.id;
+        var id = (event_id.split("_")).pop();
+        setTimeout(() => {
+            $('#submitBtn').attr("disabled", "disabled");
+            if ($('#redeliveryQty_' + id).val()) {
+                $('#returnQty_' + id).attr("disabled", "disabled");
+                $('#submitBtn').removeAttr("disabled");
+            } else {
+                $('#returnQty_' + id).removeAttr("disabled");
+            }
+            if ($('#returnQty_' + id).val()) {
+                $('#redeliveryQty_' + id).attr("disabled", "disabled");
+                $('#submitBtn').removeAttr("disabled");
+            } else {
+                $('#redeliveryQty_' + id).removeAttr("disabled");
+            }
+        }, 0)
+    })
+
+    function saveAfterSalesDelivery(deliver_id, order_id, button) {
+        var order_type = $('#id_order_type').val();
+        var delivery_date = $('#id_delivery_date').val();
+        var delivery_fee = $('#id_delivery_fee').val();
+        var warehouse_comment = $('#id_warehouse_comment').val();
+
+        if (!order_type && button === "save") {
+            alert("Order type field is mandatory.");
+            return;
+        }
+
+        if (!delivery_date) {
+            alert("Delivery date field is mandatory.");
+            return;
+        }
+
+        var after_sales_data = [];
+        var is_delivered_qty_err = false;
+        $('#id_product_list tr').each(function(index, element) {
+            var item_id = $(this).attr('item-id');
+            var item_delivered_qty = $("#item_delivered_qty_" + item_id).text() || 0;
+            var failTodeliveryQty = $('#failTodeliveryQty_' + item_id).val() || 0;
+            var redeliveryQty = $('#redeliveryQty_' + item_id).val() || 0;
+            var overdeliveryQty = $('#overdeliveryQty_' + item_id).val() || 0;
+            var returnQty = $('#returnQty_' + item_id).val() || 0;
+            
+            if (item_delivered_qty === 0 || parseInt(item_delivered_qty) < (parseInt(failTodeliveryQty) + parseInt(redeliveryQty) + parseInt(overdeliveryQty) + parseInt(returnQty))) {
+                is_delivered_qty_err = true;
+                return;
+            }
+
+            if (failTodeliveryQty || redeliveryQty || overdeliveryQty || returnQty) {
+                after_sales_data.push({
+                    item_id: item_id,
+                    failTodeliveryQty: failTodeliveryQty,
+                    redeliveryQty: redeliveryQty,
+                    overdeliveryQty: overdeliveryQty,
+                    returnQty: returnQty,
+                })
+            }
+        });
+
+        if (is_delivered_qty_err) {
+            alert("Entered quantity can not be greater than Delivered Quantity.")
+            return;
+        }
+
+        if (after_sales_data.length == 0 && button === "save") {
+            alert("Please add quantity to any of the `After Sales Arrangement` fields.");
+            return;
+        }
+
+        if (button === "save") {
+            var warn_msg = `Are you sure you want to save?`;
+        } else {
+            var warn_msg = `Are you sure you want to deliver and print?`;
+        }
+
+        var confirmed = confirm(warn_msg)
+        if (confirmed) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            var formData = new FormData();    
+            formData.append('after_sales_data', JSON.stringify(after_sales_data));
+            formData.append('order_type', order_type);
+            formData.append('delivery_date', delivery_date);
+            formData.append('delivery_fee', delivery_fee);
+            formData.append('warehouse_comment', warehouse_comment);
+            formData.append('order_id', order_id);
+            formData.append('deliver_id', deliver_id);
+            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'save_after_sales_delivery' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                            $('#loader_spin').hide();
+                        }, 0);
+                        changed = false;
+                        if (button === "save") {
+                            location.reload();
+                        } else {
+                            var generate_pdf_url = '/after_sales_generate_pdf_for_delivery_note/' + order_id + '/0/';
+                            window.open(generate_pdf_url, '_blank');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                        {% comment %} window.location = '/order-list/'; {% endcomment %}
+                    } else {
+                        setTimeout(() => {
+                            scrollToTop();
+                            $('#loader_spin').hide();
+                            $('#id_Msg').show()
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 5000);
+                },
+                error: function(error) {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                    }, 0);
+                }
+            });
+        }
+    }
+
+    function downloadDeliveryNote(deliver_id, order_id) {
+        var generate_pdf_url = '/generate_pdf_for_delivery_note/' + order_id + '/' + deliver_id + '/';
+        window.open(generate_pdf_url, '_blank');
+    }
+
+    $('#productForm').on('submit', function(event) {
+        event.preventDefault();
+
+        if (this.checkValidity()) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            this.submit();
+        }
+    });
+
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
+{% endblock javascripts %}

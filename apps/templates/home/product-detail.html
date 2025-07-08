@@ -1,0 +1,116 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Product
+Details'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: space-between">
+        <h3 class="c-grey-900 mB-20" style="text-align: center">
+          {% trans 'Product Details' %}
+        </h3>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <div class="product-images" style="display: flex; justify-content: center; margin: 5px;">
+              {% for image in product_images %}
+                <img src="{{ image.image.url }}" height="20%" width="20%" style="display:center; margin: 5px;" alt="{{ image.image_name }}" class="product-image">
+              {% endfor %}
+            </div>
+            <table class="table">
+              <thead class="table-dark">
+                <tr>
+                  <th>{% trans 'Name' %}</th>
+                  <th>{% trans 'Value' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{% trans 'Product No' %}</td>
+                  <td>{{product.product_id}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Chinese name' %}</td>
+                  <td>{{product.product_chinese_name}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'English name' %}</td>
+                  <td>{{product.product_english_name}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Supplier Product name' %}</td>
+                  <td>{{product.supplier_product_name}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Category' %}</td>
+                  <td>{{product.category.name}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Sub Category' %}</td>
+                  <td>{{product.sub_category.name}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Specification' %}</td>
+                  <td>{{product.specifications}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Sales Currency' %}</td>
+                  <td>{{product.sales_currency}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Retail Price' %}</td>
+                  <td>{{product.retail_price}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Selling Price' %}</td>
+                  <td>{{product.selling_price}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Cost of sales' %}</td>
+                  <td>{{product.std_cost_of_sales}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Shelf Date' %}</td>
+                  <td>{{product.shelf_date}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Supplier' %}</td>
+                  <td>{{product.supplier.name}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Supplier Code' %}</td>
+                  <td>{{product.supplier.code}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Ingredients List' %}</td>
+                  <td>{{product.ingredient_list}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Shelf Life' %}</td>
+                  <td>{{product.shelf_life}}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Status' %}</td>
+                  <td>{{product.status}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center;">
+        <a
+          class="btn btn-primary btn-sm mR-10"
+          href="{% url 'product-update' product.id %}"
+        >
+          {% trans 'Update' %}
+        </a>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

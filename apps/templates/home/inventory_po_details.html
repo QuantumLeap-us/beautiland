@@ -1,0 +1,358 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'View/Edit Purchase Order Details' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'View/Edit Purchase Order Details' %}</h3>
+        <form id="inventoryPoDetailsForm" method="post" action="/inventory-purchase-order-details/" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Purchase Order List'%}:</label>
+                    <div style="margin-top: 10px;">
+                        <table id="dataTable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                                <th>{% trans 'Purchase Date' %}</th>
+                                <th>{% trans 'Purchase Order ID' %}</th>
+                                <th>{% trans 'Product ID' %}</th>
+                                <th>{% trans 'Product Name' %}</th>
+                                <th>{% trans 'Product English Name' %}</th>
+                                <th>{% trans 'Specification' %}</th>
+                                <th>{% trans 'Quantity' %}</th>
+                                <th></th>
+                                <th>{% trans 'Purchse Cost' %}</th>
+                                <th></th>
+                                <th>{% trans 'Subtotal' %}</th>
+                                <th>{% trans 'Supplier' %}</th>
+                                <th>{% trans 'Remark' %}</th>
+                            </thead>
+                            <tbody id="productList">
+                                {% for inventory_po in inventory_po_data %}
+                                <tr id="inventoryPoLine_{{inventory_po.product_id}}" item-id="{{inventory_po.item_id}}">
+                                    <td>{{ inventory_po.created_date }}</td>
+                                    <td>{{ inventory_po.inventory_po_id }}</td>
+                                    <td>{{ inventory_po.product__product_id }}</td>
+                                    <td>{{ inventory_po.item_name_chinese }}</td>
+                                    <td>{{ inventory_po.item_name_english }}</td>
+                                    <td>{{ inventory_po.item_specification }}</td>
+                                    <td style="width: 12%;" id="quantity_td_{{inventory_po.product_id}}"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control po-quantity inputField" name="quantity" id="quantity_{{inventory_po.product_id}}" value="{{ inventory_po.quantity }}"></td>
+                                    <td>$</td>
+                                    <td style="width: 12%;"><input type="text" id="purchase_cost_{{inventory_po.product_id}}" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control po-purchase-cost inputField" name="purchase_cost" value="{{ inventory_po.purchase_cost }}" ></td>
+                                    <td>$</td>
+                                    <td id="sub_total_{{inventory_po.product_id}}">{{ inventory_po.subtotal }}</td>
+                                    <td>{{ inventory_po.supplier_name }}</td>
+                                    <!-- <td>{{ inventory_po.remark }}</td> -->
+                                    <td style="width: 30%;" ><input type="text" class="form-control inputField" name="remarks" id="remarks_{{inventory_po.product_id}}" value="{{ inventory_po.remark }}"></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="row gx-4" style="margin-top: 20px;">
+                          <div class="col-md-4">
+                              <div class="mb-3 div-css">
+                                  <label style="font-weight: 700;" for="id_expected_arrvl_date" class="text-normal text-dark label-css">{% trans 'Expected Arrival Date'%}</label>
+                                  <div class="input-group">
+                                    <div class="input-group-text bgc-white bd bdwR-0">
+                                      <i class="ti-calendar"></i>
+                                    </div>
+                                    <input type="text" name="date" class="form-control bdc-grey-200 start-date inputField" data-provide="datepicker" placeholder="Order Date" id="id_expected_arrvl_date" value="{{ expected_arrival_date }}">
+                                  </div>
+                              </div>
+                              <div class="mb-3 div-css">
+                                  <label style="font-weight: 700;" for="id_delivery_fee" class="text-normal text-dark label-css">{% trans 'Delivery Fee'%}</label>
+                                  <input type="text" id="id_delivery_fee" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control inputField" name="delivery_fee" value="{{ delivery_fee }}">
+                              </div>
+                          </div>
+                          <div class="col-md-4">
+                              <div class="mb-3 div-css">
+                                  <label style="font-weight: 700;" for="totalProductPrice" class="text-normal text-dark label-css">{% trans 'Total Purchase Cost'%}</label>
+                                  $ <span id="totalProductPrice" > {{ total_purchase_cost }}</span>
+                              </div>
+                              <div class="mb-3 div-css">
+                                  <label style="font-weight: 700;" for="id_special_discount" class="text-normal text-dark label-css">{% trans 'Special Discount'%}</label>
+                                  <input type="text" style="width: auto;" id="id_special_discount" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control inputField" name="special_discount" value="{{ special_discount }}">
+                              </div>
+                              <div class="mb-3 div-css">
+                                  <label style="font-weight: 700;" for="id_total_cost" class="text-normal text-dark label-css">{% trans 'Total Cost after Discount'%}</label>
+                                  $ <span id="id_total_cost" > {{ total_cost_after_discount }}</span>
+                              </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if status != "Stocked In" %}
+            <div class="col-md-12">
+              <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                  <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+                  <div style="display: flex; justify-content: center;">
+                  <button type="button" id="saveBtn" onclick="updateInventoryPo('save')" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                  {% trans 'Save' %}
+                  </button>
+                  {% if status == "Draft" %}
+                    <button type="button" id="submitBtn" onclick="updateInventoryPo('submit')" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                    {% trans 'Create' %}
+                    </button>
+                  {% endif %}
+                  <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitInvPo()">
+                  {% trans 'Exit' %}
+                  </button>
+                  </div>
+              </div>
+          </div>
+          {% endif %}
+          <span id="inv_po_id" style="display: none;">{{inv_po_id}}</span>
+        </form>
+    </div>
+  </div>
+</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  var changed = false;
+  $(document).ready(function() {
+      if ($.fn.DataTable.isDataTable('#dataTable')) {
+        // If DataTable is already initialized, destroy it
+        $('#dataTable').DataTable().destroy();
+      }
+
+      // Reinitialize DataTable with default sorting
+      $('#dataTable').DataTable({
+        "order": [[0, "desc"]],
+        // "pageLength": 100,
+      });
+
+      $(document).on("change keyup", '.po-purchase-cost', function(e) {
+        setTimeout(() => {
+          autoCalcSubTotalProductTotal();
+          }, 0);
+      });
+
+      $(document).on("change keyup", '.po-quantity', function(e) {
+        setTimeout(() => {
+          autoCalcSubTotalProductTotal();
+        }, 0);
+      }); 
+
+      $('#id_special_discount').on("keyup", function () {
+        updateTotalCost();
+      })
+
+      $('#id_delivery_fee').on("keyup", function () {
+        updateTotalCost();
+      })
+
+      checkFormValueChange();
+  });
+
+  $('.btn-click').click(function () {
+      changed = false;
+  })
+
+  window.addEventListener('beforeunload', function(event) {
+      if (changed) {
+          var confirmationMessage = 'Are you sure you want to leave this page?';
+          (event || window.event).returnValue = confirmationMessage;
+          return confirmationMessage;
+      }
+  });
+
+  function checkFormValueChange() {
+      // Get the form and input fields
+      var form = document.getElementById('inventoryPoDetailsForm');
+      var inputFields = document.getElementsByClassName('inputField');
+
+      // Store the initial values of the input fields
+      var initialValues = [];
+      for (var i = 0; i < inputFields.length; i++) {
+          initialValues.push(inputFields[i].value);
+      }
+
+      // Add event listener for input changes
+      for (var i = 0; i < inputFields.length; i++) {
+          inputFields[i].addEventListener('input', function() {
+              for (var j = 0; j < inputFields.length; j++) {
+                  if (inputFields[j].value !== initialValues[j]) {
+                      changed = true;
+                      break;
+                  }
+              }
+          });
+      }
+    }
+
+    function autoCalcSubTotalProductTotal() {
+      var total_price = 0;
+      $('#productList tr').each(function(index, element) {
+        var productId = $(this).attr('id').split('_')[1];
+        var purchase_cost = $('#purchase_cost_' + productId).val() || 0;
+        var qty = $('#quantity_' + productId).val() || 0;
+        var subtotal = parseFloat(purchase_cost) * parseInt(qty);
+        if (subtotal) {
+          $('#sub_total_' + productId).text(subtotal.toFixed(1));
+          total_price += parseFloat(subtotal);
+        } else {
+          $('#sub_total_' + productId).text((0).toFixed(1));
+        }
+      });
+      $('#totalProductPrice').text(total_price.toFixed(1));
+      updateTotalCost();
+    }
+
+    function updateTotalCost() {
+      var special_disc = $('#id_special_discount').val() || 0;
+      var total_price = $('#totalProductPrice').text() || 0;
+      var delivery_fee = $('#id_delivery_fee').val() || 0;
+      // if (special_disc) {
+        var total_cost_after_disc = parseFloat(total_price) + parseFloat(delivery_fee) - parseFloat(special_disc);
+        if (total_cost_after_disc > 0) {
+          $('#id_total_cost').text(total_cost_after_disc.toFixed(1));
+        } else {
+          $('#id_total_cost').text((0).toFixed(1));
+        }
+      // } else {
+      //   $('#id_total_cost').text(total_price);
+      // }
+    }
+
+    function updateInventoryPo(button) {
+      var product_items = [];
+      var error_msg_qty = false;
+      var error_msg_pc = false;
+      $('#productList tr').each(function(index, element) {
+        var productId = $(this).attr('id').split('_')[1];
+        var item_id = $(this).attr('item-id');
+        var purchase_cost = $('#purchase_cost_' + productId).val() || 0;
+        var qty = $('#quantity_' + productId).val() || 0;
+        if (qty <= 0) {
+          error_msg_qty = true;
+          return;
+        }
+        if (purchase_cost <= 0) {
+          error_msg_pc = true;
+          return;
+        }
+        var remark = $('#remarks_' + productId).val();
+        var subtotal = parseFloat(purchase_cost) * parseInt(qty);
+
+        product_items.push({
+          "item_id": item_id,
+          "product_id": productId,
+          "purchase_cost": purchase_cost,
+          "qty": qty,
+          "subtotal": subtotal,
+          "remark": remark,
+        })
+      });
+
+      if (error_msg_qty) {
+        setTimeout(() => {
+            $('#loader_spin').hide();
+            $('#id_Msg').show();
+            $('#id_Msg').html('<div class="alert alert-danger" role="alert">Product\'s quantity must be greater than 0.</div>');
+            scrollToTop();
+        }, 0);
+        return;
+      }
+
+      if (error_msg_pc) {
+        setTimeout(() => {
+            $('#loader_spin').hide();
+            $('#id_Msg').show();
+            $('#id_Msg').html('<div class="alert alert-danger" role="alert">Product\'s purchase cost must be greater than 0.</div>');
+            scrollToTop();
+        }, 0);
+        return;
+      }
+      
+      var total_purchase_cost = $('#totalProductPrice').text() || 0;
+      var special_disc = $('#id_special_discount').val() || 0;
+      var total_cost_after_disc = $('#id_total_cost').text() || 0;
+
+      if (parseFloat(special_disc) > parseFloat(total_purchase_cost)) {
+        alert("Special Discount cannot be greater than Total Product Cost.");
+        return;
+      }
+      
+      var formData = new FormData();
+      formData.append('product_items', JSON.stringify(product_items));
+      formData.append('total_purchase_cost', total_purchase_cost);
+      formData.append('special_disc', special_disc);
+      formData.append('total_cost_after_disc', total_cost_after_disc);
+      formData.append('inv_po_id', $('#inv_po_id').text());
+      formData.append('expected_arrival_date', $('#id_expected_arrvl_date').val());
+      formData.append('delivery_fee', $('#id_delivery_fee').val() || 0);
+      formData.append('button', button);
+
+      setTimeout(() => {
+          $('#loader_spin').show();
+      }, 0);
+      $.ajax({
+          type: "POST",
+          url: "{% url 'update_inventory_purchase_order' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      $('#loader_spin').hide();
+                  }, 0);
+                  window.location = '/inventory-purchase-order-list/';
+              } else {
+                  setTimeout(() => {
+                      $('#loader_spin').hide();
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 10000);
+          },
+          error: function(error) {
+              console.error('Error:', error);
+              setTimeout(() => {
+                  $('#loader_spin').hide();
+              }, 0);
+          }
+      });
+    }
+
+    function exitInvPo() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/inventory-purchase-order-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/inventory-purchase-order-list/';
+        }
+    }
+
+</script>
+{% endblock javascripts %}

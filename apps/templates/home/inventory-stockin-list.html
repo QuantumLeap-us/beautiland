@@ -1,0 +1,109 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'Inventory - Stock In' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+      {% endif %}
+      <span id="id_Msg" style="display: none;"></span>
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Inventory - Stock In'%}</h4>
+        <div>
+          <a class="btn btn-primary rounded btn-send" href="{% url 'inventory_stockin_order' %}">
+            {% trans 'New Stock In Order'%}
+          </a>
+          <a class="btn btn-primary rounded btn-send" href="{% url 'inventory_edit_stockin_order' 0 %}">
+            {% trans 'Edit Inventory'%}
+          </a>
+          {% if role != 'seller' %}
+            <a class="btn btn-info rounded btn-send" href="{% url 'inventory_stockin_list_export' %}" >{% trans 'Export'%}</a>
+            <!-- <button class="btn btn-secondary rounded btn-send" onclick="importInventoryModal()">{% trans 'Import'%}</button> -->
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table" cellspacing="0" width="100%">
+              <thead style="text-align: center" >
+                <tr>
+                  <th>{% trans 'Stock In Date' %}</th>
+                  <th>{% trans 'Type' %}</th>
+                  <th>{% trans 'Stock In ID' %}</th>
+                  <th>{% trans 'Purchase Order ID' %}</th>
+                  <th>{% trans 'Product ID' %}</th>
+                  <th>{% trans 'Name' %}</th>
+                  <th>{% trans 'English Name' %}</th>
+                  <th>{% trans 'Expected Stock In Quantity' %}</th>
+                  <th>{% trans 'Depreciation' %}</th>
+                  <th>{% trans 'Actual Stock In' %}</th>
+                  <th>{% trans 'Staff' %}</th>
+                  <th>{% trans 'Remark' %}</th>
+                  {% if role != 'seller' %}
+                    <th>{% trans 'Edit' %}</th>
+                  {% endif %}
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                {% for stockin_order in stockin_order_data %}
+                <tr>
+                  <td>{{stockin_order.created_date}}</td>
+                  <td>{{stockin_order.type}}</td>
+                  <td>{{stockin_order.stockin_order_id}}</td>
+                  <td>{{stockin_order.purchase_order_id}}</td>
+                  <td>{{stockin_order.product__product_id}}</td>
+                  <td>{{stockin_order.product_chinese_name}}</td>
+                  <td>{{stockin_order.product_english_name}}</td>
+                  <td>{{stockin_order.expected_stock_in_qty}}</td>
+                  <td>{{stockin_order.depreciation}}</td>
+                  <td>{{stockin_order.actual_stock_in}}</td>
+                  <td>{{stockin_order.staff}}</td>
+                  <td>{{stockin_order.stock_in_remark}}</td>
+                  {% if role != 'seller' %}
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'inventory_edit_stockin_order' stockin_order.id %}" >
+                      <i class="ti-pencil-alt"></i>
+                      </a>
+                    </div>
+                  </td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+   if ($.fn.DataTable.isDataTable('#dataTable')) {
+     // If DataTable is already initialized, destroy it
+     $('#dataTable').DataTable().destroy();
+   }
+
+   // Reinitialize DataTable with default sorting
+   $('#dataTable').DataTable({
+     "order": [[0, "desc"]],
+    //  "pageLength": 100,
+   });
+  });
+</script>
+{% endblock javascripts %}

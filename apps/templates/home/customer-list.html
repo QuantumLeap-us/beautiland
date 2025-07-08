@@ -1,0 +1,334 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Customer List'%} 
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+      {% endif %}
+      <span id="id_Msg" style="display: none;"></span>
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Customers'%}</h4>
+        <div>
+            <a class="btn btn-primary rounded btn-send" href="{% url 'customer'%}">
+              {% trans 'Add Customer'%}
+            </a>
+            {% if role != 'seller' %}
+              <button class="btn btn-info rounded btn-send" style="color: white;" onclick="exportCustomers()" >{% trans 'Export'%}</button>
+              <button class="btn btn-info rounded btn-send" style="color: white;" onclick="importCustomerModal()">{% trans 'Import'%}</button>
+            {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <div class="input-group" id="datepicker-container" style="width: 35%;float: right;margin: 0px 0px 10px 0px;">
+              <label for="id_from_date" style="margin: 5px 10px 5px 5px;">Created Date Search:</label>
+              <div class="input-group-text bgc-white bd bdwR-0">
+                <i class="ti-calendar"></i>
+              </div>
+              <input type="text" class="form-control" name="daterange" id="daterange">
+              <button type="submit" class="btn btn-sm btn-primary" style="color: white; margin-left: 10px" onclick="searchWithDate()"><i class="ti-search"></i></button>
+            </div>
+
+            <table id="dataTable" class="table" cellspacing="0" width="100%" >
+              <thead>
+                <tr>
+                  <th>{% trans 'Created Date'%}</th>
+                  <th>{% trans 'Customer Name'%}</th>
+                  <th>{% trans 'Customer English Name'%}</th>
+                  <th>{% trans 'Company Name'%}</th>
+                  <th>{% trans 'Company English Name'%}</th>
+                  <th>{% trans 'Contact Person 1'%}</th>
+                  <th>{% trans 'Phone 1'%}</th>
+                  <th>{% trans 'Contact Person 2'%}</th>
+                  <th>{% trans 'Phone 2'%}</th>
+                  <th>{% trans 'Landline'%}</th>
+                  <th>{% trans '18 District in HK'%}</th>
+                  <th>{% trans 'Main Address'%}</th>
+                  <th>{% trans 'Address 2'%}</th>
+                  <th>{% trans 'Address 3'%}</th>
+                  <th>{% trans 'Delivery Comments'%}</th>
+                  <th>{% trans 'Customer Comments'%}</th>
+                  <th>{% trans 'Salesperson'%}</th>
+                  <th>{% trans 'No. of Order'%}</th>
+                  <th>{% trans 'Accumulated Sales (HKD)'%}</th>
+                  <th>{% trans 'First Order Date'%}</th>
+                  <th>{% trans 'Last Order Date'%}</th>
+                  <th>{% trans 'Status'%}</th>
+                  <th>{% trans 'Customer ID'%}</th>
+                  <th>{% trans 'Industry Type'%}</th>
+                  <th>{% trans 'Source'%}</th>
+                  <th>{% trans 'Country/District'%}</th>
+                  <th>{% trans 'Prefix'%}</th>
+                  <th>{% trans 'Currency'%}</th>
+                  <th>{% trans 'Email'%}</th>
+                  <th>{% trans 'Name Card Preview'%}</th>
+                  <th>{% trans 'Action'%}</th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                {% for customer in customers %}
+                <tr>
+                  <td>{{customer.created_date}}</td>
+                  <td>{{customer.customer_name}}</td>
+                  <td>{{customer.customer_eng_name}}</td>
+                  <td>{{customer.company_name}}</td>
+                  <td>{{customer.company_english_name}}</td>
+                  <td>{{customer.contact_person_1}}</td>
+                  <td>{{customer.phone_1}}</td>
+                  <td>{{customer.contact_person_2}}</td>
+                  <td>{{customer.phone_2}}</td>
+                  <td>{{customer.landline}}</td>
+                  <td>{{customer.district_in_hk}}</td>
+                  <td>{{customer.main_address}}</td>
+                  <td>{{customer.address_2}}</td>
+                  <td>{{customer.address_3}}</td>
+                  <td>{{customer.delivery_comments}}</td>
+                  <td>{{customer.customer_comments}}</td>
+                  <td>{{customer.sales_person}}</td>
+                  <td>{{customer.no_of_orders}}</td>
+                  <td>{{customer.accumlated_sales}} $</td>
+                  <td>{{customer.first_order_date}}</td>
+                  <td>{{customer.last_order_date}}</td>
+                  <td style="text-transform: capitalize;">{{customer.status}}</td>
+                  <td>{{customer.customer_id}}</td>
+                  <td>{{customer.industry_type}}</td>
+                  <td>{{customer.source}}</td>
+                  <td>{{customer.country}}</td>
+                  <td>{{customer.prefix}}</td>
+                  <td>{{customer.currency}}</td>
+                  <td>{{customer.email}}</td>
+                  <td>
+                    <div style="display: flex;">
+                      {% if customer.name_card_file_path %}
+                      <img id="existsImagePreview" src="{{customer.name_card_file_path}}" class="preview-image" alt="Image Preview">
+                      {% endif %}
+                      <span>{{customer.name_card_file_name}}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'customer-update' customer.id %}" >
+                      <i class="ti-pencil-alt"></i>
+                      </a>
+                      {% if role != 'seller' %}
+                          <button type="submit" class="btn btn-danger btn-sm mR-10" onclick="deleteCustomer('{{customer.id}}')">
+                          <i class="text-light ti-trash"></i>
+                          </button>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="importCustomerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Import Customers'%}</h4>
+          <button id="btnCloseModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" id="id_importCustomersFile" name="sample_file" accept=".xlsx" >
+            <div style="margin: 10px 0px 0px 5px;">Only <b>.xlsx</b> file is allowed. <a href="{% url 'customer_import_samplefile' %}">Click here</a> to download sample file.</div>
+          </form>
+          <span id="id_modalMsg" style="display: none;"></span>
+        </div>
+        <div class="modal-footer">
+          <button id="btnClose" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="btnImport" class="btn btn-primary rounded btn-send m-10" style="color: white;" type="button" onclick="importCustomers()">{% trans 'Import'%}</button>
+          <button id="btnImporting" class="btn btn-primary rounded btn-send m-10" style="color: white; display: none;" type="button" disabled>{% trans 'Importing...'%}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+   if ($.fn.DataTable.isDataTable('#dataTable')) {
+     // If DataTable is already initialized, destroy it
+     $('#dataTable').DataTable().destroy();
+   }
+
+   // Reinitialize DataTable with default sorting
+   $('#dataTable').DataTable({
+     "order": [[0, "desc"]],
+     "pageLength": 100,
+   });
+
+    $('#daterange').daterangepicker({
+      autoUpdateInput: false,
+    });
+    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+      // searchWithDate();
+    })
+ });
+
+  setTimeout(() => {
+    var daterange = '{{daterange}}'
+    $('#daterange').val(daterange);
+  }, 0);
+
+  function searchWithDate() {
+    var daterange = $('#daterange').val();
+    var daterange_li = daterange.split(' - ');
+    var from_date = daterange_li[0];
+    var to_date = daterange_li[1];
+
+    var encodedFromDate = encodeURIComponent(from_date);
+    var encodedToDate = encodeURIComponent(to_date);
+    if (from_date && to_date) {
+      window.location = '/customer-list/?from_date=' + encodedFromDate + '&to_date=' + encodedToDate;
+    } else {
+      window.location = '/customer-list/';
+    }
+  }
+
+ function deleteCustomer(customer_id) {
+    var confirmed = confirm("Are you sure want to delete?")
+    if (confirmed) {
+        setTimeout(() => {
+            $('#loader_spin').show();
+        }, 0);
+        var formData = new FormData();
+        formData.append('customer_id', customer_id);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'customer_delete' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.code == 1) {
+                    window.location = '/customer-list/';
+                } else {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                        $('#id_Msg').show();
+                        $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }, 0);
+                }
+                setTimeout(() => {
+                    $('#id_Msg').hide();
+                }, 5000);
+            },
+            error: function(error) {
+              setTimeout(() => {
+                  $('#loader_spin').hide();
+              }, 0);
+                console.error('Error:', error);
+            }
+        });
+    }
+  }
+
+ function exportCustomers() {
+    var daterange = $('#daterange').val();
+    var daterange_li = daterange.split(' - ');
+    var from_date = daterange_li[0];
+    var to_date = daterange_li[1];
+
+    var encodedFromDate = encodeURIComponent(from_date);
+    var encodedToDate = encodeURIComponent(to_date);
+    // var search_keyword = $('#dataTable_filter input').val();
+    // var encoded_search_keyword = encodeURIComponent(search_keyword);
+    if (from_date && to_date) {
+      window.location = '/customer_list_export/?from_date=' + encodedFromDate + '&to_date=' + encodedToDate;
+    } else {
+      window.location = '/customer_list_export/';
+    }
+ }
+
+ function importCustomerModal() {
+   afterImportCss();
+   $('#importCustomerModal').modal("show");
+ }
+
+ function importCustomers() {
+   var formData = new FormData();
+   var import_customer_file = $('#id_importCustomersFile')[0].files[0];
+   formData.append('import_customer_file', import_customer_file);
+    if (import_customer_file && import_customer_file.name && ((import_customer_file.name).split('.').pop()).toLowerCase() == "xlsx") {
+      startImportCss();
+      $.ajax({
+          type: "POST",
+          url: "{% url 'customers_import' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      afterImportCss();
+                      location.reload();
+                      // $('#id_modalMsg').show();
+                      // $('#id_modalMsg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      afterImportCss();
+                      $('#id_modalMsg').show();
+                      $('#id_modalMsg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+            },
+            error: function(error) {
+              afterImportCss();
+              console.error('Error:', error);
+            }
+      });
+    } else {
+      setTimeout(() => {
+          $('#id_modalMsg').show();
+          $('#id_modalMsg').html('<div class="alert alert-info" role="alert" style="margin-bottom: 0px;">Please choose correct file to import!</div>');
+      }, 0);
+    }
+
+   setTimeout(() => {
+       $('#id_modalMsg').hide();
+   }, 10000);
+ }
+
+ function startImportCss() {
+    setTimeout(() => {
+      $("#btnImporting").show();
+      $("#btnImport").hide();
+      $("#btnClose").attr('disabled', 'disabled');
+      $("#id_importCustomersFile").attr('disabled', 'disabled');
+      $("#btnCloseModel").hide();
+    }, 0);
+ }
+
+ function afterImportCss() {
+    setTimeout(() => {
+      $("#btnImport").show();
+      $("#btnImporting").hide();
+      $("#btnClose").removeAttr('disabled');
+      $("#id_importCustomersFile").removeAttr('disabled');
+      $('#id_importCustomersFile').val("");
+      $("#btnCloseModel").show();
+    }, 0);
+ }
+</script>
+{% endblock javascripts %}

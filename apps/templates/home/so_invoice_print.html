@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap">
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        .pinyon-script {
+            font-family: 'Pinyon Script', cursive;
+        }
+        body {
+            font-family: 'Noto Sans', Arial, sans-serif;
+            font-size: 10px;
+            margin: 0;
+        }
+        .content {
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 5px;
+            text-align: left;
+        }
+        .logo {
+            width: 30%;
+        }
+        .header, .footer {
+            text-align: center;
+            /* margin-bottom: 5px; */
+        }
+        .section {
+            margin-top: 20px;
+        }
+        .underline {
+            text-decoration: underline;
+        }
+        .bordered {
+            padding: 10px;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="logo" src="{{ beautiland_logo }}" alt="">
+        <p>Address: Rm 1109 J1/F, Profit Industrial Building, 1-15 Kwai Fung Crescent, Kwai Chung, HK</p>
+        <p>Web: www.beautilandintl.com | E-Mail: info@beautilandintl.com | Tel: (852) 2152 1815 | Mob: (852) 5541 4130</p>
+    </div>
+
+    <h2 class="underline" style="text-align: center;">Invoice</h2>
+
+    <div class="">
+        <table>
+            <tr>
+                <td class="left">
+                    <table>
+                        <tr>
+                            <td>Customer ID:</td>
+                            <td>{{ customer_id }}</td>
+                        </tr>
+                        <tr>
+                            <td>Customer:</td>
+                            <td>{{ customer_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td>{{ address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Attention:</td>
+                            <td>{{ attention }}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="right">
+                    <table>
+                        <tr>
+                            <td>Invoice ID:</td>
+                            <td>{{ invoice_id }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date:</td>
+                            <td>{{ date }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tel:</td>
+                            <td>{{ telephone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Mob:</td>
+                            <td>{{ mobile }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="">
+        <table>
+            <tr style="border-top: 1px solid #000; border-bottom: 1px solid #000;">
+                <th style="padding: 5px; text-align: center;">Code</th>
+                <th style="padding: 5px;">Product Description</th>
+                <th style="padding: 5px; text-align: center;">Remark</th>
+                <th style="padding: 5px; text-align: center;">Quantity</th>
+                <th style="padding: 5px; text-align: center;">Unit Price (HK$)</th>
+                <th style="padding: 5px; text-align: center;">Subtotal (HK$)</th>
+            </tr>
+            {% for order_item in order_item_data %}
+            <tr>
+                <td style="padding: 5px; text-align: center;">{{ order_item.code }}</td>
+                <td style="padding: 5px;">{{ order_item.product_name }}</td>
+                <td style="padding: 5px; text-align: center;">{{ order_item.remarks }}</td>
+                <td style="padding: 5px; text-align: center;">{{ order_item.quantity }}</td>
+                <td style="padding: 5px; text-align: center;">HK {{ order_item.unit_price }}</td>
+                <td style="padding: 5px; text-align: center;">$ {{ order_item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+            {% for space in blank_space_length %}
+                <tr><td style="padding: 8px;"></td></tr>
+            {% endfor %}
+            <tr style="border-top: 2px solid;">
+                <td style="padding: 5px;" colspan="4"></td>
+                <th style="padding: 5px; text-align: center;">Discount (HK$): </th>
+                <td style="padding: 5px; text-align: center;">$ {{ manual_discount }}</td>
+            </tr>
+            <tr style="border-top: 1px solid;">
+                <td style="padding: 5px;" colspan="5"></td>
+                <td style="padding: 5px; text-align: center;">$ {{ total_cost }}</td>
+            </tr>
+        </table>
+    </div>
+
+    {% if language == "chinese" %}
+    <div style="border-top: 1px solid; font-size: 8px;">
+        <p>服务指引：</p>
+        <p>1. 七天更換,如有關產品質量由代理商檢查後證實是出廠缺點而不能正常運作/使用, 顧客可於購物七天內更換相同型號的貨品, 但更換貨品必須完整﹑沒有任何損毀或刮花痕跡, 並只限更換相同型號之貨品。 更換貨品不包括指定產品及個人護理產品。</p>
+        <p>2. 一年原廠保養 ( 特別註明除外 )。</p>
+        <p>3. 保養 / 保用不包括零件配件、電線斷裂或外殼刮花等人為損毀和運費,買家必須於交收時檢查清楚 ， 而郵寄或速遞之貨品請於簽收時檢查清楚。購買的儀器如廠方因該機種過時，停產或其他因素未能提供零件作更換或維修之用，本公司怒不負責。</p>
+        <p>4. 所有蒸氣或噴霧,小汽泡等儀器我們會於到貨或交收前試機,所以機內仍有水份。</p>
+        <p>5. 保養期內或之後如要維修請聯絡我們及把產品送回本公司地址進行維修或必要時將安排運回原廠維修。</p>
+        <p>6. 已購買之原裝儀器及產品均不可退款/換其他產品。</p>
+        <p>7. 已購買之儀器及產品優惠，均依據指定日期之推廣內容及有效期計算。</p>
+        <p>8. 所購買之精選產品及優惠計劃，逾期作廢，恕不另行通知。</p>
+        <p>9. 本公司不設指定顧問，需要時須於預約時說明，唯本公司只作儘量配合。</p>
+        <p>10. 本公司會不定期於給予客人儀器操作培訓過程中進行錄音以供內部培訓用途。</p>
+        <p>11. 買家及其顧客如因懷孕、患病﹑隱藏性疾病或身體不能接受其儀器/產品而引致使用儀器/產品期間之不適等或因使用產品/操作儀器不當而引致個人或其顧客不適等之一切後果，本公司概不負責，亦不作退款及更換其他產品。</p>
+        <p>12. 顧客如有懷孕或心臟病、皮膚病、感冒、敏感、血壓異常、闐癇症、藥物治療、置有心臟起博器或其他體內置有之金屬物質，建議於購買前或進行儀器使用前向顧問或治療師作出聲明，以便作出適當處理。</p>
+        <p>13. 本公司有權要求顧客出示身份證以核實身份，如以信用卡大額付款時因保安理由被要求作核對身份之用等，不便之處，敬請原諒。</p>
+        <p>14. 訂金有效日期為一個月（由購買日期起計算），逾期作廢; 有效期內取消訂單，該訂金將不獲退還。</p>
+        <p>15. 如有任何爭議，本公司保留最終決定權。</p>
+    </div>
+    {% else %}
+    <div style="border-top: 1px solid; font-size: 8px;">
+        <p>Terms of Service:</p>
+        <p>1. Seven-day replacement. If the quality of the product is inspected by the agent and it is confirmed that it is a factory defect and cannot operate/use properly, the customer can replace the product with the same model within seven days of purchase, but the replacement product must be complete and without any damage or scratches. , and only products of the same model can be exchanged. Replacement items do not include designated products and personal care products.</p>
+        <p>2. One-year original factory maintenance (unless otherwise specified).</p>
+        <p>3. Maintenance/warranty does not include man-made damage such as parts and accessories, broken wires or scratches on the casing, and shipping costs. Buyers must check clearly upon delivery. For goods shipped by mail or express delivery, please check clearly when signing for receipt. If the manufacturer of the purchased instrument is unable to provide parts for replacement or repair due to obsolescence, discontinuation of production or other factors, the company will not be responsible.</p>
+        <p>4. We will test all steam, spray, small bubble and other equipment before arrival or delivery, so there is still moisture in the equipment.</p>
+        <p>5. If you need repairs during or after the maintenance period, please contact us and return the product to our company's address for repairs. If necessary, we will arrange to ship it back to the original factory for repairs.</p>
+        <p>6. Original instruments and products purchased cannot be refunded or exchanged for other products.</p>
+        <p>7. Discounts for purchased instruments and products are calculated based on the promotion content and validity period on the specified date.</p>
+        <p>8. Selected products and discount plans purchased will be void without prior notice.</p>
+        <p>9. Our company does not have a designated consultant. If necessary, you must explain it when making an appointment. However, our company will only try to cooperate as much as possible.</p>
+        <p>10. From time to time, our company will conduct recordings during the instrument operation training provided to customers for internal training purposes.</p>
+        <p>11. If buyers and their customers suffer from discomfort during the use of the equipment/product due to pregnancy, illness, hidden disease or physical inability to accept the equipment/product, or improper use of the product/operation of the equipment causes discomfort to individuals or their customers Our company is not responsible for any consequences, and will not provide refunds or replace other products.</p>
+        <p>12. If the customer is pregnant or has heart disease, skin diseases, colds, allergies, abnormal blood pressure, epilepsy, medication, a pacemaker or other metal substances in the body, it is recommended to use the device before purchasing or using it. Make a statement to a counselor or therapist beforehand so that appropriate action can be taken.</p>
+        <p>13. The company reserves the right to require customers to present their ID cards to verify their identity. We apologize for any inconvenience if we are required to verify identity due to security reasons when making large-amount payments by credit card.</p>
+        <p>14. The deposit is valid for one month (from the date of purchase) and will be invalid if it is overdue; if the order is canceled within the validity period, the deposit will not be refunded.</p>
+        <p>15. In case of any dispute, the company reserves the right to make the final decision.</p>
+    </div>
+    {% endif %}
+
+    <div class="section">
+        <p>Signed for & on behalf of</p>
+        <p style="margin-bottom: 5px;">BEAUTILAND INTERNATIONAL COMPANY LIMITED</p>
+        <p class="pinyon-script" style="font-size: 24px;margin: 10px 0px 0px 0px;border-bottom: 2px solid;width: 30%;text-align: center;">{{ sales_person }}</p>
+        <p>Salesman: {{ sales_person }}</p>
+        <p>Date: {{ date }}</p>
+    </div>
+</body>
+</html>

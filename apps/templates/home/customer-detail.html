@@ -1,0 +1,143 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Customer Details'%}
+ {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: space-between">
+        <h3 class="c-grey-900 mB-20" style="text-align: center">
+          {% trans 'Customer Details' %}
+        </h3>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table class="table">
+              <thead class="table-dark">
+                <tr>
+                  <th>{% trans 'Name' %}</th>
+                  <th>{% trans 'Value' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{% trans 'Name' %}</td>
+                  <td>{{ customer.name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'English Name' %}</td>
+                  <td>{{ customer.english_name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Company Name' %}</td>
+                  <td>{{ customer.company_name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Company English Name' %}</td>
+                  <td>{{ customer.company_english_name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Industry Category' %}</td>
+                  <td>{{ customer.industry_category.name }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Contact 1' %}</td>
+                  <td>{{ customer.contact_1 }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Contact 2' %}</td>
+                  <td>{{ customer.contact_2 }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Area Code' %}</td>
+                  <td>{{ customer.area_code }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Phone Number' %}</td>
+                  <td>{{ customer.phone_number }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Phone Number 2' %}</td>
+                  <td>{{ customer.phone_number_2 }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Email' %}</td>
+                  <td>{{ customer.email }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'URL' %}</td>
+                  <td>{{ customer.url }}</td>
+                </tr>
+                <tr>
+                  <td>{% trans 'Landline ' %}</td>
+                  <td>{{ customer.landline }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="display: flex; justify-content: center">
+              <a
+                class="btn btn-primary rounded btn-send"
+                href="{% url 'customer-update' customer.id %}"
+              >
+                {% trans 'Update' %}
+              </a>
+            </div>
+            <div style="display: flex; justify-content: flex-end">
+              <a class="btn btn-primary btn-sm m-10" href="{% url 'address' customer.id %}">
+                <label>{% trans 'Add Address'%}</label>
+              </a>
+            </div>
+
+            <table class='table'>
+              <thead class='table-dark'>
+                <th>
+                  {% trans 'Address' %}
+                </th>
+                <th>
+                  {% trans 'Action' %}
+                </th>
+              </thead>
+              {% for address in addresses %}
+              <tbody>
+                <tr>
+                  <td>
+                  {{ address.address_line }}<br>
+                  <!-- {{ address.address_line2 }}<br>
+                  {{ address.landmark }}<br>
+                  {{ address.town }},{{ address.city }},{{ address.pincode }}<br>
+                  {{ address.state }},{{ address.country }}</td> -->
+                  <td>
+                    <div style="display: flex; justify-content: start">
+                      <a
+                        class="btn btn-primary btn-sm mR-10"
+                        href="{% url 'address-update' address.id %}"
+                      >
+                      <i class="ti-pencil-alt"></i>
+                      </a>
+                      <a
+                        class="btn btn-danger btn-sm mR-10"
+                        href="{% url 'address-delete' address.id%}"
+                      >
+                      <i class="ti-trash"></i>
+                      </a>
+                      
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              
+            </table>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

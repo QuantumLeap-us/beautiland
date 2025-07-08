@@ -1,0 +1,77 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Quotation details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class='main-content bgc-grey-100'>
+    <div id='mainContent'>
+      <div class="container-fluid">
+        {% comment %} <h4 class="c-grey-900 mT-10 mB-30">Student Management </h4> {% endcomment %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div id="mainContent">
+        <div class="container">
+            <div >
+                <h3 class="c-grey-900 mB-20 text-center">
+                    {% trans 'Quotation Details'%}
+                </h3>
+            </div>
+            <div>
+                <div class="text-center m 2px">
+                    <label><h5>{% trans 'Product List'%}</h5></label>
+                </div>
+
+                <table id="dataTable2" class="table" cellspacing="0" width="100%">
+                    <thead >
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                        <th>{% trans 'Supplier Product Name' %}</th>
+                        <th>{% trans 'Supplier Name' %}</th>
+                        <th>{% trans 'Supplier Code'%}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                    </thead>
+                    <tbody class="" >
+                        {% for product in order.purchaseitems %}
+                        <tr>
+                            <td style="display: none"><label id="id_item">{{product.purchase_id}}<label></td>
+                            <td style="width: 20%;">{{ product.product_id }}</td>
+                            <td style="width: 20%;">{{ product.product_chinese_name }}</td>
+                            <td style="width: 20%;">{%if product.product_english_name %}{{ product.product_english_name }}{% endif %}</td>
+                            <td style="width: 20%;">{{ product.supplier_product_name }}</td>
+                            <td style="width: 20%;">{{ product.supplier_name }}</td>
+                            <td style="width: 20%;">{{ product.supplier_code }}</td>
+                            <td style="width: 20%;" id="{{product.product_id}}_quantity"><label name= "quantity" id="{{product.product_id}}_label">{{ product.purchase_quantity }}</label></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div style="display:flex; justify-content:center">
+                    <a id="id_update"class="btn btn-primary rounded btn-send m-10" href="{% url 'quotation-update' order.id %}" style="color: white; display: block;">{% trans 'Update'%}</a>
+                    {% comment %} <button type="button" id="id_save"class="btn btn-success rounded btn-send m-10" onclick="saveList()" style="color: white; display: None;">{% trans 'Save'%}</button> {% endcomment %}
+                    <a class="btn btn-secondary rounded btn-send m-10" href="{% url 'quotation-pdf' order.id %}">
+                        <i class="ti-download"></i>
+                        {% trans 'Download'%}
+                    </a>
+                    <a class="btn btn-secondary rounded btn-send m-10" href="{% url 'create-purchase' order.id %}">
+                        {% trans 'Create Purchase'%}
+                    </a>
+                </div>
+            </div>
+            {{ msg }}
+        </div>
+    </div>
+</main>
+{% endblock content %} 
+{% block javascripts %}
+<script>
+$(document).ready(function () {
+    // Initialize DataTables for the product list table
+    $('#dataTable2').DataTable({
+        "scrollX": true
+        // Add other DataTables options as needed
+    });
+});
+</script>
+{% endblock javascripts %}

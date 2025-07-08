@@ -1,0 +1,100 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Quotation details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class='main-content bgc-grey-100'>
+    <div id='mainContent'>
+      <div class="container-fluid">
+        {% comment %} <h4 class="c-grey-900 mT-10 mB-30">Student Management </h4> {% endcomment %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+    <div id="mainContent">
+        <div class="container">
+            <div style="align-items: center">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Quotation Details'%}
+                </h3>
+            </div>
+            <div>
+                <div class="text-center m 2px">
+                    <label><h5>{% trans 'Product List'%}</h5></label>
+                </div>
+
+                <table id="dataTable2" class="table" cellspacing="0" width="100%">
+                    <thead>
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                        <th>{% trans 'Supplier Product Name' %}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                    </thead>
+                    <tbody class="" >
+                        {% for product in order.purchaseitems %}
+                        <tr>
+                            <td style="display: none"><label id="id_item">{{product.purchase_id}}<label></td>
+                            <td style="width: 20%;">{{ product.product_id }}</td>
+                            <td style="width: 20%;">{{ product.product_chinese_name }}</td>
+                            <td style="width: 20%;">{{ product.product_english_name }}</td>
+                            <td style="width: 20%;">{{ product.supplier_product_name }}</td>
+                            <td style="width: 20%;" id="{{product.product_id}}_quantity"><input name="quantity" class="form-control" id="{{product.product_id}}_input" value="{{product.purchase_quantity}}"/></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="orderDetails" id="orderDetailsInput" value="" />
+                    <div style="display:flex; justify-content:center">
+                        <button type="submit" id="id_save"
+                        class="btn btn-success rounded btn-send m-10" 
+                        style="color: white;">{% trans 'Save'%}</button> 
+                    </div>
+                </form>
+            </div>
+            {{ msg }}
+        </div>
+    </div>
+</main>
+{% endblock content %} 
+{% block javascripts %}
+<script>
+$(document).ready(function () {
+    // Initialize DataTables for the product list table
+    $('#dataTable2').DataTable({
+        "scrollX": true
+        // Add other DataTables options as needed
+    });
+});
+
+
+document.querySelector('form').addEventListener('submit', function(event) { 
+    event.preventDefault();
+    data = [];
+    error = false;
+    var tableRows = document.querySelectorAll('#dataTable2 tbody tr');
+    tableRows.forEach(function (row) {
+        quantity = row.querySelector('input[name^="quantity"]');
+        if (!quantity) {
+            error=true;
+        }
+        quantity = quantity.value;
+        purchaseId = row.querySelector('label[id^="id_item"]');
+        purchaseId = purchaseId.innerText
+        data.push({
+            id: purchaseId,
+            recommended_purchase_quantity: quantity
+        })
+    });
+    if (error){
+        alert("please fill input boxes!");
+        return ;
+    }
+    else{
+        document.getElementById('orderDetailsInput').value = JSON.stringify(data);
+        this.submit();
+    }
+});
+</script>
+{% endblock javascripts %}

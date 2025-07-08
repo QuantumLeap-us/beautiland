@@ -1,0 +1,187 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Order details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container">
+            <div style="align-items: center; ">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Order Details'%}
+                </h3>
+            </div>
+            <div>
+                <div class="m 2px">
+                    <label>{% trans 'Product List'%}:</label>
+                </div>
+
+                <table id="producttable" class="table" cellspacing="0" width="100%">
+                    <thead>
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                        <th>{% trans 'Sellinh Price' %}</th>
+                        <th>{% trans 'Sub Total' %}</th>
+                        <th>{% trans 'Delivered Quantity' %}</th>
+                        <th>{% trans 'Damage Quantity' %}</th>
+                    </thead>
+                    <tbody>
+                        {% for product in order.orderitems %}
+                        <tr>
+                            <td>{%if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                            <td>{%if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.order_quntity %}{{ product.order_quntity }}{% else %}-{% endif %}</td>
+                            <td>{%if product.selling_price %}{{ product.selling_price }}{% else %}-{% endif %}</td>
+                            <td>{%if product.sub_total %}{{ product.sub_total }}{% else %}-{% endif %}</td>
+                            <td style="width: 12%;"><input  type="text" size="5" class="form-control" id="id_delivery_cost" name="{{ product.product_id }}_delivery_cost" /></td>
+                            <td style="width: 12%;"><input  type="text" size="5" class="form-control" id="id_damage_cost" name="{{ product.product_id }}_damage_cost" /></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if order.freegifts %}
+                <div class="m 2px">
+                    <label>{% trans 'Gift List'%}:</label>
+                </div>
+
+                <table class="table" cellspacing="0" width="100%">
+                    <thead style="text-align: center">
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                    </thead>
+                    <tbody class="" style="text-align: center">
+                        {% for product in order.freegifts %}
+                        <tr>
+                            <td>{%if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                            <td>{%if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+                <table class="table" style="width:50%">
+                    <tbody>
+                        <tr>
+                            <td>{% trans 'Remarks'%}</td>
+                            <td>{%if order.remarks %}{{order.remarks}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Delivery Cost'%}</td>
+                            <td>{%if order.delivery_cost %}{{order.delivery_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Other Cost'%}</td>
+                            <td>{%if order.other_cost %}{{order.other_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Total Cost'%}</td>
+                            <td>{%if order.total_coste %}{{order.total_cost}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Payment Method'%}</td>
+                            <td>{%if order.payment_method %}{{order.payment_method}}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Delivery Date'%}</td>
+                            <td>{%if order.delivery_date %}{{order.delivery_date}}{% else %}-{% endif %}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row gx-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Actual Delivery Date'%}</label>
+                            <div class="input-group">
+                                <div class="input-group-text bgc-white bd bdwR-0">
+                                    <i class="ti-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control bdc-grey-200 start-date" value="{{form.delivery_date.value|date:'d/m/Y'}}" id="id_delivery_date" name="delivery_date" data-provide="datepicker" required>
+                            </div>
+                        </div>
+                        <span class="text-error">{{ form.delivery_date.errors }}</span>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Status'%}</label>
+                            {{form.status}}
+                        </div>
+                        <span class="text-error">{{ form.status.errors }}</span>
+                    </div>
+                    
+
+                    <input type="hidden" name="quantity" id="QuantityInput" value=""/>
+                    <div style="display: flex; justify-content: center;">
+                        <button class="btn btn-primary btn-sm mR-10" type="submit" style="color: white;">{% trans 'Submit'%}</button>
+                    </div>
+                </div>
+            </form>
+            {{ msg }}
+        </div>
+    </div>
+</main>
+{% endblock content %}
+{% block javascripts %}
+<script>
+    function createData() {
+        var quantities = [];
+        var isValid = true;
+
+        // Loop through the table rows to collect values
+        var tableRows = document.querySelectorAll('#producttable tbody tr');
+        var products = [];
+        tableRows.forEach(function(row) {
+            var damageInput = row.querySelector('input[id^="id_damage_cost"]');
+            var deliveredInput = row.querySelector('input[id^="id_delivery_cost"]');
+
+            var damageName = damageInput.getAttribute("name");
+            damageName = damageName.split('_')[0];
+
+            var deliveredQuantity = deliveredInput.value.trim();
+            var damageQuantity = damageInput.value.trim();
+
+            if (deliveredQuantity === '' && damageQuantity === '') {
+                isValid = false;
+                products.push(damageName);
+            }
+
+            var details = {
+                product_id: damageName,
+                delivered_quantity: deliveredQuantity,
+                damage_quantity: damageQuantity,
+            }
+
+            quantities.push(details);
+        });
+
+        if (!isValid) {
+            alert('Delivered Quantity and Damage Quantity cannot be empty for '  + products);
+            return false; // Prevent form submission
+        }
+
+        document.getElementById('QuantityInput').value = JSON.stringify(quantities);
+        return true; // Allow form submission
+    }
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        // Prevent the form from submitting by default
+        event.preventDefault();
+
+        // Call createData function and submit the form if it returns true
+        if (createData()) {
+            this.submit();
+        }
+    });
+</script>
+{% endblock javascripts %}

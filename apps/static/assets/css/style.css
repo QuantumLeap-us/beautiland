@@ -1,0 +1,25 @@
+#dataTable, #xlsx-preview table {
+  overflow-x: auto;
+  display: block;
+}
+table.dataTable td,
+table.dataTable th,#xlsx-preview table td {text-wrap: nowrap;}
+#xlsx-preview table td {
+    border-width: 1px;
+    padding: 4px 8px;
+}
+
+table thead,
+table tbody,
+table tfoot,
+table tr,
+table td,
+table th 
+{
+  vertical-align: middle;
+}
+
+.text-danger{
+  color:red;
+  font-size: 12px;
+}

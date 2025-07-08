@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+    {% block title %}Beautiland{% endblock %} 
+    </title>
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />    
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/jquery.dataTables.min.css"
+      integrity="sha512-1k7mWiTNoyx2XtmI96o+hdjP8nn0f3Z2N4oF/9ZZRgijyV4omsKOXEnqL1gKQNPy2MTSP9rIEWGcH/CInulptA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link type="text/css" href="{{ ASSETS_ROOT }}/css/index.css" rel="stylesheet">
+    <link type="text/css" href="{{ ASSETS_ROOT }}/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Specific Page CSS goes HERE -->
+    {% block stylesheets %}{% endblock stylesheets %}
+
+  </head>
+  <style>
+    .spinner-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(255 255 255 / 50%);
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+    }
+    .preview-image {
+      max-width: 50px; 
+      max-height: 50px;
+      margin-right: 10px;
+    }
+    .preview-image:hover {
+      transition: transform .3s; /* Animation */
+      transform: scale(5);
+      z-index: 1;
+    }
+    .div-css {
+      display: flex !important;
+      align-items: center;
+      padding: 5px;
+      /* align-items: baseline; */
+    }
+    .label-css {
+        width: 50%;
+    }
+    .label-css-product {
+        width: 70%;
+    }
+    .display-hide{
+      display: none;
+    }
+  </style>
+  <body class="app" style="overflow-x: auto;">
+    <!-- @TOC -->
+    <!-- =================================================== -->
+    <!--
+      + @Page Loader
+      + @App Content
+          - #Left Sidebar
+              > $Sidebar Header
+              > $Sidebar Menu
+
+          - #Main
+              > $Topbar
+              > $App Screen Content
+    -->
+
+    <!-- @Page Loader -->
+    <!-- =================================================== -->
+    <!-- <div class="spinner-overlay" id="spinner-overlay">
+      <div class="spinner"></div>
+    </div> -->
+    <div id='loader_spin' class="spinner-overlay" style="display: none;">
+      <div class="spinner"></div>
+    </div>
+    <div id='loader'>
+      <div class="spinner"></div>
+    </div>
+
+    <script>
+      window.addEventListener('load', function load() {
+        const loader = document.getElementById('loader');
+        setTimeout(function() {
+          loader.classList.add('fadeOut');
+        }, 300);
+      });
+
+      function isValidInput(event) {
+          var value = $("#" + event.srcElement.id).val();
+          // Get the character code of the pressed key
+          var charCode = (event.which) ? event.which : event.keyCode;
+          // Get the index of the dot in the current value
+          var dotIndex = value.indexOf('.');
+
+          // Allow digits (0-9), dot (.) if it doesn't exist already.
+          if ((charCode >= 48 && charCode <= 57) || (charCode == 46 && dotIndex === -1)) {
+              return true;
+          }
+
+          // Prevent any other characters
+          return false;
+      }
+
+      function handleTextPaste(event) {
+          // setTimeout(() => {
+          //     navigator.clipboard.readText().then(pastedText => {
+          //         if (!/^-?\d*\.?\d*$/.test(pastedText)) {
+          //             event.target.value = '';
+          //         }
+          //     }).catch(error => {
+          //         console.error('Failed to read clipboard text:', error);
+          //     });
+          // }, 0);
+
+          setTimeout(() => {
+              let pastedText = event.target.value;
+              if (!/^-?\d*\.?\d*$/.test(pastedText)) {
+                  event.target.value = '';
+              }
+          }, 0);
+      }
+
+      function handleIntTextPaste(event) {
+        setTimeout(() => {
+            const inputValue = event.target.value;
+            if (/[^0-9]/.test(inputValue)) {
+                event.target.value = '';
+            }
+        }, 0);
+    }
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+    </script>
+
+    <!-- @App Content -->
+    <!-- =================================================== -->
+    <div>
+
+        {% include 'includes/sidebar.html' %}    
+
+      <!-- #Main ============================ -->
+      <div class="page-container bgc-grey-100">
+
+        {% include 'includes/navigation.html' %}
+
+        {% block content %}{% endblock content %} 
+
+      </div>
+
+    </div>
+
+    {% include 'includes/scripts.html' %}
+
+    <!-- Specific Page JS goes HERE -->
+    {% block javascripts %}{% endblock javascripts %}    
+
+</body>
+</html>

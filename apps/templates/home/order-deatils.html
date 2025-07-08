@@ -1,0 +1,993 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Order details'%} {% endblock title %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <style>
+        #createTransactionModal .form-control {
+            pointer-events: auto !important;
+            opacity: 1 !important;
+        }
+        #createTransactionModal .form-control:disabled {
+            pointer-events: none !important;
+            opacity: 0.5 !important;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container-fluid">
+            <div style="align-items: center">
+                {% if error_msg %}
+                    <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+                {% endif %}
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Order Details'%}
+                </h3>
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <div class="m 2px">
+                        <label style="font-size: 15.7px;">{% trans 'General Information'%}:</label>
+                    </div>
+                    <div style="border-top: 1px solid;margin-top: 5px;">
+                        <table class='table' style="margin-top: 5px;">
+                            <tbody>
+                                <tr>
+                                <th>{%trans 'Invoice ID'%}</th>
+                                <td>{{order.order_id}}</td>
+                                <th>{%trans 'Type'%}</th>
+                                <td>{{order_form.type}}</td>
+                                <th>{%trans 'Phone'%}</th>
+                                <td>
+                                    {{order.phone}}
+                                </td>
+                                <th>{%trans 'Delivery Address'%}</th>
+                                <td>
+                                    <div id="addressDropdown">
+                                        <select class="form-control inputField" name="delivery_address" id="id_delivery_address_drop">
+                                            <option value="">-------</option>
+                                            {% for address in address_data %}
+                                                <option value="{{address}}">{{address}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </td>
+                                </tr>
+                                <tr>
+                                <th>{%trans 'Order Date'%}</th>
+                                <td>
+                                    {{order.order_date}}
+                                </td>
+                                <th>{%trans 'Company Name'%}</th>
+                                <td>
+                                    {{order.company_name}}
+                                </td>
+                                <th>{%trans 'Order Amount'%}</th>
+                                <td>
+                                    {{order.order_amount}}
+                                </td>
+                                <th>{%trans 'Delivery Comments'%}</th>
+                                <td>
+                                    <input type="text" class="form-control inputField" id="id_delivery_comments" value="{{order.delivery_comment}}" {% if order.delivery_status != "Pending" %}disabled{% endif %}>
+                                </td>
+                                </tr>
+                                <tr>
+                                <th>{%trans 'Order Status'%}</th>
+                                <td>
+                                    <div id="orderStatusDropdown">
+                                        <select class="form-control inputField" id="id_order_status">
+                                            <option value="draft">Draft</option>
+                                            <option value="pending approval">Pending approval</option>
+                                            <option value="pending reapproval">Pending reapproval</option>
+                                            <option value="pending payment">Pending payment</option>
+                                            <option value="pending deliver">Pending deliver</option>
+                                            <option value="delivered">Delivered</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <th>{%trans 'Customer ID'%}</th>
+                                <td>
+                                    {{order.customer_id}}
+                                </td>
+                                <th>{%trans 'Total Unit'%}</th>
+                                <td>
+                                    {{order.total_qty}}
+                                </td>
+                                <th>{%trans 'Delivery Date'%}</th>
+                                <td id="id_delivery_date">
+                                    {{order.delivery_date}}
+                                </td>
+                                </tr>
+                                <tr>
+                                    <th>{%trans 'Payment Status'%}</th>
+                                    <td>
+                                        {{order_form.payment_status}}
+                                    </td>
+                                    <th>{%trans 'Customer Name'%}</th>
+                                    <td>
+                                        {{order.customer_name}}
+                                    </td>
+                                    <th>{%trans 'Payment Method'%}</th>
+                                    <td>
+                                        {{order_form.payment_method}}
+                                    </td>
+                                    <th>{%trans 'Delivery Status'%}</th>
+                                    <td>
+                                    {{order_form.delivery_status}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>{%trans 'Upload Payment Record'%}</th>
+                                    <td>
+                                        <div>
+                                            <input type="file" name="payment_record" class="form-control" id="id_payment_record" accept=".jpg, .jpeg, .png, .pdf, .xls, .xlsx, .doc, .docx, .ppt, .pptx, .txt, .csv">
+                                            <div style="display: flex;">
+                                                <span id="uploadedFile" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: block;margin-top: 5px; width: 90%;" title="{{order.payment_record}}">
+                                                    {{order.payment_record}}
+                                                </span>
+                                                <a href="{% url 'download-payment-record' order.id %}" id="id_downloadAttachment" style="margin: 5px 0px 0px auto;display: none;" title="Download"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <th>{%trans 'Sales Person'%}</th>
+                                    <td>
+                                        <div id="salesPersonDropdown">
+                                            <select class="form-control inputField" name="sales_person" id="id_sales_person" {% if role == "seller" and order.can_change_sales_person == False %} disabled {% endif %}>
+                                                <option value="">-------</option>
+                                                {% for sale_person in sales_person_data %}
+                                                    <option value="{{sale_person.id}}">{{ sale_person.full_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <th>{%trans 'Payment Date'%}</th>
+                                    <td id="id_payment_date">
+                                        {{order.payment_date}}
+                                    </td>
+                                    <th>{%trans 'Delivery Method'%}</th>
+                                    <td>
+                                    {{order_form.delivery_method}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="bgc-white bd bdrs-3 p-20 mB-20" style="margin-top: 25px;">
+                <div class="m 2px">
+                    <label style="font-size: 15.7px;">{% trans 'Product List'%}:</label>
+                </div>
+                <div style="border-top: 1px solid;margin-top: 5px;">
+                    <table class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                        <thead>
+                            <th>{% trans 'Product ID' %}</th>
+                            <th>{% trans 'Product Name' %}</th>
+                            <th>{% trans 'Product English Name' %}</th>
+                            <th>{% trans 'Remark' %}</th>
+                            <th>{% trans 'Quantity' %}</th>
+                            <th>{% trans 'Unit Price' %}</th>
+                            <th>{% trans 'Total Price' %}</th>
+                            <th>{% trans 'Delivery Status' %}</th>
+                            <th>{% trans 'Delivery Quantity' %}</th>
+                            {% if order.order_status != 'pending approval' %}
+                                <th>{% trans 'Action' %}</th>
+                            {% endif %}
+                        </thead>
+                        <tbody id="orderItems">
+                            {% for product in order.orderitems %}
+                            <tr id="orderItem_{{product.prod_id}}" product_id="{{product.prod_id}}">
+                                <td>{% if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                                <td>{% if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                                <td>{% if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                                <td><input type="text" class="form-control inputField" name="remarks" id="remarks_{{product.prod_id}}" value="{{product.remark}}" disabled></td>
+                                <td><input type="number" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control order-quantity inputField" name="quantity" id="quantity_{{product.prod_id}}" value="{{product.purchase_quantity}}" disabled></td>
+                                <td id="unitPrice_{{product.prod_id}}">{% if product.selling_price %}{{ product.selling_price }}{% else %}-{% endif %}</td>
+                                <td id="totalPrice_{{product.prod_id}}">{% if product.sub_total %}{{ product.sub_total }}{% else %}-{% endif %}</td>
+                                <td>{% if order.delivery_status %}{{ order.delivery_status }}{% else %}-{% endif %}</td>
+                                <td>{% if order.delivered_quantity %}{{ product.delivered_quantity }}{% else %}-{% endif %}</td>
+                                {% if order.order_status != 'pending approval' %}
+                                    <td>
+                                        <div style="display: flex; justify-content: center">
+                                            <span class="btn btn-primary btn-sm mR-10" onclick="editOrderItem('{{product.prod_id}}')">
+                                            <i class="text-light ti-pencil-alt"></i>
+                                            </span>
+                                            <span type="submit" class="btn btn-danger btn-sm mR-10" onclick="deleteOrderItem('{{product.prod_id}}')">
+                                                <i class="text-light ti-trash"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bgc-white bd bdrs-3 p-20 mB-20" style="margin-top: 25px;">
+                <div class="m 2px">
+                    <label style="font-size: 15.7px;">{% trans 'Discount Details'%}:</label>
+                </div>
+                <div style="border-top: 1px solid;margin-top: 5px;">
+                    <table class="table" style="width: 20%;">
+                        <tbody>
+                            <tr>
+                                <th>Special Discount</th>
+                                <td><span>{{order.manual_cost}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span id="id_Msg" style="display: none;">{{ msg }}</span>
+            <input type="hidden" name="productDetails" id="orderDetailsInput" value="" />
+            <input type="hidden" name="total_quantity" id="totalQuantityInput" value="" />
+            <input type="hidden" name="total_product_cost" id="totalCostInput" value="" />
+            <input type="hidden" name="selected_customer" id="selectedCustomerInput" value="">
+            {% if order.order_status != 'pending approval' and order.order_status != 'pending reapproval' %}
+            <div class="bgc-white bd bdrs-3 p-20 mB-20" style="display: flex; justify-content: center;">
+                <button type="button" id="id_save_order" class="btn btn-primary btn-send" style="color: white; margin-right: 20px;" onclick="saveOrder('{{order.id}}')">
+                    {% trans 'Save'%}
+                </button>
+                {% if role == "seller" and order.order_status != "draft" %}
+                <button type="button" id="submitBtn" class="btn btn-success btn-send" style="color: white; margin-right: 20px;" onclick="reSubmitOrder('{{order.id}}')">
+                    {% trans 'Resubmit'%}
+                </button>
+                {% endif %}
+                {% if order.order_status == "draft" %}
+                    <button type="button" id="createBtn" class="btn btn-success btn-send" style="color: white; margin-right: 20px;" onclick="SubmitOrder('{{order.id}}')">
+                {% trans 'Submit'%}
+                </button>
+                {% endif %}
+                <!-- “Create Transaction”按钮 -->
+                <button type="button" class="btn btn-primary btn-send" style="color: white; margin-right: 20px;" data-toggle="modal" data-target="#createTransactionModal">
+                    {% trans 'Create Transaction' %}
+                </button>
+                <form action="{% url 'cancel-order' order.id %}" method="post" onsubmit="return confirmDelete('Are you sure want to cancel order?')" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" style="color: white">
+                    {% trans 'Cancel Order'%}
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <!-- 模态框：Create Transaction -->
+        <div class="modal fade" id="createTransactionModal" tabindex="-1" role="dialog" aria-labelledby="createTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createTransactionModalLabel">{% trans 'Create Transaction' %}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="transactionFormModal" enctype="multipart/form-data" action="{% url 'transaction_create_with_redirect' %}">
+                    {% csrf_token %}
+                    <!-- 隐藏的 status 字段 -->
+                    <input type="hidden" name="status" value="Pending">
+                    <!-- 调试：输出 order.id -->
+                    <div style="display: none;">Debug: order.id = {{ order.id }}</div>
+                    <!-- 订单选择 -->
+                    <div class="mb-3">
+                        <label for="id_order_id">{% trans 'Select Order' %} <span class="text-danger">*</span></label>
+                        <select name="order_id" id="id_order_id" class="form-control" required disabled>
+                            <option value="">{% trans 'Select an order' %}</option>
+                            <option value="{{ order.id }}" selected>{{ order.order_id }} - {{ order.customer.name|default:"No Customer" }}</option>
+                            {% for available_order in available_orders %}
+                                {% if available_order.id != order.id %}
+                                    <option value="{{ available_order.id }}">{{ available_order.order_id }} - {{ available_order.customer.name|default:"No Customer" }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_transaction_type">{% trans 'Transaction Type' %} <span class="text-danger">*</span></label>
+                                <select name="transaction_type" id="id_transaction_type" class="form-control" required>
+                                    <option value="">{% trans 'Select Transaction Type' %}</option>
+                                    <option value="Payment">{% trans 'Payment' %}</option>
+                                    <option value="Refund">{% trans 'Refund' %}</option>
+                                    <option value="Adjustment">{% trans 'Adjustment' %}</option>
+                                    <option value="Discount">{% trans 'Discount' %}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_amount">{% trans 'Amount' %} <span class="text-danger">*</span></label>
+                                <input type="number" name="amount" id="id_amount" class="form-control" value="1.00" step="0.01" min="0.01" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_currency">{% trans 'Currency' %} <span class="text-danger">*</span></label>
+                                <select name="currency" id="id_currency" class="form-control" required>
+                                    <option value="">{% trans 'Select Currency' %}</option>
+                                    <option value="HKD" selected>{% trans 'HKD' %}</option>
+                                    <option value="USD">{% trans 'USD' %}</option>
+                                    <option value="CNY">{% trans 'CNY' %}</option>
+                                    <option value="EUR">{% trans 'EUR' %}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_payment_method">{% trans 'Payment Method' %}</label>
+                                <select name="payment_method" id="id_payment_method" class="form-control">
+                                    <option value="">{% trans 'Select Payment Method' %}</option>
+                                    <option value="Cash">{% trans 'Cash' %}</option>
+                                    <option value="CreditCard">{% trans 'Credit Card' %}</option>
+                                    <option value="BankTransfer">{% trans 'Bank Transfer' %}</option>
+                                    <option value="OnlinePayment">{% trans 'Online Payment' %}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="id_payment_status">{% trans 'Payment Status' %} <span class="text-danger">*</span></label>
+                                <select name="payment_status" id="id_payment_status" class="form-control" required>
+                                    <option value="">{% trans 'Select Payment Status' %}</option>
+                                    <option value="Unpaid">{% trans 'Unpaid' %}</option>
+                                    <option value="Partial">{% trans 'Partial' %}</option>
+                                    <option value="Paid">{% trans 'Paid' %}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_refund_amount">{% trans 'Refund Amount' %}</label>
+                                <input type="number" name="refund_amount" id="id_refund_amount" class="form-control" value="0.00" step="0.01" min="0">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_refund_date">{% trans 'Refund Date' %}</label>
+                                <input type="datetime-local" name="refund_date" id="id_refund_date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_delivery_date">{% trans 'Delivery Date' %}</label>
+                                <input type="datetime-local" name="delivery_date" id="id_delivery_date" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_remarks">{% trans 'Remarks' %}</label>
+                                <textarea name="remarks" id="id_remarks" class="form-control"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_attachment">{% trans 'Attachment' %} (PDF或图片)</label>
+                                <input type="file" name="attachment" id="id_attachment" class="form-control-file" accept=".pdf,.jpg,.jpeg,.png">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary rounded btn-send" style="color: white">{% trans 'Save' %}</button>
+                        <button type="button" class="btn btn-danger rounded" style="color: white" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    var items_data = {{items_data | safe}};
+    var role = '{{role}}';
+    var changed = false;
+
+    $(document).ready(function () {
+        $('#id_downloadAttachment').hide();
+        if ('{{order.payment_record}}') {
+            $('#id_downloadAttachment').show();
+        }
+
+        $('#id_delivery_method').removeAttr('disabled');
+        if (role == 'seller') {
+            $('#id_delivery_method').attr('disabled', 'disabled');
+            $('#id_delivery_status').attr('disabled', 'disabled');
+            $('#id_payment_status').attr('disabled', 'disabled');
+            $('#id_order_status').attr('disabled', 'disabled');
+        }
+
+        var dropdown = document.getElementById('id_type');
+        var optionToSelect = '{{order.type}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_order_status');
+        var optionToSelect = '{{order.order_status}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_sales_person');
+        var optionToSelect = '{{order.sales_person}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].text === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_delivery_address_drop');
+        var optionToSelect = '{{order.delivery_address}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_delivery_status');
+        var optionToSelect = '{{order.delivery_status}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_payment_status');
+        var optionToSelect = '{{order.payment_status}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                if (optionToSelect == 'Paid') {
+                    $('#id_payment_method').attr('disabled', 'disabled');
+                    $('#id_payment_status').attr('disabled', 'disabled');
+                }
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_payment_method');
+        var optionToSelect = '{{order.payment_method}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_delivery_method');
+        var optionToSelect = '{{order.delivery_method}}';
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        $('.order-quantity').on("change keyup", function (e) {
+            var product_id = (e.currentTarget.id).split("_")[1];
+            updateTotalPrice(product_id);
+        });
+
+        checkFormValueChange();
+
+        $('#createTransactionModal').on('shown.bs.modal', function () {
+            $('#transactionFormModal input, #transactionFormModal select, #transactionFormModal textarea').each(function() {
+                $(this).removeAttr('disabled');
+                $(this).removeAttr('readonly');
+                $(this).prop('disabled', false);
+                $(this).prop('readonly', false);
+                console.log('Field:', $(this).attr('id'), 'Disabled:', $(this).prop('disabled'));
+            });
+            $('input[type="datetime-local"]').each(function() {
+                $(this).prop('type', 'datetime-local');
+            });
+            // 设置默认值
+            var orderId = '{{ order.id }}';
+            console.log('Template order ID:', orderId);
+            if (orderId) {
+                $('#id_order_id').val(orderId);
+                console.log('Set order ID:', $('#id_order_id').val());
+            } else {
+                console.error('Template order ID is empty');
+            }
+            $('#id_transaction_type').val('Adjustment');
+            $('#id_amount').val('1.00');
+            $('#id_currency').val('HKD');
+            $('#id_payment_method').val('Cash');
+            $('#id_payment_status').val('Partial');
+            $('#id_refund_amount').val('0.00');
+            $('#id_refund_date').val('');
+            $('#id_delivery_date').val('');
+            $('#transactionFormModal select').trigger('change');
+            // 调试：输出字段值
+            console.log('FormData:', {
+                order_id: $('#id_order_id').val(),
+                transaction_type: $('#id_transaction_type').val(),
+                amount: $('#id_amount').val(),
+                currency: $('#id_currency').val(),
+                payment_method: $('#id_payment_method').val(),
+                payment_status: $('#id_payment_status').val(),
+                refund_amount: $('#id_refund_amount').val(),
+                refund_date: $('#id_refund_date').val(),
+                delivery_date: $('#id_delivery_date').val(),
+                remarks: $('#id_remarks').val(),
+                attachment: $('#id_attachment').val()
+            });
+        });
+
+        $('#transactionFormModal').on('submit', function(event) {
+            event.preventDefault(); // 阻止默认表单提交
+            // 前端验证
+            if (!$('#id_order_id').val()) {
+                alert('请选择订单。');
+                console.error('Order ID is empty');
+                return;
+            }
+            if (!$('#id_transaction_type').val()) {
+                alert('请选择交易类型。');
+                return;
+            }
+            var amount = parseFloat($('#id_amount').val());
+            if (isNaN(amount) || amount <= 0) {
+                alert('请输入大于0的有效金额。');
+                return;
+            }
+            if (!$('#id_currency').val()) {
+                alert('请选择货币。');
+                return;
+            }
+            if (!$('#id_payment_status').val()) {
+                alert('请选择支付状态。');
+                return;
+            }
+            var refundAmount = parseFloat($('#id_refund_amount').val()) || 0;
+            if (refundAmount < 0) {
+                alert('退款金额不能为负数。');
+                return;
+            }
+            var refundDate = $('#id_refund_date').val();
+            if (refundAmount > 0 && !refundDate) {
+                alert('退款金额大于0时，请提供退款日期。');
+                return;
+            }
+            var deliveryDate = $('#id_delivery_date').val();
+            if (deliveryDate && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(deliveryDate)) {
+                alert('请提供有效的配送日期格式（YYYY-MM-DDTHH:MM）。');
+                return;
+            }
+            var attachment = $('#id_attachment')[0].files[0];
+            if (attachment) {
+                var validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+                if (!validTypes.includes(attachment.type)) {
+                    alert('附件必须是PDF、JPEG或PNG文件。');
+                    return;
+                }
+                if (attachment.size > 5 * 1024 * 1024) {
+                    alert('附件大小必须小于5MB。');
+                    return;
+                }
+            }
+            var $form = $(this);
+            var $submitButton = $form.find('button[type="submit"]');
+            $submitButton.prop('disabled', true);
+            var formData = new FormData(this);
+            // 调试：输出 FormData
+            console.log('FormData Entries:', Array.from(formData.entries()));
+            for (var pair of formData.entries()) {
+                console.log('FormData:', pair[0], ':', pair[1]);
+            }
+            $.ajax({
+                type: "POST",
+                url: $form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+                },
+                success: function(response) {
+                    console.log('Response:', response);
+                    if (response.code === 1) {
+                        console.log('Attempting to hide modal');
+                        $('#createTransactionModal').modal('hide');
+                        console.log('Modal hidden status:', !$('#createTransactionModal').hasClass('show'));
+                        $('#id_Msg').show();
+                        $('#id_Msg').html('<div class="alert alert-success" role="alert">{% trans "交易创建成功" %}</div>');
+                        setTimeout(() => {
+                            $('#id_Msg').hide();
+                            console.log('Redirecting to:', '/order-get/' + $('#id_order_id').val() + '/');
+                            window.location.href = '/order-get/' + $('#id_order_id').val() + '/';
+                        }, 2000); // 延迟2秒以显示提示
+                    } else {
+                        $('#id_Msg').show();
+                        var errorMsg = response.msg;
+                        if (response.errors) {
+                            var errors = JSON.parse(response.errors);
+                            errorMsg += '<ul>';
+                            for (var field in errors) {
+                                errorMsg += '<li>' + field + ': ' + errors[field][0].message + '</li>';
+                            }
+                            errorMsg += '</ul>';
+                        }
+                        $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + errorMsg + '</div>');
+                        setTimeout(() => {
+                            $('#id_Msg').hide();
+                        }, 5000);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', xhr.responseText);
+                    $('#id_Msg').show();
+                    $('#id_Msg').html('<div class="alert alert-danger" role="alert">{% trans "保存交易时发生错误：" %}' + xhr.responseText + '</div>');
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 5000);
+                },
+                complete: function() {
+                    $submitButton.prop('disabled', false);
+                    console.log('AJAX request completed');
+                }
+            });
+        });
+
+    $('.btn-click').click(function () {
+        changed = false;
+    });
+
+    window.addEventListener('beforeunload', function(event) {
+        if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function checkFormValueChange() {
+        var form = document.getElementById('orderForm');
+        var inputFields = document.getElementsByClassName('inputField');
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    function confirmDelete(msg) {
+        var confirmed = confirm(msg);
+        if (!confirmed) {
+            event.preventDefault();
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+        }
+    }
+
+    function updateTotalPrice(product_id) {
+        var unit_price_currency = ($('#unitPrice_' + product_id).text()).split(" ") || 0;
+        var unit_price = parseFloat(unit_price_currency[1]);
+        var currency = unit_price_currency[0];
+        var quantity = parseFloat($('#quantity_' + product_id).val()) || 0;
+        var total_price = unit_price * quantity;
+        if (total_price > 0) {
+            $('#totalPrice_' + product_id).text(currency + " " + (total_price).toFixed(2));
+        }
+    }
+
+    function editOrderItem(product_id) {
+        $('#remarks_' + product_id).removeAttr('disabled');
+        $('#quantity_' + product_id).removeAttr('disabled');
+    }
+
+    function deleteOrderItem(product_id) {
+        $('#orderItem_' + product_id).remove();
+    }
+
+    function saveOrder(order_id) {
+        var formData = new FormData();
+        var payment_record_files = $('#id_payment_record')[0].files[0];
+        formData.append('payment_record_files', payment_record_files);
+
+        formData.append('payment_method', $('#id_payment_method').val());
+        formData.append('delivery_method', $('#id_delivery_method').val());
+        formData.append('delivery_comments', $('#id_delivery_comments').val());
+        formData.append('order_status', $('#id_order_status').val());
+        formData.append('payment_status', $('#id_payment_status').val());
+        formData.append("delivery_address", $('#id_delivery_address_drop').val());
+        formData.append("delivery_date", $('#id_delivery_date').text());
+        formData.append("order_type", $('#id_type').val());
+        formData.append("sales_person", $('#id_sales_person').val());
+        formData.append('order_id', order_id);
+
+        var is_quantity = true;
+        var productDetails = [];
+        var items_total_price = 0;
+        $('#orderItems tr').each(function(index, element) {
+            var product_id = $(this).attr('product_id');
+            var quantity = parseFloat($('#quantity_' + product_id).val()) || 0;
+            var remarks = ($('#remarks_' + product_id).val()).trim();
+
+            if (isNaN(quantity) || quantity === 0 || quantity < 0) {
+              alert("You can't put 0, negative value, or None in Quantity!");
+              is_quantity = false;
+            }
+
+            var totalPrice = parseFloat($('#totalPrice_' + product_id).text().split(" ")[1]) || 0;
+            items_total_price += totalPrice;
+            var selling_price = parseFloat($('#unitPrice_' + product_id).text().split(" ")[1]) || 0;
+            productDetails.push({
+                'product_id': parseInt(product_id),
+                'selling_price': selling_price,
+                'quantity': parseInt(quantity),
+                'total_cost': totalPrice,
+                'remarks': remarks,
+            });
+        });
+
+        if (!is_quantity) {
+            return false;
+        }
+
+        formData.append('productDetails', JSON.stringify(productDetails));
+        formData.append('items_total_price', items_total_price);
+
+        setTimeout(() => {
+            $('#loader_spin').show();
+        }, 0);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'order-update' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.code == 1) {
+                    changed = false;
+                    if ($('#id_payment_status').val() == 'Paid') {
+                        $('#id_payment_method').attr('disabled', 'disabled');
+                        $('#id_payment_status').attr('disabled', 'disabled');
+                    }
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                        $('#id_payment_record').val('');
+                        $('#id_payment_date').text(response.payment_date);
+                        $('#id_delivery_date').text(response.delivery_date);
+                        $('#uploadedFile').text(response.payment_record_files);
+                        $('#uploadedFile').attr('title', response.payment_record_files);
+                        if (response.payment_record_files) {
+                            $('#id_downloadAttachment').show();
+                        }
+
+                        var dropdown = document.getElementById('id_delivery_method');
+                        var optionToSelect = response.delivery_method;
+
+                        for (var i = 0; i < dropdown.options.length; i++) {
+                            if (dropdown.options[i].value === optionToSelect) {
+                                dropdown.options[i].selected = true;
+                                break;
+                            }
+                        }
+                        $('#id_Msg').show();
+                        $('#id_Msg').html('<div class="alert alert-success" role="alert">' + response.msg + '</div>');
+                    }, 0);
+                } else {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                        $('#id_Msg').show();
+                        $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }, 0);
+                }
+                setTimeout(() => {
+                    $('#id_Msg').hide();
+                }, 5000);
+            },
+            error: function(error) {
+                setTimeout(() => {
+                    $('#loader_spin').hide();
+                }, 0);
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function reSubmitOrder(order_id) {
+        var itemRowCount = $('#orderItems tr').length;
+        if (itemRowCount == 0) {
+            alert("You can't remove all the product!");
+            return false;
+        }
+
+        var is_quantity = true;
+        var is_remark_change = false;
+        var is_quantity_change = false;
+        var productDetails = [];
+        var items_total_price = 0;
+        $('#orderItems tr').each(function(index, element) {
+            var product_id = $(this).attr('product_id');
+            var quantity = parseFloat($('#quantity_' + product_id).val()) || 0;
+            var remarks = ($('#remarks_' + product_id).val()).trim();
+            var existed_remark = (items_data[product_id]["remarks"]) || "";
+            var existed_quantity = items_data[product_id]["quantity"];
+            if (remarks != existed_remark) {
+                is_remark_change = true;
+            }
+            if (quantity != existed_quantity) {
+                is_quantity_change = true;
+            }
+
+            if (isNaN(quantity) || quantity === 0 || quantity < 0) {
+              alert("You can't put 0, negative value, or None in Quantity!");
+              is_quantity = false;
+            }
+
+            var totalPrice = parseFloat($('#totalPrice_' + product_id).text().split(" ")[1]) || 0;
+            items_total_price += totalPrice;
+            var selling_price = parseFloat($('#unitPrice_' + product_id).text().split(" ")[1]) || 0;
+            productDetails.push({
+                'product_id': parseInt(product_id),
+                'selling_price': selling_price,
+                'quantity': parseInt(quantity),
+                'total_cost': totalPrice,
+                'remarks': remarks,
+            });
+        });
+
+        if (!is_quantity) {
+            return false;
+        }
+
+        if (!is_remark_change && !is_quantity_change && itemRowCount == Object.keys(items_data).length) {
+            alert("You need to change something in product list to resubmit order!");
+            return false;
+        }
+
+        var confirmed = confirm("Are you sure want to resubmit this order.");
+        if (confirmed) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            var formData = new FormData();
+            var payment_record_files = $('#id_payment_record')[0].files[0];
+
+            formData.append('payment_record_files', payment_record_files);
+            formData.append('payment_method', $('#id_payment_method').val());
+            formData.append('delivery_method', $('#id_delivery_method').val());
+            formData.append('delivery_comments', $('#id_delivery_comments').val());
+            formData.append('order_status', $('#id_order_status').val());
+            formData.append('payment_status', $('#id_payment_status').val());
+            formData.append('items_total_price', items_total_price);
+            formData.append('order_id', order_id);
+            formData.append('productDetails', JSON.stringify(productDetails));
+            formData.append("delivery_address", $('#id_delivery_address_drop').val());
+            formData.append("delivery_date", $('#id_delivery_date').text());
+            formData.append("order_type", $('#id_type').val());
+            formData.append("sales_person", $('#id_sales_person').val());
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'order-resubmit' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                            $('#loader_spin').hide();
+                        }, 0);
+                        changed = false;
+                        window.location = '/order-list/';
+                    } else {
+                        setTimeout(() => {
+                            $('#loader_spin').hide();
+                            $('#id_Msg').show();
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 5000);
+                },
+                error: function(error) {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                    }, 0);
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    function SubmitOrder(order_id) {
+        var formData = new FormData();
+        var payment_record_files = $('#id_payment_record')[0].files[0];
+        formData.append('payment_record_files', payment_record_files);
+
+        formData.append('payment_method', $('#id_payment_method').val());
+        formData.append('delivery_method', $('#id_delivery_method').val());
+        formData.append('delivery_comments', $('#id_delivery_comments').val());
+        formData.append('order_status', $('#id_order_status').val());
+        formData.append('payment_status', $('#id_payment_status').val());
+        formData.append("delivery_address", $('#id_delivery_address_drop').val());
+        formData.append("delivery_date", $('#id_delivery_date').text());
+        formData.append("order_type", $('#id_type').val());
+        formData.append("sales_person", $('#id_sales_person').val());
+
+        var is_quantity = true;
+        var productDetails = [];
+        var items_total_price = 0;
+        $('#orderItems tr').each(function(index, element) {
+            var product_id = $(this).attr('product_id');
+            var quantity = parseFloat($('#quantity_' + product_id).val()) || 0;
+            var remarks = ($('#remarks_' + product_id).val()).trim();
+
+            if (isNaN(quantity) || quantity === 0 || quantity < 0) {
+              alert("You can't put 0, negative value, or None in Quantity!");
+              is_quantity = false;
+            }
+
+            var totalPrice = parseFloat($('#totalPrice_' + product_id).text().split(" ")[1]) || 0;
+            items_total_price += totalPrice;
+            var selling_price = parseFloat($('#unitPrice_' + product_id).text().split(" ")[1]) || 0;
+            productDetails.push({
+                'product_id': parseInt(product_id),
+                'selling_price': selling_price,
+                'quantity': parseInt(quantity),
+                'total_cost': totalPrice,
+                'remarks': remarks,
+            });
+        });
+
+        if (!is_quantity) {
+            return false;
+        }
+
+        formData.append('productDetails', JSON.stringify(productDetails));
+        formData.append('items_total_price', items_total_price);
+        formData.append('order_id', order_id);
+        setTimeout(() => {
+            $('#loader_spin').show();
+        }, 0);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'order_submit' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.code == 1) {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                    }, 0);
+                    changed = false;
+                    window.location = '/order-list/';
+                } else {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                        $('#id_Msg').show();
+                        $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }, 0);
+                }
+                setTimeout(() => {
+                    $('#id_Msg').hide();
+                }, 5000);
+            },
+            error: function(error) {
+                setTimeout(() => {
+                    $('#loader_spin').hide();
+                }, 0);
+                console.error('Error:', error);
+            }
+        });
+    }
+</script>
+{% endblock javascripts %}

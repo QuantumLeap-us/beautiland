@@ -1,0 +1,90 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'purchase List'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Purchase List'%}</h4>
+        <div>
+            <a class="btn btn-secondary rounded btn-send" 
+            href="{% url 'purchase'%}">{% trans 'Create Purchase Order'%}</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>{% trans 'No' %}</th>
+                  <th>{% trans 'Chinese Name' %}</th>
+                  <th>{% trans 'English Name' %}</th>
+                  <th>{% trans 'Supplier Product Name' %}</th>
+                  <th>{% trans 'Purchase Quantity' %}</th>
+                  <th>{% trans 'Delivery Date' %}</th>
+                  <th>{% trans 'Delivery Cost' %}</th>
+                  <th>{% trans 'Total Price' %}</th>
+                  <th>{% trans 'Remarks' %}</th>
+                  <th>{% trans 'Payment Methods' %}</th>
+                  <th>{% trans 'Action'%}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for purchase in purchases %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{% for items in purchase.purchaseitems %}{% if items.product_chinese_name %}
+                    {{items.product_chinese_name}}{% else %}-{% endif %}<br>{% endfor %}</td>
+                  <td>{% for items in purchase.purchaseitems %}{% if items.product_english_name %}
+                    {{items.product_english_name}}{% else %}-{% endif %}<br>{% endfor %}</td>
+                  <td>{% for items in purchase.purchaseitems %}{% if items.supplier_product_name %}
+                    {{items.supplier_product_name}}{% else %}-{% endif %}<br>{% endfor %}</td>
+                  <td>{% for items in purchase.purchaseitems %}{% if items.purchase_quantity %}
+                    {{items.purchase_quantity}}{% else %}-{% endif %}<br>{% endfor %}</td>
+                  <td>{% if purchase.delivery_date %}{{purchase.delivery_date}}{% else %}-{% endif %}</td>
+                  <td>{% if purchase.delivery_cost %}{{purchase.delivery_cost}}{% else %}-{% endif %}</td>
+                  <td>{% if purchase.total_cost %}{{purchase.total_cost}}{% else %}-{% endif %}</td>
+                  <td>{% if purchase.remarks %}{{purchase.remarks}}{% else %}-{% endif %}</td>
+                  <td>{% if purchase.payment_method %}{{purchase.payment_method}}{% else %}-{% endif %}</td>
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'purchase-get' purchase.id %}">
+                        <i class="ti-eye" style="color: white;"></i>
+                      </a>
+                      <a class="btn btn-danger btn-sm mR-10" href="{% url 'purchase-delete' purchase.id %}">
+                        <i class="ti-trash" style="color: white;"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function () {
+    $('#dataTable2').DataTable({
+      "scrollX": true
+      // Add other DataTables options as needed
+    });
+  });
+</script>
+{% endblock javascripts %}

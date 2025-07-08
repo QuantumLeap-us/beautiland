@@ -1,0 +1,538 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Update Customer'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+</style>
+{% endblock stylesheets %}
+{% block content %}
+<main class='main-content bgc-grey-100'>
+    <div id='mainContent'>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            {% if error_msg %}
+            <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+            {% endif %}
+            <span id="id_Msg" style="display: none;"></span>
+            <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Update Customer'%}</h3>
+            <form id="customerForm" method="post" action="/customer-update/{{customer_data.id}}/" enctype="multipart/form-data" style="margin-top: 35px;">
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    {% csrf_token %}
+                    <div class="row gx-4">
+                        <div class="col-md-4">
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_created_date" class="text-normal text-dark">{% trans 'Created Date'%}</label>
+                                <input type="text" class="form-control inputField" id="id_created_date" value="{{customer_data.created_date}}" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_customer_name" class="text-normal text-dark">{% trans 'Customer Name'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="customer_name" id="id_customer_name" value="{{customer_data.customer_name}}" required>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_company_name" class="text-normal text-dark">{% trans 'Company Name'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="company_name" id="id_company_name" value="{{customer_data.company_name}}" required>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_phone_1" class="text-normal text-dark">{% trans 'Phone 1'%} <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control inputField" name="phone_1" id="id_phone_1" value="{{customer_data.phone_1}}" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_landline" class="text-normal text-dark">{% trans 'Landline'%}</label>
+                                <input type="tel" class="form-control inputField" name="landline" id="id_landline" value="{{customer_data.landline}}" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_prefix" class="text-normal text-dark">{% trans 'Prefix'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="prefix" id="id_prefix" required>
+                                    <option value="">-------</option>
+                                    {% for prefix in prefixes %}
+                                    <option value="{{prefix}}">{{prefix}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_email" class="text-normal text-dark">{% trans 'Email'%}</label>
+                                <input type="email" class="form-control inputField" name="email" id="id_email" value="{{customer_data.email}}">    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_salesperson" class="text-normal text-dark">{% trans 'Salesperson'%}</label>
+                                <select class="form-control inputField" name="salesperson" id="id_salesperson" {% if role == "seller" %} disabled {% endif %}>
+                                    <option value="">-------</option>
+                                    {% for sales_person in sales_person_data %}
+                                    <option value="{{sales_person.id}}">{{sales_person.full_name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="hidden" name="salesperson" id="id_sales_person_hidden" value="">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_first_order_date" class="text-normal text-dark">{% trans 'First Order Date'%}</label>
+                                <input type="text" class="form-control" id="id_first_order_date" value="{{customer_data.first_order_date}}" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_last_order_date" class="text-normal text-dark">{% trans 'Last Order Date'%}</label>
+                                <input type="text" class="form-control" id="id_last_order_date" value="{{customer_data.last_order_date}}" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_accumlated_sales" class="text-normal text-dark">{% trans 'Accumulated Sales (HKD)'%}</label>
+                                <input type="text" class="form-control" id="id_accumlated_sales" value="{{customer_data.accumlated_sales}}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_customer_id" class="text-normal text-dark">{% trans 'Customer ID'%}</label>
+                                <input type="text" class="form-control" id="id_customer_id" value="{{customer_data.customer_id}}" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_customer_eng_name" class="text-normal text-dark">{% trans 'Customer Eng Name'%}</label>
+                                <input type="text" class="form-control inputField" name="customer_eng_name" id="id_customer_eng_name" value="{{customer_data.customer_eng_name}}">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_company_eng_name" class="text-normal text-dark">{% trans 'Company Eng Name'%}</label>
+                                <input type="text" class="form-control inputField" name="company_eng_name" id="id_company_eng_name" value="{{customer_data.company_english_name}}">    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_person_2" class="text-normal text-dark">{% trans 'Contact Person 2 (English)'%}</label>
+                                <input type="text" class="form-control inputField" name="contact_person_2" id="id_contact_person_2" value="{{customer_data.contact_person_2}}">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_person_2_chinese" class="text-normal text-dark">{% trans 'Contact Person 2 (Chinese)'%}</label>
+                                <input type="text" class="form-control inputField" name="contact_person_2_chinese" id="id_contact_person_2_chinese" value="{{customer_data.contact_person_2_chinese}}">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_country" class="text-normal text-dark">{% trans 'Country/District'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="country" id="id_country" required>
+                                    <option value="">-------</option>
+                                    {% for country in countries %}
+                                        <option value="{{country}}">{{country}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_currency" class="text-normal text-dark">{% trans 'Currency'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="currency" id="id_currency" required>
+                                    <option value="">-------</option>
+                                    {% for curr in currency %}
+                                        <option value="{{curr}}">{{curr}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_source" class="text-normal text-dark">{% trans 'Source'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="source" id="id_source" required>
+                                    <option value="">-------</option>
+                                    {% for source in sources %}
+                                        <option value="{{source}}">{{source}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_name_card_file" class="text-normal text-dark">{% trans 'Name Card'%}</label>
+                                <div style="width: 100%;">
+                                    <div id="name_card_preview_img">
+                                        <img id="imagePreview" src="#" class="preview-image" alt="Image Preview" style="display: none;">
+                                        <input type="file" class="form-control inputField" name="name_card_file" id="id_name_card_file" style="width: 100%;height: fit-content;" accept=".jpg, .jpeg, .png" onchange="previewImage(event)">
+                                    </div>
+                                    {% if customer_data.name_card_file_name %}
+                                        <div id="existedNameCard" style="display: flex;margin-top: 10px;flex-wrap: wrap;">
+                                            <img id="existsImagePreview" src="{{customer_data.name_card_file_path}}" class="preview-image" alt="Image Preview" >
+                                            <span id="uploadedFile" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; display: block;margin-top: 5px; width: 60%;" title="{{customer_data.name_card_file_name}}">
+                                                {{customer_data.name_card_file_name}}
+                                            </span>
+                                            <a href="{% url 'download_customer_name_card' customer_data.id %}" id="id_downloadAttachment" style="margin: 5px 0px 0px auto;" title="Download"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                            <a id="id_removeAttachment" onclick="removeNameCard('{{customer_data.id}}')" style="margin: 5px 0px 0px 10px; cursor: pointer;" title="Remove"><i class="fa fa-remove" style="color: #f44336;font-size: 16px;" aria-hidden="true"></i></a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_no_of_order" class="text-normal text-dark">{% trans 'No. of Order'%}</label>
+                                <input type="text" class="form-control" id="id_no_of_order" value="{{customer_data.no_of_orders}}" disabled>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_status" class="text-normal text-dark">{% trans 'Status'%}</label>
+                                <input type="text" class="form-control" name="status" id="id_status" style="text-transform: capitalize;" value="{{customer_data.status}}" disabled>
+                                <input type="hidden" class="form-control" name="status" id="id_status" style="text-transform: capitalize;" value="{{customer_data.status}}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_industry_type" class="text-normal text-dark">{% trans 'Industry Type'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="industry_type" id="id_industry_type" required>
+                                    <option value="">-------</option>
+                                    {% for industry_type in industry_types %}
+                                    <option value="{{industry_type}}">{{industry_type}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_person_1" class="text-normal text-dark">{% trans 'Contact Person 1 (English)'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="contact_person_1" id="id_contact_person_1" value="{{customer_data.contact_person_1}}" required>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_contact_person_1_chinese" class="text-normal text-dark">{% trans 'Contact Person 1 (Chinese)'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="contact_person_1_chinese" id="id_contact_person_1_chinese" value="{{customer_data.contact_person_1_chinese}}" required>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_phone_2" class="text-normal text-dark">{% trans 'Phone 2'%}</label>
+                                <input type="tel" class="form-control inputField" name="phone_2" id="id_phone_2" value="{{customer_data.phone_2}}" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_district_in_hk" class="text-normal text-dark">{% trans '18 District in HK'%} <span class="text-danger">*</span></label>
+                                <select class="form-control inputField" name="district_in_hk" id="id_district_in_hk" required>
+                                    <option value="">-------</option>
+                                    {% for dist_in_hk in districts_in_hk %}
+                                    <option value="{{dist_in_hk}}">{{dist_in_hk}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_main_address" class="text-normal text-dark">{% trans 'Main Address (English)'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="main_address" id="id_main_address" value="{{customer_data.main_address}}" required>    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_main_address_chinese" class="text-normal text-dark">{% trans 'Main Address (Chinese)'%} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control inputField" name="main_address_chinese" id="id_main_address_chinese" value="{{customer_data.main_address_chinese}}" required>    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_address_2" class="text-normal text-dark">{% trans 'Address 2 (English)'%}</label>
+                                <input type="text" class="form-control inputField" name="address_2" id="id_address_2" value="{{customer_data.address_2}}">    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_address_2_chinese" class="text-normal text-dark">{% trans 'Address 2 (Chinese)'%}</label>
+                                <input type="text" class="form-control inputField" name="address_2_chinese" id="id_address_2_chinese" value="{{customer_data.address_2_chinese}}">    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_address_3" class="text-normal text-dark">{% trans 'Address 3 (English)'%}</label>
+                                <input type="text" class="form-control inputField" name="address_3" id="id_address_3" value="{{customer_data.address_3}}">    
+                            </div>
+                            <div class="mb-3 div-css">
+                                <label class="label-css" for="id_address_3_chinese" class="text-normal text-dark">{% trans 'Address 3 (Chinese)'%}</label>
+                                <input type="text" class="form-control inputField" name="address_3_chinese" id="id_address_3_chinese" value="{{customer_data.address_3_chinese}}">    
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12" style="display: flex;padding: 15px;">
+                            <div class="col-md-6 div-css" style="padding: 0px 15px 15px 15px;">
+                                <label class="label-css" style="width: 30%;" for="id_delivery_comments" class="text-normal text-dark">{% trans 'Delivery Comments'%}</label>
+                                <input type="text" class="form-control inputField" name="delivery_comments" id="id_delivery_comments" value="{{customer_data.delivery_comments}}">
+                            </div>
+                            <div class="col-md-6 div-css" style="padding: 0px 15px 15px 15px;">
+                                <label class="label-css" style="width: 30%;" for="id_customer_comments" class="text-normal text-dark">{% trans 'Customer Comments'%}</label>
+                                <input type="text" class="form-control inputField" name="customer_comments" id="id_customer_comments" value="{{customer_data.customer_comments}}">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+                </div>
+                <div class="col-md-12">
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div style="display: flex; justify-content: center;">
+                            <button type="submit" id="saveBtn" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                            {% trans 'Save' %}
+                            </button>
+                            {% if customer_data.status == "draft" %}
+                                <button type="submit" id="submitBtn" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                                {% trans 'Create' %}
+                                </button>
+                            {% endif %}
+                            {% if role != 'seller' %}
+                                <button type="button" class="btn btn-danger" style="color: white;margin-right: 20px;" onclick="deleteCustomer('{{customer_data.id}}')">
+                                    {% trans 'Delete' %}
+                                </button>
+                            {% endif %}
+                            <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitCustomer()">
+                            {% trans 'Exit' %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                </form>
+        </div>
+        </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    var changed = false;
+    $(document).ready(function() {
+        $('#saveBtn, #submitBtn').click(function() {
+            $('#buttonClicked').val($(this).attr('id'));  // Set the value of hidden input to the ID of the clicked button
+        });
+        
+        // $(document).on("click", '.sidebar-link', function(e) {
+        //     if (changed) {
+        //         confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+        //         if (!confirmed) {
+        //             return false;
+        //         }
+        //     }
+        // })
+        
+        var dropdown = document.getElementById('id_salesperson');
+        var sales_person_id = '{{customer_data.sales_person}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === sales_person_id) {
+                dropdown.options[i].selected = true;
+                $("#id_sales_person_hidden").val(dropdown.options[i].value);
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_prefix');
+        var prefix = '{{customer_data.prefix}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === prefix) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_country');
+        var country = '{{customer_data.country}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === country) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_currency');
+        var currency = '{{customer_data.currency}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === currency) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_source');
+        var source = '{{customer_data.source}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === source) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_industry_type');
+        var industry_type = '{{customer_data.industry_type}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === industry_type) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_district_in_hk');
+        var district_in_hk = '{{customer_data.district_in_hk}}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === district_in_hk) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        $(document).on("change", '#id_salesperson', function(e) {
+          setTimeout(() => {
+            $("#id_sales_person_hidden").val($('#id_salesperson').val());
+          }, 0);
+        });
+
+        checkFormValueChange();
+    });
+
+    $('.btn-click').click(function () {
+        changed = false;
+    })
+
+    window.addEventListener('beforeunload', function(event) {
+        if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function checkFormValueChange() {
+        // Get the form and input fields
+        var form = document.getElementById('customerForm');
+        var inputFields = document.getElementsByClassName('inputField');
+
+        // Store the initial values of the input fields
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+
+        // Add event listener for input changes
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    function removeNameCard(customer_id) {
+        setTimeout(() => {
+            $('#loader_spin').show();
+        }, 0);
+        var formData = new FormData();
+        formData.append('customer_id', customer_id);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'remove_customer_name_card' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                            $('#existedNameCard').hide();
+                            $('#loader_spin').hide();
+                            // $('#id_Msg').show();
+                            // $('#id_Msg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                        }, 0);
+                    } else {
+                        setTimeout(() => {
+                            $('#loader_spin').hide();
+                            $('#id_Msg').show();
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 5000);
+                },
+            error: function(error) {
+                setTimeout(() => {
+                    $('#loader_spin').hide();
+                }, 0);
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function previewImage(event) {
+        var fileInput = event.target;
+        var imagePreview = document.getElementById('imagePreview');
+        
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+            if (file && file.size > maxSize) {
+                event.target.value = "";
+                imagePreview.style.display = 'none';
+                $('#id_name_card_file').css("width", "100%");
+                $('#name_card_preview_img').css("display", "block");
+                alert("File size exceeds the maximum limit of 2 MB.");
+                return false;
+            }
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                $('#id_name_card_file').css("width", "80%");
+                $('#name_card_preview_img').css("display", "flex");
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            imagePreview.style.display = 'none';
+            $('#id_name_card_file').css("width", "100%");
+            $('#name_card_preview_img').css("display", "block");
+        }
+    }
+
+    function exitCustomer() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/customer-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/customer-list/';
+        }
+    }
+
+    function deleteCustomer(customer_id) {
+        var confirmed = confirm("Are you sure want to delete?")
+        if (confirmed) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            var formData = new FormData();
+            formData.append('customer_id', customer_id);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'customer_delete' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.code == 1) {
+                        window.location = '/customer-list/';
+                    } else {
+                        setTimeout(() => {
+                            $('#loader_spin').hide();
+                            $('#id_Msg').show();
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 10000);
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                    }, 0);
+                }
+            });
+        }
+    }
+
+    $('#customerForm').on('submit', function(event) {
+        event.preventDefault();
+
+        if (this.checkValidity()) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            this.submit();
+        }
+    });
+
+
+</script>
+{% endblock javascripts %}

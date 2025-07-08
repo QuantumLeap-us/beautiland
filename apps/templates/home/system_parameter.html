@@ -1,0 +1,159 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Add System Parameter'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+  .div-css {
+        display: flex !important;
+        align-items: center;
+        padding: 5px;
+    }
+    .label-css {
+        width: 50%;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          {% if error_msg %}
+              <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}.</span></div>
+          {% endif %}
+          <h4 class="c-grey-900 mB-20" style="text-align: center;">{% trans "Add System Parameter" %}</h4>
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <div class="pb-3 ">
+              <div class="bgc-white p-20">
+                <div class="mT-10">
+                  <form enctype="multipart/form-data" action="{% url 'system_parameter' id %}" method="post" id="myForm">
+                      {% csrf_token %}
+                    <div class="row justify-content-center">
+                      <label class="col-sm-2 col-form-label" for="id_system_parameter" class="text-normal text-dark">{% trans 'System Parameter'%} <span class="text-danger">*</span></label>
+                      <div class="mb-3 col-md-3 div-css">
+                        {% if system_parameteres.system_parameter == "Product ID" %}
+                          <select class="form-control" name="product_id" id="id_product_id">
+                            {% for category in categories %}
+                                <option value="{{category.id}}">{{ category.name }}</option>
+                            {% endfor %}
+                          </select>
+                        {% else %}
+                          <input class="form-control" type="text" name="system_parameter" id="id_system_parameter" value="{{system_parameteres.system_parameter}}" required {% if system_parameteres.system_parameter %} disabled {% endif %}>
+                          {% if system_parameteres.system_parameter %}
+                            <input class="form-control" type="hidden" name="system_parameter" id="id_system_parameter" value="{{system_parameteres.system_parameter}}">
+                          {% endif %}
+                        {% endif %}
+                      </div>
+                    </div> 
+                    <div class="row justify-content-center">
+                      {% if system_parameteres.system_parameter == "Sales Person" %}
+                        <label class="col-sm-2 col-form-label" for="id_name" class="text-normal text-dark">{% trans 'Value'%} <span title="You can select multiple sales person." class="fa fa-info-circle"></span> <span class="text-danger">*</span></label>
+                        <div class="mb-3 col-md-3 div-css">
+                          <select class="form-control" name="sales_person" id="id_sales_person" multiple>
+                            {% for sale_person in sales_person_data %}
+                                <option value="{{sale_person.id}}">{{ sale_person.full_name }}</option>
+                            {% endfor %}
+                          </select>
+                        </div> 
+                      {% elif system_parameteres.system_parameter == "Inactive Customer" %}
+                        <label class="col-sm-2 col-form-label" for="id_name" class="text-normal text-dark">{% trans 'Value'%} <span title="Add value in months." class="fa fa-info-circle"></span> <span class="text-danger">*</span></label>
+                        <div class="mb-3 col-md-3 div-css">
+                            <input class="form-control" type="number" name="name" id="id_name" min="1" value="{{system_parameteres.name}}" onpaste="handleTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required>
+                        </div>
+                      {% elif system_parameteres.system_parameter == "Product ID" %}
+                        <label class="col-sm-2 col-form-label" for="id_prod_id" class="text-normal text-dark">{% trans 'Value'%} <span title="Add pattern for Product ID." class="fa fa-info-circle"></span> <span class="text-danger">*</span></label>
+                        <div class="mb-3 col-md-3 div-css">
+                            <input class="form-control" type="text" name="name" id="id_prod_id" required>
+                        </div>
+                      {% elif system_parameteres.system_parameter == "Delivery Note" %}
+                        <label class="col-sm-2 col-form-label" for="id_name" class="text-normal text-dark">{% trans 'Value'%} <span class="text-danger">*</span></label>
+                        <div class="mb-3 col-md-3 div-css">
+                            <textarea class="form-control" type="text" name="name" id="id_name" required>{{system_parameteres.name}}</textarea>
+                        </div>
+                      {% elif system_parameteres.system_parameter == "Whatsapp Preset Message" %}
+                        <label class="col-sm-2 col-form-label" for="id_name" class="text-normal text-dark">{% trans 'Value'%} <span class="text-danger">*</span></label>
+                        <div class="mb-3 col-md-3 div-css">
+                            <textarea class="form-control" type="text" name="name" id="id_name" required>{{system_parameteres.name}}</textarea>
+                        </div>
+                      {% else %}
+                        <label class="col-sm-2 col-form-label" for="id_name" class="text-normal text-dark">{% trans 'Value'%} <span title="Add comma separated value. i.e. test1, test2, test3..." class="fa fa-info-circle"></span> <span class="text-danger">*</span></label>
+                        <div class="mb-3 col-md-3 div-css">
+                            <textarea class="form-control" type="text" name="name" id="id_name" required>{{system_parameteres.name}}</textarea>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="row justify-content-center">
+                      <label class="col-sm-2 col-form-label"></label>
+                      <div class="col-md-3 div-css">
+                        <button class="btn-primary btn" style="color: white;">{% trans 'Save'%}</button>
+                      </div>
+                    </div>                    
+                  </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</main>
+
+
+{% endblock content %}
+{% block javascripts %}
+<script>
+  var sale_person_ids = '{{sales_persons_ids}}';
+  // var sys_param_prod_id_value = JSON.parse(JSON.stringify(("{{sys_param_prod_id_value | safe}}")));
+  var sys_param_prod_id_value = JSON.parse('{{sys_param_prod_id_value }}');
+
+  $(document).ready(function() {
+    $("#id_sales_person").select2({
+        width: "100%",
+    });
+
+    if (sale_person_ids) {
+      var dropdown = $("#id_sales_person");
+      var optionsToSelect = sale_person_ids.split(", ");
+
+      setTimeout(() => {
+        dropdown.val(optionsToSelect);
+        dropdown.trigger("change"); // Trigger the change event
+      }, 0);
+    }
+
+    productIdDropdown();
+
+    $('#id_product_id').on("change", function () {
+      productIdDropdown();
+    })
+  });
+
+  function productIdDropdown() {
+    var selected_cat_type = $('#id_product_id').val();
+    $('#id_prod_id').val("");
+    if (sys_param_prod_id_value.hasOwnProperty(selected_cat_type)) {
+        var product_id_pattern = sys_param_prod_id_value[selected_cat_type]
+        $('#id_prod_id').val(product_id_pattern);
+    }
+  }
+
+  function handleTextPaste(event) {
+        setTimeout(() => {
+            navigator.clipboard.readText().then(pastedText => {
+                if (!/^-?\d*\.?\d*$/.test(pastedText)) {
+                    event.target.value = '';
+                }
+            }).catch(error => {
+                console.error('Failed to read clipboard text:', error);
+            });
+        }, 0);
+    }
+</script>
+{% endblock javascripts %}

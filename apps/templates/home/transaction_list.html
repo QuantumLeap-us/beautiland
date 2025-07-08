@@ -1,0 +1,401 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %} {% trans 'Transaction List' %} {% endblock title %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.0.5/daterangepicker.css" integrity="sha512-iyy9nTPuAaxP9hZsDl6LWiQZmK6mAru99GePVxQgtN2dt2OCGGjYaT1O2kC2K4OjmYk2eWW+ghTqD9xV0J6p/IQ==" crossorigin="anonymous">
+    <style>
+        .daterangepicker {
+            z-index: 9999;
+            font-size: 14px;
+        }
+        #datepicker-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            gap: 5px; /* 控制输入框间距 */
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+        .input-group label {
+            margin: 0 5px 0 0;
+            white-space: nowrap;
+        }
+        .input-group input,
+        .input-group select {
+            flex: 1;
+            min-width: 0;
+        }
+        .input-group-text {
+            border-radius: 0 4px 4px 0;
+        }
+        #daterange {
+            cursor: pointer;
+            background: #fff;
+        }
+        /* 媒体查询：屏幕宽度小于 768px 时分两排 */
+        @media (max-width: 768px) {
+            #datepicker-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            #datepicker-container .input-group {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            #datepicker-container .input-group:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container-fluid">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h4 class="c-grey-900 mB-20">{% trans 'Transaction List' %}</h4>
+                <div>
+                    <a href="{% url 'transaction-create' %}" class="btn btn-primary rounded btn-send mR-10" style="color: white;">{% trans 'Create Transaction' %}</a>
+                    <button class="btn btn-success rounded btn-send mR-10" style="color: white;" data-toggle="modal" data-target="#importModal">{% trans 'Import' %}</button>
+                    {% if can_export %}
+                        <button class="btn btn-info rounded btn-send" style="color: white;" onclick="exportTransactions()">{% trans 'Export' %}</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div id="datepicker-container">
+                            <div class="input-group" style="width: 20%;">
+                                <label for="invoice_id">{% trans 'Invoice ID' %}:</label>
+                                <input type="text" class="form-control" name="invoice_id" id="invoice_id" value="{{ request.GET.invoice_id }}">
+                            </div>
+                            <div class="input-group" style="width: 20%;">
+                                <label for="customer_id">{% trans 'Customer ID' %}:</label>
+                                <input type="text" class="form-control" name="customer_id" id="customer_id" value="{{ request.GET.customer_id }}">
+                            </div>
+                            <div class="input-group" style="width: 20%;">
+                                <label for="payment_status">{% trans 'Payment Status' %}:</label>
+                                <select class="form-control" name="payment_status" id="payment_status">
+                                    <option value="">{% trans 'All' %}</option>
+                                    {% for value, label in payment_status_choices %}
+                                        <option value="{{ value }}" {% if request.GET.payment_status == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="input-group" style="width: 35%;">
+                                <label for="daterange">{% trans 'Transaction Date Search' %}:</label>
+                                <div class="input-group-text bgc-white bd bdwR-0">
+                                    <i class="ti-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control" name="daterange" id="daterange" readonly>
+                                <button type="button" class="btn btn-sm btn-primary" style="color: white; margin-left: 5px;" onclick="searchTransactions()"><i class="ti-search"></i></button>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table id="transactionTable" class="table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>{% trans 'Transaction Date' %}</th>
+                                        <th>{% trans 'Transaction ID' %}</th>
+                                        <th>{% trans 'Invoice ID' %}</th>
+                                        <th>{% trans 'Customer ID' %}</th>
+                                        <th>{% trans 'Customer Name' %}</th>
+                                        <th>{% trans 'Sales Person' %}</th>
+                                        <th>{% trans 'Type' %}</th>
+                                        <th>{% trans 'Amount' %}</th>
+                                        <th>{% trans 'Currency' %}</th>
+                                        <th>{% trans 'Payment Method' %}</th>
+                                        <th>{% trans 'Payment Status' %}</th>
+                                        <th>{% trans 'Status' %}</th>
+                                        <th>{% trans 'Upload Date' %}</th>
+                                        <th>{% trans 'Refund Amount' %}</th>
+                                        <th>{% trans 'Refund Date' %}</th>
+                                        <th>{% trans 'Net Amount' %}</th>
+                                        <th>{% trans 'Delivery Date' %}</th>
+                                        <th>{% trans 'Updated At' %}</th>
+                                        <th>{% trans 'Created By' %}</th>
+                                        <th>{% trans 'Remarks' %}</th>
+                                        <th>{% trans 'Action' %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in transactions %}
+                                        <tr>
+                                            <td>{{ transaction.transaction_date|date:"Y-m-d H:i:s" }}</td>
+                                            <td>{{ transaction.transaction_id }}</td>
+                                            <td>{{ transaction.order.order_id }}</td>
+                                            <td>{{ transaction.customer_id|default:"-" }}</td>
+                                            <td>{{ transaction.customer_name|default:"-" }}</td>
+                                            <td>{{ transaction.sales_person|default:"-" }}</td>
+                                            <td>{{ transaction.get_transaction_type_display }}</td>
+                                            <td>{{ transaction.amount }}</td>
+                                            <td>{{ transaction.currency }}</td>
+                                            <td>{{ transaction.payment_method|default:"-" }}</td>
+                                            <td>{{ transaction.get_payment_status_display }}</td>
+                                            <td>{{ transaction.get_status_display }}</td>
+                                            <td>{{ transaction.upload_date|date:"Y-m-d H:i:s"|default:"-" }}</td>
+                                            <td>{{ transaction.refund_amount }}</td>
+                                            <td>{{ transaction.refund_date|date:"Y-m-d H:i:s"|default:"-" }}</td>
+                                            <td>{{ transaction.net_amount }}</td>
+                                            <td>{{ transaction.delivery_date|date:"Y-m-d H:i:s"|default:"-" }}</td>
+                                            <td>{{ transaction.updated_at|date:"Y-m-d H:i:s" }}</td>
+                                            <td>{{ transaction.created_by.username|default:"-" }}</td>
+                                            <td>{{ transaction.remarks|default:"-" }}</td>
+                                            <td>
+                                                <div style="display: flex; justify-content: center;">
+                                                    <a class="btn btn-info btn-sm mR-10" href="{% url 'transaction-detail' transaction.id %}" title="{% trans 'View Details' %}">
+                                                        <i class="ti-eye"></i>
+                                                    </a>
+                                                    {% if transaction.status != 'Awaiting Approval' and transaction.status != 'Approved' %}
+                                                        <a class="btn btn-primary btn-sm mR-10" href="{% url 'transaction-update' transaction.id %}" title="{% trans 'Edit' %}">
+                                                            <i class="ti-pencil-alt"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                    {% if role != 'seller' %}
+                                                        <form action="{% url 'transaction-delete' transaction.id %}" method="post" onsubmit="return confirmDelete()" class="inline">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger btn-sm mR-10" title="{% trans 'Delete' %}">
+                                                                <i class="text-light ti-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importModalLabel">{% trans 'Import Transactions' %}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form id="importForm" method="post" enctype="multipart/form-data" action="{% url 'transaction-import' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="file">{% trans 'Upload Excel File' %}</label>
+                            <input type="file" class="form-control-file" id="file" name="file" accept=".xlsx,.xls">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+                        <button type="submit" class="btn btn-primary">{% trans 'Import' %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.0.5/daterangepicker.min.js" integrity="sha512-x7pH7tPZmzemjvxK9ktqWj+sg3nL9HNTRj7/2H7G/1B1pgiK4bwnxJ6lKh3uL7uWk+zTDdDHXMjxT5hRdxSzm7Q==" crossorigin="anonymous"></script>
+<script>if (typeof $.fn.daterangepicker === 'undefined') { document.write('<script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1.0/daterangepicker.min.js"><\/script>'); }</script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js" integrity="sha512-KE8BDaxpW+8Z66xvVrv4Zfy+1O4IZDQ7A9K3J2V8MBN7S2k2I+qBYSJRT+xeSn6M3o7VB0k2Q==" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js" integrity="sha512-L4yAHV6jM3v1v6I7Z7xL2F2V2W2V6V8M3v6I7Z7xL2F2V2W2V6V8M3v6I7Z7xL2F2==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        // 检查 daterangepicker 是否可用
+        if (typeof $.fn.daterangepicker === 'undefined') {
+            console.error('daterangepicker 未加载，请检查脚本来源。');
+            $('#mainContent').prepend('<div class="alert alert-danger" role="alert">{% trans "无法加载日期选择器，请刷新页面或检查网络连接。" %}</div>');
+            return;
+        }
+
+        // 初始化 daterangepicker
+        $('#daterange').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'MM/DD/YYYY',
+                separator: ' - ',
+                applyLabel: '{% trans "应用" %}',
+                cancelLabel: '{% trans "取消" %}',
+                fromLabel: '{% trans "从" %}',
+                toLabel: '{% trans "到" %}',
+                customRangeLabel: '{% trans "自定义" %}',
+                daysOfWeek: [
+                    '{% trans "周日" %}',
+                    '{% trans "周一" %}',
+                    '{% trans "周二" %}',
+                    '{% trans "周三" %}',
+                    '{% trans "周四" %}',
+                    '{% trans "周五" %}',
+                    '{% trans "周六" %}'
+                ],
+                monthNames: [
+                    '{% trans "一月" %}',
+                    '{% trans "二月" %}',
+                    '{% trans "三月" %}',
+                    '{% trans "四月" %}',
+                    '{% trans "五月" %}',
+                    '{% trans "六月" %}',
+                    '{% trans "七月" %}',
+                    '{% trans "八月" %}',
+                    '{% trans "九月" %}',
+                    '{% trans "十月" %}',
+                    '{% trans "十一月" %}',
+                    '{% trans "十二月" %}'
+                ],
+                firstDay: 1
+            },
+            ranges: {
+                '{% trans "今天" %}': [moment(), moment()],
+                '{% trans "昨天" %}': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '{% trans "最近7天" %}': [moment().subtract(6, 'days'), moment()],
+                '{% trans "最近30天" %}': [moment().subtract(29, 'days'), moment()],
+                '{% trans "本月" %}': [moment().startOf('month'), moment().endOf('month')],
+                '{% trans "上月" %}': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                '{% trans "今年" %}': [moment().startOf('year'), moment().endOf('year')]
+            },
+            alwaysShowCalendars: true,
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment(),
+            opens: 'left',
+            drops: 'down'
+        });
+
+        // 当用户选择日期范围时更新输入框
+        $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+        });
+
+        // 当用户取消选择时清空输入框
+        $('#daterange').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+
+        // 设置初始日期范围（从后端传入）
+        var daterange = '{{ daterange|escapejs }}';
+        if (daterange) {
+            $('#daterange').val(daterange);
+        }
+
+        // 初始化 DataTable
+        if ($.fn.DataTable.isDataTable('#transactionTable')) {
+            $('#transactionTable').DataTable().destroy();
+        }
+
+        $('#transactionTable').DataTable({
+            "order": [[0, "desc"]]
+        });
+
+        // 导入表单提交
+        $('#importForm').on('submit', function(event) {
+            event.preventDefault();
+            var $form = $(this);
+            var $submitButton = $form.find('button[type="submit"]');
+            $submitButton.prop('disabled', true);
+            var formData = new FormData(this);
+            $.ajax({
+                type: "POST",
+                url: $form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.code === 1) {
+                        $('#importModal').modal('hide');
+                        window.location.reload();
+                    } else {
+                        $('.alert').remove();
+                        $('#mainContent').prepend('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }
+                },
+                error: function(error) {
+                    $('.alert').remove();
+                    $('#mainContent').prepend('<div class="alert alert-danger" role="alert">{% trans "导入交易时发生错误。" %}</div>');
+                },
+                complete: function() {
+                    $submitButton.prop('disabled', false);
+                }
+            });
+        });
+    });
+
+    function searchTransactions() {
+        var daterange = $('#daterange').val();
+        var customer_id = $('#customer_id').val();
+        var invoice_id = $('#invoice_id').val();
+        var payment_status = $('#payment_status').val();
+        var params = [];
+        if (daterange) {
+            var daterange_li = daterange.split(' - ');
+            var from_date = daterange_li[0];
+            var to_date = daterange_li[1];
+            params.push('from_date=' + encodeURIComponent(from_date));
+            params.push('to_date=' + encodeURIComponent(to_date));
+        }
+        if (customer_id) {
+            params.push('customer_id=' + encodeURIComponent(customer_id));
+        }
+        if (invoice_id) {
+            params.push('invoice_id=' + encodeURIComponent(invoice_id));
+        }
+        if (payment_status) {
+            params.push('payment_status=' + encodeURIComponent(payment_status));
+        }
+        var url = '/transactions/';
+        if (params.length > 0) {
+            url += '?' + params.join('&');
+        }
+        window.location = url;
+    }
+
+    function exportTransactions() {
+        var daterange = $('#daterange').val();
+        var customer_id = $('#customer_id').val();
+        var invoice_id = $('#invoice_id').val();
+        var payment_status = $('#payment_status').val();
+        var params = ['export=1'];
+        if (daterange) {
+            var daterange_li = daterange.split(' - ');
+            var from_date = daterange_li[0];
+            var to_date = daterange_li[1];
+            params.push('from_date=' + encodeURIComponent(from_date));
+            params.push('to_date=' + encodeURIComponent(to_date));
+        }
+        if (customer_id) {
+            params.push('customer_id=' + encodeURIComponent(customer_id));
+        }
+        if (invoice_id) {
+            params.push('invoice_id=' + encodeURIComponent(invoice_id));
+        }
+        if (payment_status) {
+            params.push('payment_status=' + encodeURIComponent(payment_status));
+        }
+        window.location = '/transactions/?' + params.join('&');
+    }
+
+    function confirmDelete() {
+        return confirm("{% trans '确定要删除此交易吗？' %}");
+    }
+</script>
+{% endblock javascripts %}

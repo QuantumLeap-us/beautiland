@@ -1,0 +1,321 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'New Stock In Order' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'New Stock In Order' %}</h3>
+        <form id="inventoryPoListForm" method="post" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Purchase Order List'%}:</label>
+                    <div style="margin-top: 10px;">
+                        <table id="dataTable" class="table" cellspacing="0" width="100%">
+                            <thead>
+                                <th>{% trans 'Purchase Date' %}</th>
+                                <th>{% trans 'Purchase Order ID' %}</th>
+                                <th>{% trans 'Product ID' %}</th>
+                                <th>{% trans 'Product Name' %}</th>
+                                <th>{% trans 'Product English Name' %}</th>
+                                <th>{% trans 'Specification' %}</th>
+                                <th>{% trans 'Expected Stock In Quantity' %}</th>
+                                <th>{% trans 'Add' %}</th>
+                            </thead>
+                            <tbody id="productList">
+                                {% for inventory_po in inventory_po_data %}
+                                <tr id="inventoryPoLine_{{inventory_po.item_id}}">
+                                    <td>{{ inventory_po.created_date }}</td>
+                                    <td>{{ inventory_po.inventory_po_id }}</td>
+                                    <td>{{ inventory_po.product__product_id }}</td>
+                                    <td>{{ inventory_po.item_name_chinese }}</td>
+                                    <td>{{ inventory_po.item_name_english }}</td>
+                                    <td>{{ inventory_po.item_specification }}</td>
+                                    <td>{{ inventory_po.quantity }}</td>
+                                    <td>
+                                        <button type="button" id="addProduct_{{inventory_po.item_id}}" onclick="addToPoProductList('{{inventory_po.item_id}}', '{{inventory_po.product_id}}', '{{inventory_po.created_date}}', 
+                                        '{{ inventory_po.inventory_po_id }}', '{{inventory_po.product__product_id}}', '{{inventory_po.item_name_chinese}}', '{{ inventory_po.item_name_english }}',
+                                        '{{ inventory_po.item_specification }}', '{{ inventory_po.quantity }}')"
+                                        class="btn btn-primary btn-sm" style="pointer-events: auto;"><i class="ti-plus" style="color: white;"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Purchase Order Product List'%}:</label>
+                    <div style="border-top: 1px solid; margin-top: 10px;">
+                      <table class="table">
+                          <thead>
+                            <th>{% trans 'Purchase Date' %}</th>
+                            <th>{% trans 'Purchase Order ID' %}</th>
+                            <th>{% trans 'Product ID' %}</th>
+                            <th>{% trans 'Product Name' %}</th>
+                            <th>{% trans 'Product English Name' %}</th>
+                            <th>{% trans 'Specification' %}</th>
+                            <th>{% trans 'Expected Stock In Quantity' %}</th>
+                            <th>{% trans 'Depreciation' %}</th>
+                            <th>{% trans 'Actual Stock In' %}</th>
+                            <th>{% trans 'Stock In Remark' %}</th>
+                          </thead>
+                          <tbody id="poList">
+                            <tr id="noDataMsg">
+                                <td colspan="10" style="text-align: center;"><span>Add to view data.</span></td>
+                            </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+              <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                  <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+                  <div style="display: flex; justify-content: center;">
+                  <button type="button" id="saveBtn" onclick="createStockinOrder('save')" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                  {% trans 'Save' %}
+                  </button>
+                  <!-- <button type="button" id="submitBtn" onclick="createStockinOrder('submit')" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                  {% trans 'Create' %}
+                  </button> -->
+                  <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitInvStockinOrder()">
+                  {% trans 'Exit' %}
+                  </button>
+                  </div>
+              </div>
+          </div>
+          <span id="inv_po_id" style="display: none;">{{inv_po_id}}</span>
+        </form>
+    </div>
+  </div>
+</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  var changed = false;
+  $(document).ready(function() {
+      if ($.fn.DataTable.isDataTable('#dataTable')) {
+        // If DataTable is already initialized, destroy it
+        $('#dataTable').DataTable().destroy();
+      }
+
+      // Reinitialize DataTable with default sorting
+      $('#dataTable').DataTable({
+        "order": [[0, "desc"]],
+        // "pageLength": 100,
+      });
+
+      checkFormValueChange();
+  });
+
+  $('.btn-click').click(function () {
+      changed = false;
+  })
+
+  window.addEventListener('beforeunload', function(event) {
+      if (changed) {
+          var confirmationMessage = 'Are you sure you want to leave this page?';
+          (event || window.event).returnValue = confirmationMessage;
+          return confirmationMessage;
+      }
+  });
+
+  function checkFormValueChange() {
+      // Get the form and input fields
+      var form = document.getElementById('inventoryPoListForm');
+      var inputFields = document.getElementsByClassName('inputField');
+
+      // Store the initial values of the input fields
+      var initialValues = [];
+      for (var i = 0; i < inputFields.length; i++) {
+          initialValues.push(inputFields[i].value);
+      }
+
+      // Add event listener for input changes
+      for (var i = 0; i < inputFields.length; i++) {
+          inputFields[i].addEventListener('input', function() {
+              for (var j = 0; j < inputFields.length; j++) {
+                  if (inputFields[j].value !== initialValues[j]) {
+                      changed = true;
+                      break;
+                  }
+              }
+          });
+      }
+    }
+
+    function addToPoProductList(item_id, product_id, created_date, inventory_po_id, product__product_id, item_name_chinese, item_name_english, item_specification, quantity) {
+      changed = true;
+      $('#noDataMsg').hide();
+      $('#addProduct_' + item_id).hide();
+  
+      var orderList = document.getElementById("poList");
+      orderList.insertAdjacentHTML(
+          "beforeend",
+          `<tr id="inventoryPoProdLine_${item_id}" product-id=${product_id}>
+            <td>${created_date}</td>
+            <td>${inventory_po_id}</td>
+            <td>${product__product_id}</td>
+            <td>${item_name_chinese}</td>
+            <td>${item_name_english}</td>
+            <td>${item_specification}</td>
+            <td id="inventory_exp_qty_${item_id}">${quantity}</td>
+            <td style="width: 12%;" id="depreciation_td_${item_id}"><input type="number" onpaste="handleIntTextPaste(event)" class="form-control po-quantity inputField" name="depreciation" id="depreciation_${item_id}" value=""></td>
+            <td style="width: 12%;" id="actual_stock_in_td_${item_id}"><input type="number" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control po-quantity inputField" name="actual_stock_in" id="actual_stock_in_${item_id}" value=""></td>
+            <td style="width: 12%;" id="stock_in_remark_td_${item_id}"><input type="text" class="form-control po-quantity inputField" name="stock_in_remark" id="stock_in_remark_${item_id}" value=""></td>
+            <td>
+              <div class="display: flex; justify-content: space-evenly;">
+                <button style="margin: 2px;" type="button" class="btn btn-danger btn-sm" onclick=deleteProduct('${item_id}')>
+                  <i class="ti-trash" style="color: white;"></i>
+                </button>
+              </div>
+            </td>
+          </tr>`
+      );
+    }
+
+    function deleteProduct(id) {
+      changed = true;
+      $('#inventoryPoProdLine_' + id).remove();
+      $('#addProduct_' + id).show();
+    } 
+
+    function createStockinOrder(button) {
+      var product_items = []
+      var error_msg = false;
+        $('#poList tr').slice(1).each(function(index, element) {
+            var item_id = $(this).attr('id').split('_')[1];
+            var productId = $(this).attr('product-id');
+
+            var inventory_exp_qty = $('#inventory_exp_qty_' + item_id).text() || 0;
+            var depreciation = $('#depreciation_' + item_id).val() || 0;
+            var actual_stock_in = $('#actual_stock_in_' + item_id).val() || 0;
+            var stock_in_remark = $('#stock_in_remark_' + item_id).val();
+
+            depreciation = parseInt(depreciation);
+            actual_stock_in = parseInt(actual_stock_in);
+            inventory_exp_qty = parseInt(inventory_exp_qty);
+
+            if (depreciation > inventory_exp_qty) {
+                alert("Depreciation cannot be greater than Expected Stock In Quantity.");
+                error_msg = true;
+                return;
+            }
+
+            if (actual_stock_in > inventory_exp_qty) {
+                alert("Actual Stock In cannot be greater than Expected Stock In Quantity.");
+                error_msg = true;
+                return;
+            }
+
+            if (depreciation < 0) {
+                alert("Depreciation cannot be negetive, zero or blank.");
+                error_msg = true;
+                return;
+            }
+            if (actual_stock_in < 0) {
+                alert("Actual Stock In cannot be negetive, zero or blank.");
+                error_msg = true;
+                return;
+            }
+
+            if ((depreciation + actual_stock_in) > inventory_exp_qty) {
+                alert("Sum of Depreciation and Actual Stock In cannot be greater than Expected Stock In Quantity.");
+                error_msg = true;
+                return;
+            }
+
+            product_items.push({
+                "item_id": item_id,
+                "product_id": productId,
+                "depreciation": depreciation,
+                "actual_stock_in": actual_stock_in,
+                "stock_in_remark": stock_in_remark,
+            })
+        });
+      
+      if (error_msg) {
+        return;
+      }
+
+      var formData = new FormData();
+      formData.append('product_items', JSON.stringify(product_items));
+      formData.append('inv_po_id', $('#inv_po_id').text());
+      formData.append('button', button);
+
+      setTimeout(() => {
+          $('#loader_spin').show();
+      }, 0);
+      $.ajax({
+          type: "POST",
+          url: "{% url 'create_inventory_stockin' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      $('#loader_spin').hide();
+                  }, 0);
+                  window.location = '/inventory_stockin_list/';
+              } else {
+                  setTimeout(() => {
+                      $('#loader_spin').hide();
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 10000);
+          },
+          error: function(error) {
+              console.error('Error:', error);
+              setTimeout(() => {
+                  $('#loader_spin').hide();
+              }, 0);
+          }
+      });
+    }
+
+    function exitInvStockinOrder() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/inventory_stockin_list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/inventory_stockin_list/';
+        }
+    }
+
+
+</script>
+{% endblock javascripts %}

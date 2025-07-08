@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Product List'%} 
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+
+{% endblock stylesheets %} {% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div class="container">
+    <div style="display: flex; justify-content: space-between">
+      <h4 class="c-grey-900 mB-20">{% trans 'Import Products'%}</h4>
+    </div>
+    <div>
+      <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" class="form-control" id="file" name="file" accept=".csv, .xlsx" onchange="previewFile()">
+        <div style="display:flex; justify-content: center;">
+        <button class="btn btn-primary rounded btn-send m-10" style="color: white;" type="submit">{% trans 'Submit'%}</button>
+        </div>
+      </form>
+      <div>{{ msg }}</div>
+      <div id="xlsx-preview"></div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  function previewFile() {
+    var fileInput = document.getElementById('file');
+    var file = fileInput.files[0];
+
+    if (file) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        var data = new Uint8Array(e.target.result);
+        var workbook = XLSX.read(data, { type: 'array' });
+
+        // Assuming the first sheet is the one you want to preview
+        var sheetName = workbook.SheetNames[0];
+        var sheet = workbook.Sheets[sheetName];
+
+        var html = XLSX.utils.sheet_to_html(sheet);
+        var previewElement = document.getElementById('xlsx-preview');
+        previewElement.innerHTML = html;
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+  }
+</script>
+{% endblock javascripts %}

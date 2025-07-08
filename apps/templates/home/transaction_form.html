@@ -1,0 +1,149 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% if transaction %}{% trans 'Edit Transaction' %}{% else %}{% trans 'Create Transaction' %}{% endif %} {% endblock title %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container-fluid">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <div style="display: flex; justify-content: space-between">
+                <h4 class="c-grey-900 mB-20">
+                    {% if transaction %}
+                        {% trans 'Edit Transaction' %} {{ transaction.transaction_id }}
+                    {% else %}
+                        {% trans 'Create Transaction' %}
+                    {% endif %}
+                </h4>
+                <a class="btn btn-secondary rounded btn-send" href="{% url 'transaction-list' %}" style="color: white">{% trans 'Back to Transactions' %}</a>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <form method="post" id="transactionForm" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% if not transaction %}
+                                <div class="mb-3 div-css">
+                                    <label class="label-css" for="order_id">{% trans 'Select Order' %} <span class="text-danger">*</span></label>
+                                    <select name="order_id" id="order_id" class="form-control" required>
+                                        <option value="">{% trans 'Select an order' %}</option>
+                                        {% for order in orders %}
+                                            <option value="{{ order.id }}">{{ order.order_id }} - {{ order.customer.name|default:"-" }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
+                            <div class="row gx-12">
+                                <div class="col-md-6">
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.transaction_type.id_for_label }}">{% trans 'Transaction Type' %} <span class="text-danger">*</span></label>
+                                        {{ form.transaction_type }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.amount.id_for_label }}">{% trans 'Amount' %} <span class="text-danger">*</span></label>
+                                        {{ form.amount }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.currency.id_for_label }}">{% trans 'Currency' %} <span class="text-danger">*</span></label>
+                                        {{ form.currency }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.payment_method.id_for_label }}">{% trans 'Payment Method' %}</label>
+                                        {{ form.payment_method }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.status.id_for_label }}">{% trans 'Status' %} <span class="text-danger">*</span></label>
+                                        {{ form.status }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.payment_status.id_for_label }}">{% trans 'Payment Status' %}</label>
+                                        {{ form.payment_status }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.refund_amount.id_for_label }}">{% trans 'Refund Amount' %}</label>
+                                        {{ form.refund_amount }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.refund_date.id_for_label }}">{% trans 'Refund Date' %}</label>
+                                        {{ form.refund_date }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.delivery_date.id_for_label }}">{% trans 'Delivery Date' %}</label>
+                                        {{ form.delivery_date }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.remarks.id_for_label }}">{% trans 'Remarks' %}</label>
+                                        {{ form.remarks }}
+                                    </div>
+                                    <div class="mb-3 div-css">
+                                        <label class="label-css" for="{{ form.attachment.id_for_label }}">{% trans 'Attachment' %} (PDF or Image)</label>
+                                        {{ form.attachment }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                {% if transaction and transaction.status == 'Awaiting Approval' %}
+                                    <p class="text-danger">{% trans 'This transaction is awaiting approval and cannot be edited.' %}</p>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary rounded btn-send" style="color: white">{% trans 'Save' %}</button>
+                                {% endif %}
+                                <a href="{% url 'transaction-list' %}" class="btn btn-danger rounded" style="color: white">{% trans 'Cancel' %}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        {% if transaction and transaction.status == 'Awaiting Approval' %}
+            $('#transactionForm input, #transactionForm select, #transactionForm textarea').prop('disabled', true);
+        {% endif %}
+        $('#transactionForm').on('submit', function(event) {
+            event.preventDefault();
+            var $form = $(this);
+            var $submitButton = $form.find('button[type="submit"]');
+            $submitButton.prop('disabled', true);
+            var formData = new FormData(this);
+            $.ajax({
+                type: "POST",
+                url: $form.attr('action'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.code === 1) {
+                        window.location = "{% url 'transaction-list' %}";
+                    } else {
+                        $('.alert').remove();
+                        $('#mainContent').prepend('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    $('.alert').remove();
+                    $('#mainContent').prepend('<div class="alert alert-danger" role="alert">{% trans "An error occurred while saving the transaction." %}</div>');
+                },
+                complete: function() {
+                    $submitButton.prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
+{% endblock javascripts %}

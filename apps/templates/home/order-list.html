@@ -1,0 +1,416 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Sales'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+      {% endif %}
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Order List'%}</h4>
+        <div>
+            <a class="btn btn-primary rounded btn-send" href="{% url 'order'%}" style="color: white">{% trans 'Create Order'%}</a>
+            {% if role != 'seller' %}
+              <a class="btn btn-info rounded btn-send" style="color: white;" onclick="exportSalesOrders()" >{% trans 'Export'%}</a>
+              <button class="btn btn-info rounded btn-send" style="color: white;" onclick="importOrderModal()">{% trans 'Import'%}</button>
+            {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <div class="input-group" id="datepicker-container" style="width: 35%;float: right;margin: 0px 0px 10px 0px;">
+                <label for="id_from_date" style="margin: 5px 10px 5px 5px;">Order Date Search:</label>
+                <div class="input-group-text bgc-white bd bdwR-0">
+                  <i class="ti-calendar"></i>
+                </div>
+                <!-- <input type="text" class="form-control bdc-grey-200 start-date" value="" id="id_from_date" name="from_date" value="{{from_date}}" data-provide="datepicker">
+                <label for="id_to_date" style="margin: 5px">&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" class="form-control bdc-grey-200 start-date" value="" id="id_to_date" name="to_date" value="{{to_date}}" data-provide="datepicker"> -->
+                <input type="text" class="form-control" name="daterange" id="daterange">
+                <button type="submit" class="btn btn-sm btn-primary" style="color: white; margin-left: 10px" onclick="searchWithDate()"><i class="ti-search"></i></button>
+                
+              </div>
+            <table id="dataTable" class="table" cellspacing="0" width="100%" data-ajax-url="{% url 'order-list' %}">
+              <thead>
+                <tr>
+                  <th>{% trans 'Created On'%}</th>
+                  <th>{% trans 'Order Date'%}</th>
+                  <th>{% trans 'Company Name'%}</th>
+                  <th>{% trans 'Invoice ID'%}</th>
+                  <th>{% trans 'Phone'%}</th>
+                  <th>{% trans 'Product ID'%}</th>
+                  <th>{% trans 'Product Name'%}</th>
+                  <th>{% trans 'Remark'%}</th>
+                  <th>{% trans 'Quantity'%}</th>
+                  <th>{% trans 'Currency'%}</th>
+                  <th>{% trans 'Unit Price'%}</th>
+                  <th>{% trans 'Total Price'%}</th>
+                  <th>{% trans 'Payment Method'%}</th>
+                  <th>{% trans 'Delivery Date'%}</th>
+                  <th>{% trans 'Order Status'%}</th>
+                  <th>{% trans 'Sales'%}</th>
+                  <th>{% trans 'Type'%}</th>
+                  <th>{% trans 'Action'%}</th>
+                  <th>{% trans 'Download Order'%}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in order_data %}
+                <tr>
+                  <td>{{order.created_on}}</td>
+                  <td>{{order.date}}</td>
+                  <td>{{order.customer__company_name}}</td>
+                  <td>{{order.invoice_id}}</td>
+                  <td>{{order.customer__phone_number}}</td>
+                  <td>{{order.product_id}}</td>
+                  <td>{{order.product_chinese_name}}</td>
+                  <td>{{order.ramarks}}</td>
+                  <td>{{order.quantity}}</td>
+                  <td>{{order.currency}}</td>
+                  <td>{{order.unit_price}}</td>
+                  <td>{{order.total_price}}</td>
+                  <td>{{order.payment_method}}</td>
+                  <td>{{order.delivery_date}}</td>
+                  <td>{{order.order_status}}</td>
+                  <td>{{order.sales_person}}</td>
+                  <td>{{order.type}}</td>
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'order-get' order.id %}">
+                        <i class="ti-pencil-alt"></i>
+                      </a>
+                      {% if role != 'seller' and order.order_status != 'Pending approval' %}
+                        <form action="{% url 'cancel-order' order.id %}" method="post" onsubmit="return confirmDelete()" class="inline">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm mR-10">
+                          <i class="text-light ti-trash"></i>
+                          </button>
+                        </form>
+                      {% endif %}
+                    </div>
+                  </td>
+                  <td>
+                    {% if order.order_status != 'Pending approval' %}
+                    <div style="color: #0f9aee; text-align: center; cursor: pointer; font-size: 19px;" onclick="downloadOrderModal('{{order.id}}', '{{order.invoice_id}}', '{{order.total_cost}}')"><i class="fa fa-download" aria-hidden="true"></i></div>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="importOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Import Order'%}</h4>
+          <button id="btnCloseModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" id="id_importOrderFile" name="sample_file" accept=".xlsx" >
+            <div style="margin: 10px 0px 0px 5px;">Only <b>.xlsx</b> file is allowed. <a href="{% url 'order_import_samplefile' %}">Click here</a> to download sample file.</div>
+          </form>
+          <span id="id_Msg" style="display: none;"></span>
+        </div>
+        <div class="modal-footer">
+          <button id="btnClose" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="btnImport" class="btn btn-primary rounded btn-send m-10" style="color: white;" type="button" onclick="importOrder()">{% trans 'Import'%}</button>
+          <button id="btnImporting" class="btn btn-primary rounded btn-send m-10" style="color: white; display: none;" type="button" disabled>{% trans 'Importing...'%}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="id_downloadOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" style="--bs-modal-width: 35%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Download Order'%}</h4>
+          <button id="btnCloseModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="downloadOrderForm" method="post" action="/generate-pdf/" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div class="row gx-12" style="padding: 5px;">
+              <div class="col-md-6">
+                <div class="mb-3 div-css">
+                    <label class="label-css" for="id_invoice_id" class="text-normal text-dark">{% trans 'Invoice ID'%}</label>
+                    <input type="text" class="form-control inputField" id="id_invoice_id" value="" disabled>
+                </div>
+                <div class="mb-3 div-css">
+                    <label class="label-css" for="id_file_type" class="text-normal text-dark">{% trans 'File Type'%} <span class="text-danger">*</span></label>
+                    <select class="form-control inputField" name="file_type" id="id_file_type" required>
+                      <option value="">-------</option>
+                      {% comment %} <option value="delivery">Delivery Notes</option> {% endcomment %}
+                      <option value="invoice">Invoice</option>
+                    </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3 div-css">
+                    <label class="label-css" for="id_total_price" class="text-normal text-dark">{% trans 'Total Price'%}</label>
+                    <input type="text" class="form-control inputField" id="id_total_price" value="" disabled>
+                </div>
+                <div class="mb-3 div-css">
+                    <label class="label-css" for="id_language" class="text-normal text-dark">{% trans 'Language'%} <span class="text-danger">*</span></label>
+                    <select class="form-control inputField" name="language" id="id_language" required>
+                      <option value="">-------</option>
+                      <option value="english">English</option>
+                      <option value="chinese">Chinese</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="order_id" id="order_id">
+            <input type="hidden" name="file_type" id="file_type">
+            <input type="hidden" name="language" id="language">
+            <div class="modal-footer">
+              <button id="btnDownload" class="btn btn-success rounded btn-send m-10" style="color: white;" type="submit" >{% trans 'Download'%}</button>
+              <button id="btnDownloading" class="btn btn-success rounded btn-send m-10" style="color: white; display: none;" type="button" disabled>{% trans 'Downloading...'%}</button>
+              <button id="btnClose" type="button" class="btn btn-danger" style="color: white;" data-bs-dismiss="modal">Exit</button>
+            </div>
+          </form>
+
+          <!-- <iframe id="downloadIframe" name="downloadIframe" style="display: block; width: 100%; height: 100px;"></iframe> -->
+          <span id="id_Msg" style="display: none;"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+    $('#daterange').daterangepicker({
+      autoUpdateInput: false,
+    });
+    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+      // searchWithDate();
+    })
+    //   $('#daterange').on('cancel.daterangepicker', function(ev, picker) {
+    //     $(this).val('');
+    // });
+  });
+
+  setTimeout(() => {
+    // $('#id_from_date').val('{{from_date}}');
+    // $('#id_to_date').val('{{to_date}}');
+    var daterange = '{{daterange}}'
+    $('#daterange').val(daterange);
+  }, 0);
+
+  function searchWithDate() {
+    var daterange = $('#daterange').val();
+    var daterange_li = daterange.split(' - ');
+    var from_date = daterange_li[0];
+    var to_date = daterange_li[1];
+
+    var encodedFromDate = encodeURIComponent(from_date);
+    var encodedToDate = encodeURIComponent(to_date);
+    if (from_date && to_date) {
+      window.location = '/order-list/?from_date=' + encodedFromDate + '&to_date=' + encodedToDate;
+    } else {
+      window.location = '/order-list/';
+    }
+  }
+
+  function exportSalesOrders() {
+    var daterange = $('#daterange').val();
+    var daterange_li = daterange.split(' - ');
+    var from_date = daterange_li[0];
+    var to_date = daterange_li[1];
+
+    var encodedFromDate = encodeURIComponent(from_date);
+    var encodedToDate = encodeURIComponent(to_date);
+    if (from_date && to_date) {
+      window.location = '/order-list-export/?from_date=' + encodedFromDate + '&to_date=' + encodedToDate;
+    } else {
+      window.location = '/order-list-export/';
+    }
+  }
+
+  function confirmDelete() {
+    var confirmed = confirm("Are you sure? This will delete whole order.")
+    if (!confirmed) {
+        event.preventDefault(); // Prevent the form from submitting
+    }
+  }
+
+  // $(document).ready(function () {
+  //     $('#dataTable2').DataTable({
+  //         "processing": true,
+  //         "serverSide": true,
+  //         "ajax": {
+  //             "url": $('#dataTable').data('ajax-url'),
+  //             "type": "GET",
+  //             "dataType": "json",
+  //             "dataSrc": "data"
+  //         },
+  //         "columns": [
+  //             { "data": "No" },
+  //             { "data": "date" },
+  //             { "data": "customer__company_name" },
+  //             { "data": "invoice_id" },
+  //             { "data": "customer__phone_number" },
+  //             { "data": "product_id" },
+  //             { "data": "product_chinese_name" },
+  //             { "data": "ramarks" },
+  //             { "data": "quantity" },
+  //             { "data": "unit_price" },
+  //             { "data": "total_price" },
+  //             { "data": "payment_method" },
+  //             { "data": "delivery_date" },
+  //             { "data": "order_status" },
+  //             { "data": "sales_person" },
+  //             { "data": "type" }
+  //         ]
+  //       })
+  //     });
+        
+  $(document).ready(function() {
+    // $('#dataTable').DataTable({
+    //   "order": [[0, "desc"]],
+    //     "scrollX": true,
+    //     // Add other DataTables options as needed
+    // });
+
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+      // If DataTable is already initialized, destroy it
+      $('#dataTable').DataTable().destroy();
+    }
+
+    // Reinitialize DataTable with default sorting
+    $('#dataTable').DataTable({
+      "order": [[0, "desc"]],
+    });
+
+    // Position the datepicker before the DataTable filter input
+    // $('#datepicker-container').insertBefore($('.dataTables_filter label'));
+    // $('#dataTable_filter').append($('#datepicker-container'));
+  });
+
+  function importOrderModal() {
+    afterImportCss();
+    $('#importOrderModal').modal("show");
+  }
+
+  function importOrder() {
+    var formData = new FormData();
+    var import_order_file = $('#id_importOrderFile')[0].files[0];
+    formData.append('import_order_file', import_order_file);
+    if (import_order_file && import_order_file.name && ((import_order_file.name).split('.').pop()).toLowerCase() == "xlsx") {
+      startImportCss();
+      $.ajax({
+          type: "POST",
+          url: "{% url 'order_import' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      location.reload();
+                      // $('#id_Msg').show();
+                      // $('#id_Msg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      afterImportCss();
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+            },
+            error: function(error) {
+              afterImportCss();
+              console.error('Error:', error);
+            }
+      });
+    } else {
+      setTimeout(() => {
+          $('#id_Msg').show();
+          $('#id_Msg').html('<div class="alert alert-info" role="alert" style="margin-bottom: 0px;">Please choose correct file to import!</div>');
+      }, 0);
+    }
+
+    setTimeout(() => {
+        $('#id_Msg').hide();
+    }, 5000);
+  }
+
+  function startImportCss() {
+    setTimeout(() => {
+      $("#btnImporting").show();
+      $("#btnImport").hide();
+      $("#btnClose").attr('disabled', 'disabled');
+      $("#id_importOrderFile").attr('disabled', 'disabled');
+      $("#btnCloseModel").hide();
+    }, 0);
+  }
+
+ function afterImportCss() {
+    setTimeout(() => {
+      $("#btnImport").show();
+      $("#btnImporting").hide();
+      $("#btnClose").removeAttr('disabled');
+      $("#id_importOrderFile").removeAttr('disabled');
+      $('#id_importOrderFile').val("");
+      $("#btnCloseModel").show();
+    }, 0);
+ }
+
+ var order_id = "";
+ function downloadOrderModal(id, invoice_id, total_price) {
+    setTimeout(() => {
+      order_id = id;
+      $('#id_invoice_id').val(invoice_id);
+      $('#id_total_price').val(total_price);
+      $('#id_file_type').val("");
+      $('#id_language').val("");
+    }, 0);
+    $('#id_downloadOrderModal').modal("show");
+ }
+
+  function submitPage() {
+    document.getElementById('order_id').value = order_id;
+    document.getElementById('file_type').value = $('#id_file_type').val();
+    document.getElementById('language').value = $('#id_language').val();
+    return true;
+  }
+
+  document.getElementById('downloadOrderForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      
+      if (submitPage()) {
+        this.submit();
+        $('#btnDownload').hide();
+        $('#btnDownloading').show();
+        setTimeout(() => {
+          $('#btnDownload').show();
+          $('#btnDownloading').hide();
+        }, 4000);
+      }
+  });
+</script>
+{% endblock javascripts %}

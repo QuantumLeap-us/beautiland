@@ -1,0 +1,155 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'In Stock'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container">
+            <div style="align-items: center; ">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'In Stock'%}
+                </h3>
+            </div>
+            <div>
+                <div class="m 2px">
+                    <label>{% trans 'Product List'%}:</label>
+                </div>
+
+                <table id="dataTable" class="table" cellspacing="0" width="100%">
+                    <thead id="mainHead">
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                        <th>{% trans 'Supplier Product Name' %}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                        {% if order.status == "Partially Delivered" %}
+                            <th>{% trans 'Remaining Quantity' %}</th>  
+                        {% endif %}
+                        <th>{% trans 'Delivered Quantity' %}</th>
+                        <th>{% trans 'Damage Quantity' %}</th>
+                    </thead>
+                    <tbody id="mainBody">
+                        {% for product in order.purchaseitems %}
+                        <tr>
+                            <td>{%if product.product_id %}{{ product.product_id }}{%else%}-{%endif%}</td>
+                            <td>{%if product.product_chinese_name %}{{ product.product_chinese_name }}{%else%}-{%endif%}</td>
+                            <td>{%if product.product_english_name %}{{ product.product_english_name }}{%else%}-{%endif%}</td>
+                            <td>{%if product.supplier_product_name %}{{ product.supplier_product_name }}{%else%}-{%endif%}</td>
+                            <td>{%if product.purchase_quantity %}{{ product.purchase_quantity }}{%else%}-{%endif%}</td>
+                            {% if order.status == "Partially Delivered" %}
+                            <td>{%if product.remaining_quantity %}{{ product.remaining_quantity }}{%else%}-{%endif%}</td>
+                            {% endif %}
+                            <td style="width: 10%;"><input class="form-control" type="text" size="5" id="id_delivery_quantity" 
+                                name="{{ product.product_id }}_delivery_quantity" {% if product.delivered_quantity %} value="{{product.delivered_quantity}}"{% endif %}/></td>
+                            <td style="width: 10%;"><input class="form-control" type="text" size="5" id="id_damage_quantity" 
+                                name="{{ product.product_id }}_damage_quantity" {% if product.damage_quantity %} value="{{product.damage_quantity}}"{% endif %} /></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <table class="table" style="width: 50%">
+                    <tbody>
+                        <tr>
+                            <td>{% trans 'Status'%}</td>
+                            <td>{%if order.status %}{{order.status}}{%else%}-{%endif%}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Delivery Date'%}</td>
+                            <td>{%if order.delivery_date %}{{order.delivery_date}}{%else%}-{%endif%}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Remarks'%}</td>
+                            <td>{%if order.remarks %}{{order.remarks}}{%else%}-{%endif%}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form method="post" action="" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row gx-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Actual Delivery Date'%}</label>
+                            <div class="input-group">
+                                <div class="input-group-text bgc-white bd bdwR-0">
+                                    <i class="ti-calendar"></i>
+                                </div>
+                                <input type="text" class="form-control bdc-grey-200 start-date" value="{{form.actual_arrival_date.value|date:'m/d/Y'}}" id="id_actual_arrival_date" name="actual_arrival_date" data-provide="datepicker">
+                            </div>
+                        </div>
+                        <span class="text-error">{{ form.actual_arrival_date.errors }}</span>
+                    </div>
+                        
+                    <div class="col-md-6">    
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Status'%}</label>
+                            {{form.status}}
+                        </div>
+                        <span class="text-error">{{ form.status.errors }}</span>
+                    </div>
+
+                    <input type="hidden" name="quantity" id="QuantityInput" value=""/>
+                    <div style="display: flex; justify-content: center">
+                        <button class="btn btn-primary rounded btn-send" type="submit" style="color: white;">{% trans 'Submit'%}</button>
+                    </div>
+                </div>        
+            </form>
+            {{ msg }}
+        </div>
+    </div>
+</main>
+{% endblock content %}
+{% block javascripts %}
+<script>
+    function createData() {
+        var quantities = [];
+        var products = [];
+        var isValid = true;
+
+        // Loop through the table rows to collect values
+        var tableRows = document.querySelectorAll('#dataTable tbody tr');
+        tableRows.forEach(function(row) {
+            var damageInput = row.querySelector('input[id^="id_damage_quantity"]');
+            var deliveredInput = row.querySelector('input[id^="id_delivery_quantity"]');
+
+            var damageName = damageInput.getAttribute("name");
+            damageName = damageName.split('_')[0];
+
+            var deliveredQuantity = deliveredInput.value.trim();
+            var damageQuantity = damageInput.value.trim();
+
+            if (deliveredQuantity === '' && damageQuantity === '') {
+                isValid = false;
+                products.push(damageName);
+            }
+
+            var details = {
+                product_id: damageName,
+                delivered_quantity: deliveredQuantity,
+                damage_quantity: damageQuantity,
+            }
+            quantities.push(details);
+        });
+
+        if (!isValid) {
+            alert('Delivered Quantity and Damage Quantity cannot be empty for '  + products);
+            return false; // Prevent form submission
+        }
+
+        document.getElementById('QuantityInput').value = JSON.stringify(quantities);
+        return true; // Allow form submission
+    }
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        // Prevent the form from submitting by default
+        event.preventDefault();
+
+        // Call createData function and submit the form if it returns true
+        if (createData()) {
+            this.submit();
+        }
+    });
+</script>
+{% endblock javascripts %}

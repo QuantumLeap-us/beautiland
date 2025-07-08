@@ -1,0 +1,54 @@
+
+
+{% extends "layouts/base-authentication.html" %}
+{% load i18n %}
+
+{% block title %} {% trans 'Login'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="peers ai-s fxw-nw h-100vh">
+      <div class="d-n@sm- peer peer-greed h-100 pos-r bgr-n bgpX-c bgpY-c bgsz-cv" style='background-image: url("{{ ASSETS_ROOT }}/images/bg.jpg")'>
+        <div class="pos-a centerXY">
+          <div class="bgc-white bdrs-50p pos-r" style='width: 120px; height: 120px;'>
+            <img class="pos-a centerXY" src="{{ ASSETS_ROOT }}/images/logo.png" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4 peer pX-40 pY-80 h-100 bgc-white scrollable pos-r" style='min-width: 320px;'>
+
+        <h4 class="fw-300 c-grey-900 mB-40">Beautiland - {% trans 'Login'%}</h4>
+
+        <form method="post" action="">
+
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="text-normal text-dark form-label">{% trans 'Username'%}</label>
+            {{ form.username }}
+          </div>
+          <span class="text-error">{{ form.username.errors }}</span>
+
+          <div class="mb-3">
+            <label class="text-normal text-dark form-label">{% trans 'Password'%}</label>
+            {{ form.password }}
+          </div>
+          <span class="text-error">{{ form.password.errors }}</span>
+
+          <div class="mb-3">
+            <button type="submit" name="login" class="btn btn-primary" style="color: white;">{% trans 'Login'%}</button>
+
+            &nbsp; &nbsp;
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

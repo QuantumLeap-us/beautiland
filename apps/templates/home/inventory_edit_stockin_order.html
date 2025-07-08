@@ -1,0 +1,627 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} {% trans 'Edit Inventory' %} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Edit Inventory' %}</h3>
+        <form id="inventoryEditStockInOrderForm" method="post" action="/inventory_edit_stockin_order/{{id}}/" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="col-md-12" style="max-height: 690px; overflow-y: auto;">
+                {% if id != 0 %}
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type" id="id_type">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name" id="id_product_name" value="{{chinese_name}}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id" id="id_product_id" value="{{product_id}}" disabled>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name" id="id_product_english_name" value="{{english_name}}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity" id="id_quantity" value="{{quantity}}">
+                                    <input type="hidden"  class="form-control inputField" name="old_quantity" id="id_old_quantity" value="{{quantity}}">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification" id="id_specification" value="{{specification}}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark" id="id_remark">{{remark}}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_1" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_1" id="id_type_1">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_1" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_1" id="id_product_name_1" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_1" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_1" id="id_product_id_1">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_1" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_1" id="id_product_english_name_1" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_1" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_1" id="id_quantity_1">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_1" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_1" id="id_specification_1" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_1" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_1" id="id_remark_1"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_2" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_2" id="id_type_2">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_2" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_2" id="id_product_name_2" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_2" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_2" id="id_product_id_2">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_2" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_2" id="id_product_english_name_2" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_2" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_2" id="id_quantity_2">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_2" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_2" id="id_specification_2" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_2" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_2" id="id_remark_2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_3" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_3" id="id_type_3">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_3" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_3" id="id_product_name_3" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_3" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_3" id="id_product_id_3">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_3" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_3" id="id_product_english_name_3" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_3" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_3" id="id_quantity_3">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_3" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_3" id="id_specification_3" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_3" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_3" id="id_remark_3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_4" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_4" id="id_type_4">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_4" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_4" id="id_product_name_4" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_4" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_4" id="id_product_id_4">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_4" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_4" id="id_product_english_name_4" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_4" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_4" id="id_quantity_4">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_4" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_4" id="id_specification_4" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_4" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_4" id="id_remark_4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_5" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_5" id="id_type_5">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_5" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_5" id="id_product_name_5" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_5" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_5" id="id_product_id_5">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_5" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_5" id="id_product_english_name_5" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_5" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_5" id="id_quantity_5">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_5" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_5" id="id_specification_5" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_5" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_5" id="id_remark_5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_6" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_6" id="id_type_6">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_6" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_6" id="id_product_name_6" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_6" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_6" id="id_product_id_6">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_6" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_6" id="id_product_english_name_6" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_6" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_6" id="id_quantity_6">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_6" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_6" id="id_specification_6" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_6" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_6" id="id_remark_6"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_7" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_7" id="id_type_7">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_7" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_7" id="id_product_name_7" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_7" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_7" id="id_product_id_7">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_7" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_7" id="id_product_english_name_7" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_7" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_7" id="id_quantity_7">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_7" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_7" id="id_specification_7" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_7" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_7" id="id_remark_7"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                        <div class="row gx-4">
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_type_8" class="text-normal text-dark">{% trans 'Type' %}</label>
+                                    <select class="form-control inputField" name="type_8" id="id_type_8">
+                                        <option value="">-------</option>
+                                        <option value="Purchase">Purchase</option>
+                                        <option value="Exchange">Exchange</option>
+                                        <option value="Depreciation">Depreciation</option>
+                                        <option value="Cycle Count">Cycle Count</option>
+                                        <option value="Sample">Sample</option>
+                                        <option value="Others">Others</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_name_8" class="text-normal text-dark">{% trans 'Product Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_name_8" id="id_product_name_8" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_id_8" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                                    <input type="text" class="form-control inputField product-id" name="product_id_8" id="id_product_id_8">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_product_english_name_8" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                                    <input type="text" class="form-control inputField" name="product_english_name_8" id="id_product_english_name_8" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_quantity_8" class="text-normal text-dark">{% trans 'Quantity' %}</label>
+                                    <input type="number"  class="form-control inputField" name="quantity_8" id="id_quantity_8">
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label class="label-css-product" for="id_specification_8" class="text-normal text-dark">{% trans 'Specification' %}</label>
+                                    <input type="text" class="form-control inputField" name="specification_8" id="id_specification_8" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 div-css">
+                                    <label class="form-label" style="width: 14.8%;" for="id_remark_8" class="text-normal text-dark">{% trans 'Remark' %}</label>
+                                    <textarea class="form-control inputField" name="remark_8" id="id_remark_8"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-12">
+              <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                  <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+                  <div style="display: flex; justify-content: center;">
+                  <button type="submit" id="saveBtn" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                  {% trans 'Save' %}
+                  </button>
+                  <!-- <button type="submit" id="submitBtn" onclick="createStockinOrder('submit')" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                  {% trans 'Create' %}
+                  </button> -->
+                  <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitEditInvStockinOrder()">
+                  {% trans 'Exit' %}
+                  </button>
+                  </div>
+              </div>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  var changed = false;
+  $(document).ready(function() {
+      if ($.fn.DataTable.isDataTable('#dataTable')) {
+        // If DataTable is already initialized, destroy it
+        $('#dataTable').DataTable().destroy();
+      }
+
+      // Reinitialize DataTable with default sorting
+      $('#dataTable').DataTable({
+        "order": [[0, "desc"]],
+        // "pageLength": 100,
+      });
+
+      var dropdown = document.getElementById('id_type');
+        var move_type = '{{move_type}}';
+        if (move_type) {
+            for (var i = 0; i < dropdown.options.length; i++) {
+                if (dropdown.options[i].value === move_type) {
+                    dropdown.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+
+      checkFormValueChange();
+  });
+
+    var typingTimer;
+    var doneTypingInterval = 500; // 0.5 second
+
+    const productIds = document.getElementsByClassName('product-id');
+
+    Array.from(productIds).forEach(function(element) {
+        element.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            const product_id = event.target.value;
+            const html_id = event.target.id;
+            typingTimer = setTimeout(function() {
+                getProduct(product_id, html_id);
+            }, doneTypingInterval);
+        });
+    });
+
+    function getProduct(product_id, html_id) {
+      if (product_id.trim()) {
+        $.ajax({
+            type: "GET",
+            url: "/get_product/" + product_id.trim() + "/",
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                    html_id = html_id.split("_");
+                    var dom_id = html_id[html_id.length - 1]
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                            var product_chinese_name = response.product_data.product_chinese_name;
+                            var product_english_name = response.product_data.product_english_name;
+                            var specification = response.product_data.specification;
+                            $('#id_product_name_' + dom_id).val(product_chinese_name);
+                            $('#id_product_english_name_' + dom_id).val(product_english_name);
+                            $('#id_specification_' + dom_id).val(specification);
+                        }, 0);
+                    } else {
+                        setTimeout(() => {
+                            scrollToTop();
+                            $('#id_product_name_' + dom_id).val("");
+                            $('#id_product_english_name_' + dom_id).val("");
+                            $('#id_specification_' + dom_id).val("");
+                            $('#id_Msg').show();
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 10000);
+                },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+      }
+    }
+
+  $('.btn-click').click(function () {
+      changed = false;
+  })
+
+  window.addEventListener('beforeunload', function(event) {
+      if (changed) {
+          var confirmationMessage = 'Are you sure you want to leave this page?';
+          (event || window.event).returnValue = confirmationMessage;
+          return confirmationMessage;
+      }
+  });
+
+  function checkFormValueChange() {
+      // Get the form and input fields
+      var form = document.getElementById('inventoryEditStockInOrderForm');
+      var inputFields = document.getElementsByClassName('inputField');
+      console.log("inputFields------------->>", inputFields);
+
+      // Store the initial values of the input fields
+      var initialValues = [];
+      for (var i = 0; i < inputFields.length; i++) {
+          initialValues.push(inputFields[i].value);
+      }
+
+      // Add event listener for input changes
+      for (var i = 0; i < inputFields.length; i++) {
+          inputFields[i].addEventListener('input', function() {
+              for (var j = 0; j < inputFields.length; j++) {
+                  if (inputFields[j].value !== initialValues[j]) {
+                      changed = true;
+                      break;
+                  }
+              }
+          });
+      }
+    }
+
+    function exitEditInvStockinOrder() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/inventory_stockin_list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/inventory_stockin_list/';
+        }
+    }
+
+
+</script>
+{% endblock javascripts %}

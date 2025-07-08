@@ -1,0 +1,58 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+
+{% block title %} {% trans '優惠券列表' %} {% endblock title %}
+
+{% block stylesheets %}
+<style>
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+  th { background-color: #f2f2f2; }
+  .btn { padding: 5px 10px; margin-right: 5px; }
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <h4 class="c-grey-900 mB-20">{% trans '優惠券列表' %}</h4>
+      <a class="btn btn-primary rounded btn-send" href="{% url 'coupon_create' %}" style="...">{% trans '創建優惠券' %}</a>
+      {% if error_msg %}
+      <div class="error_msg">
+        <div class="alert alert-danger" role="alert">{{ error_msg }}</div>
+      </div>
+      {% endif %}
+      <table>
+        <thead>
+          <tr>
+            <th>{% trans '代碼' %}</th>
+            <th>{% trans '類型' %}</th>
+            <th>{% trans '折扣值' %}</th>
+            <th>{% trans '最低消費額' %}</th>
+            <th>{% trans '有效期' %}</th>
+            <th>{% trans '操作' %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for coupon in coupons %}
+          <tr>
+            <td>{{ coupon.code }}</td>
+            <td>{{ coupon.type }}</td>
+            <td>{{ coupon.discount_value }}</td>
+            <td>{{ coupon.min_spend }}</td>
+            <td>{{ coupon.start_date }} - {{ coupon.end_date }}</td>
+            <td>
+              <a href="{% url 'coupon_edit' coupon.pk %}" class="btn btn-info rounded btn-send" style="...">{% trans '編輯' %}</a>
+              <a href="{% url 'coupon_delete' coupon.pk %}" class="btn btn-danger rounded btn-send" style="..." onclick="return confirm('{% trans '確定要刪除嗎？' %}')">{% trans '刪除' %}</a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">{% trans '暫無數據' %}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,407 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %} {% block title %}
+{% trans 'Create Order'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container">
+      <div style="align-items: center">
+        <h3 class="c-grey-900 mB-20" style="text-align: center">
+          {% trans 'Create Order'%}
+        </h3>
+      </div>
+      <div>
+        <div class="m 2px">
+          <label>{% trans 'Customer'%}:</label>
+          <table class="table">
+            <thead class="table-dark">
+  
+            </thead>
+            <tbody>
+              <tr>
+                <td>{% trans 'Name' %}</td>
+                <td>{{ customer.name }} {{ customer.english_name }}</td>
+              </tr>
+              <tr>
+                <td>{% trans 'Company Name' %}</td>
+                <td>{{ customer.company_name }} {{ customer.company_english_name }}</td>
+              </tr>
+              <tr>
+                <td>{% trans 'Phone Number' %}</td>
+                <td>{{ customer.area_code }} {{ customer.phone_number }}</td>
+              </tr>
+              <tr>
+                <td>{% trans 'Email' %}</td>
+                <td>{{ customer.email }}</td>
+              </tr>
+              <tr>
+                <td>{% trans 'Address' %}</td>
+                <td>{{ customer.address_line1 }}<br>{{ customer.address_line2 }}<br>
+                  {{ customer.town }} {{ customer.city }} {{ customer.pincode }}<br>
+                  {{ customer.state }}<br>
+                  {{ customer.country }}<br>
+                </td>
+              </tr> 
+            </tbody>
+          </table>
+
+        </div>
+
+        <div class="m 2px">
+          <label>{% trans 'Product List'%}:</label>
+        </div>
+
+        <table class="table" cellspacing="0" width="100%">
+          <thead>
+            <th>{% trans 'Product No' %}</th>
+            <th>{% trans 'Product Name' %}</th>
+            <th>{% trans 'Product English Name' %}</th>
+            <th>{% trans 'Selling Price' %}</th>
+            <th>{% trans 'Quantity' %}</th>
+            <th>{% trans 'Sub Total' %}</th>
+          </thead>
+          <tbody>
+            {% for order in orderlist %}
+            <tr>
+              <td>{{ order.product.product_id }}</td>
+              <td>{{ order.product.product_chinese_name }}</td>
+              <td>{{ order.product.product_english_name }}</td>
+              <td>{{ order.selling_price }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.total_cost }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <form method="post" action="{% url "place-order" %}" enctype="multipart/form-data">
+        {% csrf_token %}  
+
+        <div class="row gx-4">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Total Product Price'%}:</label>
+              <input type="text" class="form-control" name="total_product_cost" id="id_total_product_cost"
+                placeholder="Total Product Cost" value="{{ total_product_cost }}" />
+            </div>
+            <span class="text-error">{{ form.total_product_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Delivery Fee'%}</label>
+              {{form.delivery_cost}}
+            </div>
+            <span class="text-error">{{ form.delivery_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Other Fee'%}</label>
+              {{form.other_cost}}
+            </div>
+            <span class="text-error">{{ form.other_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Voucher'%}</label>
+              <select name="voucher" id="id_voucher" multiple>
+                  {% for voucher in vouchers %}
+                    <option value="{{ voucher.id }}">{{voucher.english_name}} - {{voucher.discount_type}} - {{voucher.discount_value}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+            <span class="text-error">{{ form.voucher.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Total Price'%}</label>
+              {{form.total_cost}}
+            </div>
+            <span class="text-error">{{ form.total_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Delivery Date'%}</label>
+              <div class="input-group">
+                <div class="input-group-text bgc-white bd bdwR-0">
+                  <i class="ti-calendar"></i>
+                </div>
+                <input type="text" class="form-control bdc-grey-200 start-date" value="{{form.delivery_date.value|date:'d/m/Y'}}" id="id_delivery_date" name="delivery_date" data-provide="datepicker">
+              </div>
+            </div>
+            <span class="text-error">{{ form.delivery_date.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Remarks'%}</label>
+              {{form.remarks}}
+            </div>
+            <span class="text-error">{{ form.remarks.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Payment Method'%}</label>
+              {{form.payment_method}}
+            </div>
+            <span class="text-error">{{ form.payment_method.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3" id="gift_div" style="display: None">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Gifts'%}</label>
+              <select class="form-control" name="free_gift" id="id_free_gift" multiple>
+              </select>
+            </div>
+            <span class="text-error">{{ form.free_gift.errors }}</span>
+          </div>
+        </div>
+
+        <!-- <input type="hidden" name="productDetails" id="orderDetailsInput" value="" />
+        <input type="hidden" name="total_quantity" id="totalQuantityInput" value="{{ total_quantity }}" />
+        <input type="hidden" name="total_product_cost" id="totalCostInput" value="{{ total_product_cost }}" /> -->
+        <input type="hidden" name="vouchers" id="voucherInput"/>
+        <input type="hidden" name="free_gifts" id="freegiftInput" />
+
+
+        <div style="display: flex; justify-content: center;">
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-send" style="color: white">
+            {% trans 'Submit'%}
+          </button>
+        </div>
+      </form>
+      {{ msg }}
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  var ids = 0;
+  var total_quantity = parseFloat('{{ total_quantity }}');
+  var total_product_cost = parseFloat('{{ total_product_cost }}');
+  var selectedVouchers =  $('#id_voucher').val();
+  var total_cost = 0;
+  var voucher = [];
+  var productDetails = [];
+  var giftdiv = document.getElementById("gift_div");
+  var no_of_selected_gift = 0;
+  var maximumgifts=0;
+
+  {% for data in vouchers %}
+  eligible_product=[];
+    {%for product in data.discount_voucher.only_available_to.all %}
+      eligible_product.push({
+        "id": parseInt("{{ product.id }}"),
+        "name": "{{ product.product_chinese_name }}",
+        "english_name": "{{ product.product_english_name }}"
+      });
+    {% endfor %}
+    no_of_gift = 0
+    {% if data.voucher_type == 'Free Gift'%}
+      no_of_gift = "{{ data.discount_voucher.no_of_gift }}";
+    {% endif %}
+    
+  var data = {
+    id : "{{data.id}}",
+    voucherid : "{{data.voucherid}}",
+    chinese_name : "{{data.chinese_name}}",
+    english_name : "{{data.english_name}}",
+    voucher_highlights : "{{data.voucher_highlights}}",
+    voucher_details : "{{data.voucher_details}}",
+    voucher_type : "{{data.voucher_type}}",
+    discount_type : "{{data.discount_type}}",
+    discount_value : "{{data.discount_value}}",
+    quota : "{{data.quota}}",
+    created_date : "{{data.created_date}}",
+    last_modified_date : "{{data.last_modified_date}}",
+    start_date : "{{data.start_date}}",
+    end_date : "{{data.end_date}}",
+    status : "{{data.status}}",
+    created_by : "{{data.created_by}}",
+    product_combo: "{{data.product_combo.product.id}}",
+    eligible_product: eligible_product,
+    no_of_gift: no_of_gift
+  }
+  voucher.push(data)
+  {% endfor %}
+  
+  {% for order in orderlist %}
+    productDetails.push({
+      product_id: parseInt("{{order.product.id}}"), 
+      quantity: parseInt("{{order.quantity}}"), 
+      total_cost: parseInt("{{order.total_cost}}"), 
+      selling_price: parseInt("{{order.selling_price}}")
+    });
+  {% endfor %}
+  document.getElementById('id_delivery_cost').addEventListener('input', updateTotalCost);
+  document.getElementById('id_other_cost').addEventListener('input', updateTotalCost);
+  document.getElementById('id_total_product_cost').addEventListener('input', updateTotalCost);
+
+  // Call updateTotalCost once when the page loads
+  $(document).ready(function () {
+    updateTotalCost();
+
+  });
+
+  function calculateDiscount(discountType, discountValue, productPrice) {
+    if (discountType === 'Rate(%)') {
+      return (parseFloat(discountValue) / 100) * productPrice;
+    } else if (discountType === 'Fixed Amount') {
+      return parseFloat(discountValue);
+    } else {
+      return 0;
+    }
+  }
+
+  function updateTotalCost() {
+    var selectedVouchers = $('#id_voucher').val();
+    var deliveryCost = parseFloat(document.getElementById('id_delivery_cost').value) || 0;
+    var otherCost = parseFloat(document.getElementById('id_other_cost').value) || 0;
+    var totalProductCost = parseFloat(document.getElementById('id_total_product_cost').value) || 0;
+    var voucherDiscount = 0;
+    var discountVoucherCount = 0;
+    var freeGiftVoucherCount = 0;
+
+    
+    for (var i = 0; i < voucher.length; i++) {
+      var discountType = voucher[i].discount_type;
+      var discountValue = voucher[i].discount_value;
+      if (selectedVouchers && selectedVouchers.includes(voucher[i].id.toString()) && voucher[i].voucher_type === "Product Combo"){
+        // Filter productDetails based on voucher.product_combo
+        var comboProductId = parseInt(voucher[i].product_combo);
+        var comboProductDetails = productDetails.find(item => item.product_id === comboProductId);
+
+        if (comboProductDetails) {
+          var productPrice = comboProductDetails.selling_price;
+          voucherDiscount += calculateDiscount(discountType, discountValue, productPrice);
+        }
+      }
+
+      else if (selectedVouchers && selectedVouchers.includes(voucher[i].id.toString()) && voucher[i].voucher_type === 'Discount Voucher') {
+        // You may need to handle Discount Voucher logic here if different from Product Combo
+        voucherDiscount += calculateDiscount(discountType, discountValue, total_product_cost);
+        discountVoucherCount++;
+      }
+
+      else if(selectedVouchers && selectedVouchers.includes(voucher[i].id.toString()) && voucher[i].voucher_type === 'Free Gift') {
+        var selectgift = document.getElementById("id_free_gift");
+        selectgift.innerHTML = '';
+        giftdiv.style.display = 'block';
+        maximumgifts = voucher[i].no_of_gift
+        $("#id_free_gift").select2({
+          width: "100%",
+          placeholder: `Select any ${maximumgifts} free gift`
+        });
+
+        voucher[i].eligible_product.forEach(function(product) {
+          selectgift.insertAdjacentHTML(
+            "beforeend",
+            `<option value="${product.id}">${product.name} - ${product.english_name}</option>`
+          )
+        });
+
+        freeGiftVoucherCount++;
+      }
+
+      if (discountVoucherCount > 1) {
+        alert('Please select only one Discount Voucher.');
+        // or display the error message in a more user-friendly way
+        // and prevent the form submission
+        discountVoucherCount = 0;
+        $("#id_voucher").val('').trigger('change')
+        return false;
+      }
+  
+      if (freeGiftVoucherCount > 1) {
+        alert('Please select only one Free Gift Voucher.');
+        // or display the error message in a more user-friendly way
+        // and prevent the form submission
+        freeGiftVoucherCount = 0;
+        $("#id_voucher").val('').trigger('change')
+        giftdiv.style.display = 'none';
+        return false;
+      }
+    }
+  
+    // Calculate total cost
+    var totalCost = totalProductCost + deliveryCost + otherCost - voucherDiscount;
+  
+    document.getElementById('id_total_cost').value = totalCost;
+  }
+
+  document.querySelector('form').addEventListener('submit', function (event) {
+    // Prevent the form from submitting by default
+    event.preventDefault();
+
+    // document.getElementById('orderDetailsInput').value = JSON.stringify(productDetails);
+    // document.getElementById('totalQuantityInput').value = JSON.stringify(total_quantity);
+    // document.getElementById('totalCostInput').value = JSON.stringify(total_product_cost); 
+    var selectedVouchers = $('#id_voucher').val();
+    var freeGifts = $("#id_free_gift").val();
+    document.getElementById('voucherInput').value = JSON.stringify(selectedVouchers); 
+    document.getElementById('freegiftInput').value = JSON.stringify(freeGifts); 
+    // If productDetails is not empty, proceed with form submission
+
+    this.submit();
+  });
+
+  $(document).ready(function () {
+
+    $('#dataTable2').DataTable({
+      "scrollX": true
+      // Add other DataTables options as needed
+      });
+
+    // Initialize Select2 for the 'customer' field
+    $("#id_customer").select2({
+      width: "100%",
+    });
+
+    $("#id_voucher").select2({
+      width: "100%",
+    });
+    $("#id_voucher").on("select2:select",function (event) {
+      updateTotalCost();
+      // var check_validate =  validatevouchers();
+
+      // if (check_validate === false){
+      //  event.preventDefault();
+      // }
+    });
+    $("#id_voucher").on("select2:unselect", function (event) {
+      var removedVoucherId = event.params.data.id;
+
+      // Find the removed voucher in the 'voucher' array
+      var removedVoucher = voucher.find(v => v.id.toString() === removedVoucherId.toString());
+
+      if (removedVoucher.voucher_type === 'Free Gift') {
+          var selectgift = document.getElementById("id_free_gift");
+          selectgift.innerHTML = '';
+          giftdiv.style.display = 'none';
+        }
+
+      updateTotalCost();
+    });
+
+    $("#id_free_gift").on("select2:select",function (event) {
+      no_of_selected_gift ++;
+
+      // Check if the number of selected gifts exceeds the voucher limit
+      if (no_of_selected_gift > maximumgifts) {
+        alert('You have selected more gifts than allowed for this voucher.');
+        // Remove the last selected gift to stay within the limit
+        $("#id_free_gift").val('').trigger('change')
+        no_of_selected_gift=0;
+      }
+    }); 
+
+    $("#id_free_gift").on("select2:unselect", function (event) {
+      if (no_of_selected_gift>0) {
+        no_of_selected_gift--;
+      }
+    });
+  });
+</script>
+{% endblock javascripts %}

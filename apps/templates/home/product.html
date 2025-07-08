@@ -1,0 +1,594 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Add Product'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Add Product'%}</h3>
+        <form id="productForm" method="post" action="/product/" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <h3 class="c-grey-900 mB-20" style="text-align: left">{% trans 'Basic Info' %}</h3>
+                <div class="row gx-4">
+                    <div class="col-md-4">
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_brand" class="text-normal text-dark">{% trans 'Brand' %}</label>
+                            <select class="form-control inputField" name="brand" id="id_brand">
+                              <option value="">-------</option>
+                              {% for brand in brands %}
+                              <option value="{{brand}}">{{brand}}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_product:" class="text-normal text-dark">{% trans 'Product ID' %}</label>
+                            <input type="text" class="form-control inputField" name="Product" id="id_product" disabled>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_chinese_product_name" class="text-normal text-dark">{% trans 'Product Chinese Name' %} <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control inputField" name="chinese_product_name" id="id_chinese_product_name" required>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_unit_of_measurement" class="text-normal text-dark">{% trans 'Unit of Measurement' %} <span class="text-danger">*</span></label>
+                            <select class="form-control inputField" name="unit_of_measurement" id="id_unit_of_measurement" required>
+                              <option value="">-------</option>
+                              {% for uom in uoms %}
+                              <option value="{{uom}}">{{uom}}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_product_status" class="text-normal text-dark">{% trans 'Product Status' %}</label>
+                            <input type="text" class="form-control inputField" name="product_status" id="id_product_status" value="{{product_data.status}}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_category" class="text-normal text-dark">{% trans 'Category' %} <span class="text-danger">*</span></label>
+                            <select class="form-control inputField" name="category" id="id_category" required>
+                              <option value="">-------</option>
+                              {% for id, name in categories.items %}
+                              <option value="{{id}}">{{name}}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_barcode" class="text-normal text-dark">{% trans 'Barcode' %}</label>
+                            <input type="text" class="form-control inputField" name="barcode" id="id_barcode">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_chinese_english_name" class="text-normal text-dark">{% trans 'Product English Name' %}</label>
+                            <input type="text" class="form-control inputField" name="chinese_english_name" id="id_chinese_english_name">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_weight" class="text-normal text-dark">{% trans 'Weight' %}</label>
+                            <input type="number" class="form-control inputField" min="1" name="weight" id="id_weight" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_out_of_stock" class="text-normal text-dark">{% trans 'Out of Stock' %}</label>
+                            <div style="width: 20px; height: 20px; border: 1px solid #ced4da; border-radius: 0.375rem; display: flex; justify-content: center; align-items: center;" class="inputField" id="id_out_of_stock" ></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_sub_category" class="text-normal text-dark">{% trans 'Sub-Category' %} <span class="text-danger">*</span></label>
+                            <select class="form-control inputField" name="sub_category" id="id_sub_category" required>
+                            </select>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_shelf_life_value" class="text-normal text-dark">{% trans 'Shelf Life' %}</label>
+                            <div style="width: 100%; display: flex;">
+                              <input type="number" style="width: 47%;" min="1" class="form-control inputField" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" name="shelf_life_value" id="id_shelf_life_value">
+                              <select class="form-control inputField" style="width: 47%; margin-left: 6%;" name="shelf_life_time" id="id_shelf_life_time">
+                                <option value="year">Year</option>
+                                <option value="month">Month</option>
+                                <option value="day">Day</option>
+                              </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_product_image" class="text-normal text-dark">{% trans 'Product Image' %}</label>
+                            <div id="name_card_preview_img" style="width: 100%;">
+                              <img id="imagePreview" src="#" class="preview-image" alt="Image Preview" style="display: none;">
+                              <input type="file" class="form-control inputField" name="product_image" id="id_product_image" style="width: 100%;height: fit-content;" accept=".jpg, .jpeg, .png" onchange="previewImage(event)">
+                            </div>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_onboarding_date" class="text-normal text-dark">{% trans 'Onboarding Date' %}</label>
+                            <div class="input-group">
+                              <div class="input-group-text bgc-white bd bdwR-0">
+                                <i class="ti-calendar"></i>
+                              </div>
+                              <input type="text" name="onboarding_date" class="form-control bdc-grey-200 start-date" data-provide="datepicker" placeholder="Order Date" id="id_onboarding_date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                <h3 class="c-grey-900 mB-20" style="text-align: left">{% trans 'Sales Info' %}</h3>
+                <div class="row gx-4">
+                  <div class="col-md-4">
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_currency" class="text-normal text-dark">{% trans 'Currency' %} <span class="text-danger">*</span></label>
+                            <select class="form-control inputField" name="currency" id="id_currency" required>
+                              {% for curr in currency %}
+                              <option value="{{curr}}">{{curr}}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_bundle_product_id" class="text-normal text-dark">{% trans 'Bundle Product ID' %}</label>
+                            <input type="text" class="form-control inputField" name="bundle_product_id" id="id_bundle_product_id">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_pics_of_bundle_product" class="text-normal text-dark">{% trans 'Pics of Bundle Product' %}</label>
+                            <input type="text" class="form-control inputField" name="pics_of_bundle_product" id="id_pics_of_bundle_product">
+                        </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_retail_price" class="text-normal text-dark">{% trans 'Retail Price' %} <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control inputField" name="retail_price" id="id_retail_price" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" required>
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_name_of_bundle_product" class="text-normal text-dark">{% trans 'Name of Bundle Product' %} </label>
+                          <input type="text" class="form-control inputField" name="name_of_bundle_product" id="id_name_of_bundle_product" disabled>
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_cost_of_retail" class="text-normal text-dark">{% trans 'Cost of Retail' %} <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control inputField" name="cost_of_retail" id="id_cost_of_retail" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" required>
+                      </div>
+                  </div>
+                  <div class="col-md-4">
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_selling_price" class="text-normal text-dark">{% trans 'Selling Price' %} <span class="text-danger">*</span></label>
+                          <input type="text" class="form-control inputField" name="selling_price" id="id_selling_price" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" required>
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_bundle_product_price" class="text-normal text-dark">{% trans 'Bundle Product Price' %}</label>
+                          <input type="text" class="form-control inputField" name="bundle_product_price" id="id_bundle_product_price" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">  
+                      </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <h3 class="c-grey-900 mB-20" style="text-align: left">{% trans 'Supply Information' %}</h3>
+              <div class="row gx-4">
+                <div class="col-md-12">
+                  <div class="row gx-4">
+                    <div class="col-md-4">
+                      <div class="mb-3 div-css">
+                        <label class="label-css-product" for="id_supplier_id" class="text-normal text-dark">{% trans 'Supplier ID' %} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control inputField" name="supplier_id" id="id_supplier_id" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3 div-css">
+                        <label class="label-css-product" for="id_supplier_name" class="text-normal text-dark">{% trans 'Supplier Name' %}</label>
+                        <input type="text" class="form-control inputField" name="supplier_name" id="id_supplier_name" disabled>
+                    </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3 div-css">
+                        <label class="label-css-product" for="id_supplier_product_name" class="text-normal text-dark">{% trans 'Supplier Product Name' %} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control inputField" name="supplier_product_name" id="id_supplier_product_name" required>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3 div-css">
+                      <label class="form-label" style="width: 14.8%;" for="id_ingredient" class="text-normal text-dark">{% trans 'Ingredient' %}</label>
+                      <textarea class="form-control inputField" name="ingredient" id="id_ingredient"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="mb-3 div-css">
+                      <label class="form-label" style="width: 14.8%;" for="id_product_remark" class="text-normal text-dark">{% trans 'Product Remark' %}</label>
+                      <textarea class="form-control inputField" name="product_remark" id="id_product_remark"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_raw_cost" class="text-normal text-dark">{% trans 'Raw Cost' %}</label>
+                          <input type="text" class="form-control inputField cost-field" name="raw_cost" id="id_raw_cost" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_other_cost" class="text-normal text-dark">{% trans 'Other Cost' %}</label>
+                          <input type="text" class="form-control inputField cost-field" name="other_cost" id="id_other_cost" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_total_cost" class="text-normal text-dark">{% trans 'Total Cost' %}</label>
+                          <input type="text" class="form-control inputField" name="total_cost" id="id_total_cost" disabled>
+                          <input type="hidden" class="form-control inputField" name="total_cost_product" id="id_total_cost_product">
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_total_loss" class="text-normal text-dark">{% trans 'Total Loss' %}</label>
+                          <input type="text" class="form-control inputField" name="total_loss" id="id_total_loss" disabled>
+                      </div>
+                      <div class="mb-3 div-css">
+                        <label class="label-css-product" for="id_total_shipment_quantity" class="text-normal text-dark">{% trans 'Total Shipment Quantity' %}</label>
+                        <input type="text" class="form-control inputField" name="total_shipment_quantity" id="id_total_shipment_quantity" disabled>
+                      </div>
+                      <div class="mb-3 div-css">
+                        <label class="label-css-product" for="id_last_stock_in_date" class="text-normal text-dark">{% trans 'Last Stock In date' %}</label>
+                        <input type="text" class="form-control inputField" name="last_stock_in_date" id="id_last_stock_in_date" disabled>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_packaging_cost" class="text-normal text-dark">{% trans 'Packaging Cost' %}</label>
+                            <input type="text" class="form-control inputField cost-field" name="packaging_cost" id="id_packaging_cost" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_delivery_fee_to_hk" class="text-normal text-dark">{% trans 'Delivery Fee to HK' %} </label>
+                            <input type="text" class="form-control inputField cost-field" name="delivery_fee_to_hk" id="id_delivery_fee_to_hk" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_total_stock_in" class="text-normal text-dark">{% trans 'Total Stock in' %}</label>
+                            <input type="text" class="form-control inputField" name="total_stock_in" id="id_total_stock_in" disabled>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_current_inventory" class="text-normal text-dark">{% trans 'Current Inventory' %}</label>
+                            <input type="text" class="form-control inputField" name="current_inventory" id="id_current_inventory" disabled>
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_safe_number" class="text-normal text-dark">{% trans 'Safe Number' %}</label>
+                            <input type="number" class="form-control inputField" min="1" name="safe_number" id="id_safe_number" onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+                        <div class="mb-3 div-css">
+                            <label class="label-css-product" for="id_last_order_date" class="text-normal text-dark">{% trans 'Last Order Date' %}</label>
+                            <input type="text" class="form-control inputField" name="last_order_date" id="id_olast_order_date" disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_processing_cost" class="text-normal text-dark">{% trans 'Processing Cost' %}</label>
+                          <input type="text" class="form-control inputField cost-field" name="processing_cost" id="id_processing_cost" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_currency_of_cost" class="text-normal text-dark">{% trans 'Currency of Cost' %} <span class="text-danger">*</span></label>
+                          <select class="form-control inputField" name="currency_of_cost" id="id_currency_of_cost" required>
+                            {% for curr_of_cost in currency_of_costs %}
+                            <option value="{{curr_of_cost}}">{{curr_of_cost}}</option>
+                            {% endfor %}  
+                          </select>
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_total_stock_out" class="text-normal text-dark">{% trans 'Total Stock Out' %}</label>
+                          <input type="text" class="form-control inputField" name="total_stock_out" id="id_total_stock_out" disabled>  
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="total_order_quantity" class="text-normal text-dark">{% trans 'Total Order Quantity' %}</label>
+                          <input type="text" class="form-control inputField" name="total_order_quantity" id="id_total_order_quantity" disabled>  
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_purchasing_amount" class="text-normal text-dark">{% trans 'Purchasing Amount' %}</label>
+                          <input type="text" class="form-control inputField" name="purchasing_amount" id="id_purchasing_amount" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)">  
+                      </div>
+                      <div class="mb-3 div-css">
+                          <label class="label-css-product" for="id_last_purchase_date" class="text-normal text-dark">{% trans 'Last Purchase Date' %}</label>
+                          <input type="text" class="form-control inputField" name="last_purchase_date" id="id_last_purchase_date" disabled  >  
+                      </div>
+                    </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+           <div class="bgc-white bd bdrs-3 p-20 mB-20">
+             <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+             <div style="display: flex; justify-content: center;">
+               <button type="submit" id="saveBtn" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+               {% trans 'Save' %}
+               </button>
+               <button type="submit" id="submitBtn" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+               {% trans 'Create' %}
+               </button>
+               <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitProduct()">
+               {% trans 'Exit' %}
+               </button>
+             </div>
+           </div>
+         </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    var category_subcategory = JSON.parse('{{category_subcategory | safe}}');
+    var changed = false;
+
+    $(document).ready(function() {
+        $('#saveBtn, #submitBtn').click(function() {
+            $('#buttonClicked').val($(this).attr('id'));  // Set the value of hidden input to the ID of the clicked button
+        });
+
+        // $(document).on("click", '.sidebar-link', function(e) {
+        //     if (changed) {
+        //         confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+        //         if (!confirmed) {
+        //           return false;
+        //         }
+        //     }
+        // })
+
+        subcategoryDropdown();
+        $('#id_category').on("change", function () {
+            subcategoryDropdown();
+        })
+
+        $('#saveBtn, #submitBtn').click(function() {
+            $('#buttonClicked').val($(this).attr('id'));  // Set the value of hidden input to the ID of the clicked button
+        });
+
+        var dropdown = document.getElementById('id_currency');
+        var currency = 'HKD';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === currency) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        var dropdown = document.getElementById('id_currency_of_cost');
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === currency) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        checkFormValueChange();
+        calculateTotalCost();
+    });
+
+    $('.btn-click').click(function () {
+        changed = false;
+    })
+
+    window.addEventListener('beforeunload', function(event) {
+        if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function previewImage(event) {
+        var fileInput = event.target;
+        var imagePreview = document.getElementById('imagePreview');
+        
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+            if (file && file.size > maxSize) {
+                event.target.value = "";
+                imagePreview.style.display = 'none';
+                $('#id_name_card_file').css("width", "100%");
+                $('#name_card_preview_img').css("display", "block");
+                alert("File size exceeds the maximum limit of 2 MB.");
+                return false;
+            }
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                $('#id_name_card_file').css("width", "80%");
+                $('#name_card_preview_img').css("display", "flex");
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            imagePreview.style.display = 'none';
+            $('#id_name_card_file').css("width", "100%");
+            $('#name_card_preview_img').css("display", "block");
+        }
+    }
+
+    function checkFormValueChange() {
+        // Get the form and input fields
+        var form = document.getElementById('productForm');
+        var inputFields = document.getElementsByClassName('inputField');
+
+        // Store the initial values of the input fields
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+
+        // Add event listener for input changes
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    function subcategoryDropdown() {
+        var selected_category = $('#id_category').val();
+        var subcategory_html = `<option value="">-------</option>`;
+        if (category_subcategory.hasOwnProperty(selected_category)) {
+            var subcategories = category_subcategory[selected_category]
+            
+            var subcategories_length = subcategories.length;
+            for (let index = 0; index < subcategories_length; index++) {
+              subcategory_html += `<option value="${subcategories[index]["id"]}">${subcategories[index]["name"]}</option>`;
+            }
+        }
+        $('#id_sub_category').html(subcategory_html);
+    }
+
+    var typingTimer;
+    var doneTypingInterval = 500; // 0.5 second
+
+    document.getElementById('id_supplier_id').addEventListener('input', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(getSupplier, doneTypingInterval);
+    });
+
+    document.getElementById('id_bundle_product_id').addEventListener('input', function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(getBundleProduct, doneTypingInterval);
+    });
+
+    function getSupplier() {
+      var supplier_id = $('#id_supplier_id').val();
+      if (supplier_id.trim()) {
+        var formData = new FormData();
+        formData.append('supplier_id', supplier_id.trim());
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_supplier' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                          var supplier_name = response.supplier_name;
+                          console.log("supplier_name", supplier_name);
+                          $('#id_supplier_name').val(supplier_name);
+                        }, 0);
+                    } else {
+                        setTimeout(() => {
+                            scrollToTop();
+                            $('#id_supplier_name').val("");
+                            $('#id_supplier_id').val("");
+                            $('#id_Msg').show();
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 10000);
+                },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+      }
+    }
+
+    function getBundleProduct() {
+      var bundle_product_id = $('#id_bundle_product_id').val();
+      if (bundle_product_id.trim()) {
+        var formData = new FormData();
+        formData.append('bundle_product_id', bundle_product_id.trim());
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_bundle_product' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                          var bundle_product_name = response.product_name;
+                          $('#id_name_of_bundle_product').val(bundle_product_name);
+                        }, 0);
+                    } else {
+                        setTimeout(() => {
+                            scrollToTop();
+                            $('#id_name_of_bundle_product').val("");
+                            $('#id_bundle_product_id').val("");
+                            $('#id_Msg').show();
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 5000);
+                },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+      }
+    }
+
+    $('.cost-field').on('keyup', function () {
+      calculateTotalCost();
+    })
+
+    function calculateTotalCost() {
+      var raw_cost = parseFloat($('#id_raw_cost').val()) || 0;
+      var packaging_cost = parseFloat($('#id_packaging_cost').val()) || 0;
+      var processing_cost = parseFloat($('#id_processing_cost').val()) || 0;
+      var other_cost = parseFloat($('#id_other_cost').val()) || 0;
+      var delivery_fee_to_hk = parseFloat($('#id_delivery_fee_to_hk').val()) || 0;
+      var total_cost = raw_cost + packaging_cost + processing_cost + other_cost + delivery_fee_to_hk;
+      if (total_cost > 0) {
+        $('#id_total_cost').val(total_cost);
+        $('#id_total_cost_product').val(total_cost);
+      } else {
+        $('#id_total_cost').val("");
+        $('#id_total_cost_product').val("");
+      }
+    }
+
+    function exitProduct() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/product-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/product-list/';
+        }
+    }
+
+    $('#productForm').on('submit', function(event) {
+        event.preventDefault();
+
+        if (this.checkValidity()) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            this.submit();
+        }
+    });
+
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
+{% endblock javascripts %}

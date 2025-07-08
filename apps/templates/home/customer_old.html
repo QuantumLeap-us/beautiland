@@ -1,0 +1,182 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Add Customer'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} <main class='main-content bgc-grey-100'>
+    <div id='mainContent'>
+      <div class="container-fluid">
+        {% comment %} <h4 class="c-grey-900 mT-10 mB-30">Student Management </h4> {% endcomment %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Customer'%}</h3>
+          
+            <form method="post" action="">
+                {% csrf_token %}
+                
+                <div class="row gx-4">
+                    <div class="col-md-6">
+                        <div class="mb-3 ">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Name'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.name.value == None %}{% else %}
+                                value="{{form.name.value}}" {% endif %} name="name"
+                                id="id_name">
+                                <span class="text-danger">{{ form.name.errors }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3 ">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'English Name'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.english_name.value == None %}{% else %}
+                                value="{{form.english_name.value}}" {% endif %} name="english_name"
+                                id="id_english_name">
+                                <span class="text-danger">{{ form.english_name.errors }}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3 ">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Company Name'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.company_name.value == None %}{% else %}
+                                value="{{form.company_name.value}}" {% endif %} name="company_name"
+                                id="id_company_name">
+                                <span class="text-danger">{{ form.company_name.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Customer English Name'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.company_english_name.value == None %}{% else %}
+                                value="{{form.company_english_name.value}}" {% endif %} name="company_english_name"
+                                id="id_company_english_name">
+                                <span class="text-danger">{{ form.company_english_name.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Contact 1'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.contact_1.value == None %}{% else %}
+                                value="{{form.contact_1.value}}" {% endif %} name="contact_1" id="id_contact_1">
+                                <span class="text-danger">{{ form.contact_1.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3 ">
+                            <label class="form-label">{% trans 'Industry Category'%}:</label>
+                            {{ form.industry_category }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Contact 2'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.contact_2.value == None %}{% else %}
+                                value="{{form.contact_2.value}}" {% endif %}name="contact_2" id="id_contact_2">
+                                <span class="text-danger">{{ form.contact_2.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">{% trans 'Country Code'%}:</label>
+                            {{ form.area_code }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Phone Number'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.phone_number.value == None %}{% else %}
+                                value="{{form.phone_number.value}}" {% endif %} name="phone_number" id="id_phone_number">
+                                <span class="text-danger">{{ form.phone_number.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Phone Number 2'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.phone_number.value == None %}{% else %}
+                                value="{{form.phone_number_2.value}}" {% endif %} name="phone_number_2"
+                                id="id_phone_number_2">
+                                <span class="text-danger">{{ form.phone_number_2.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    {% comment %} <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Fax Number'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.fax_number.value == None %}{% else %}
+                                value="{{form.fax_number.value}}" {% endif %} name="fax_number" id="id_fax_number">
+                                <span class="text-danger">{{ form.fax_number.errors }}</span>
+                        </div>
+                        
+                    </div> {% endcomment %}
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Email'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.email.value == None %}{% else %}
+                                value="{{form.email.value}}" {% endif %} name="email" id="id_email">
+                                <span class="text-danger">{{ form.email.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'URL'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.url.value == None %}{% else %}
+                                value="{{form.url.value}}" {% endif %} name="url" id="id_url">
+                                <span class="text-danger">{{ form.url.errors }}</span>
+                        </div>
+                       
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Landline'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.landline.value == None %}{% else %}
+                                value="{{form.landline.value}}" {% endif %} name="landline" id="id_landline">
+                                <span class="text-danger">{{ form.landline.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Customer Comments'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.customer_comments.value == None %}{% else %}
+                                value="{{form.customer_comments.value}}" {% endif %} name="customer_comments" id="id_customer_comments">
+                                <span class="text-danger">{{ form.customer_comments.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Delivery Comments'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.delivery_comments.value == None %}{% else %}
+                                value="{{form.delivery_comments.value}}" {% endif %} name="delivery_comments" id="id_delivery_comments">
+                                <span class="text-danger">{{ form.delivery_comments.errors }}</span>
+                        </div>
+                        
+                    </div>
+                    {% comment %} <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Region'%} <span class="text-danger">*</span> :</label>
+                            <input type="text" class="form-control" {% if form.region.value == None %}{% else %}
+                                value="{{form.region.value}}" {% endif %} name="region" id="id_region">
+                                <span class="text-danger">{{ form.region.errors }}</span>
+                        </div>
+                        
+                    </div> {% endcomment %}
+                <div style="display: flex; justify-content: center;">
+                    <button type="submit" class="btn btn-primary rounded btn-send " style="color: white;">{% trans 'Submit'%}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

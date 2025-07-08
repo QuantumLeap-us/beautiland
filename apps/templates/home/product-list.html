@@ -1,0 +1,269 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %}
+{% block title %} Product List {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} 
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+      {% endif %}
+      <span id="id_Msg" style="display: none;"></span>
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Product List'%}</h4>
+        <div>
+          <a class="btn btn-primary rounded btn-send" href="{% url 'product'%}">{% trans 'Add Product'%}</a>
+          <!-- <input type="file" id="csvFile" name="csvFile" accept=".csv, .xlsx" style="display: none;">
+          <button type="button" onclick="document.getElementById('csvFile').click();">Upload CSV</button> -->
+          {% if role != 'seller' %}
+          <a class="btn btn-info rounded btn-send" href="{% url 'product-export'%}" >{% trans 'Export'%}</a>
+          <button class="btn btn-info rounded btn-send" style="color: white;" onclick="importProductModal()">{% trans 'Import'%}</button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+           <table id="dataTable" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>{% trans 'Created Date' %}</th>
+                  <th>{% trans 'Product ID' %}</th>
+                  <th>{% trans 'Product Chinese Name' %}</th>
+                  <th>{% trans 'Product English Name' %}</th>
+                  <th>{% trans 'Category' %}</th>
+                  <th>{% trans 'Sub Category' %}</th>
+                  <th>{% trans 'Specification' %}</th>
+                  <th>{% trans 'Retail Price' %}</th>
+                  <th>{% trans 'Selling Price' %}</th>
+                  <th>{% trans 'Cost of Retail' %}</th>
+                  <th>{% trans 'Total Stock Out' %}</th>
+                  <th>{% trans 'Total Shipment Quantity' %}</th>
+                  <th>{% trans 'Current Inventory' %}</th>
+                  <th>{% trans 'Total Order Quantity' %}</th>
+                  <th>{% trans 'Last Purchase Date' %}</th>
+                  <th>{% trans 'Supplier' %}</th>
+                  <th>{% trans 'Supplier ID' %}</th>
+                  <th>{% trans 'Status' %}</th>
+                  <th>{% trans 'Actual Cost' %}</th>
+                  <th>{% trans 'Currency of Cost' %}</th>
+                  <th>{% trans 'Inventory After Sales' %}</th>
+                  <th>{% trans 'Last Order Date' %}</th>
+                  <th>{% trans 'Product Image' %}</th>
+                  <th>{% trans 'Action' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for product in products %}
+                <tr>
+                  <td>{{product.created_date}}</td>
+                  <td>{{product.product_id}}</td>
+                  <td>{{product.product_chinese_name}}</td>
+                  <td>{{product.product_english_name}}</td>
+                  <td>{{product.category}}</td>
+                  <td>{{product.sub_category}}</td>
+                  <td>{{product.specification}}</td>
+                  <td>{{product.retail_price}}</td>
+                  <td>{{product.selling_price}}</td>
+                  <td>{{product.cost_of_retail}}</td>
+                  <td>{{inventory.total_stock_out_quantity}}</td>
+                  <td>{{inventory.total_shipping_quantity}}</td>
+                  <td>{{inventory.current_quantity}}</td>
+                  <td>{{inventory.total_purchased_quantity}}</td>
+                  <td>{{inventory.last_purchase_date}}</td>
+                  <td>{{product.supplier__company_name}}</td>
+                  <td>{{product.supplier_id}}</td>
+                  <td style="text-transform: capitalize;">{{product.status}}</td>
+                  <td>{{product.total_cost}}</td>
+                  <td>{{product.currency_of_cost}}</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>
+                    <div style="display: flex;">
+                      {% if product.name_card_file_path %}
+                      <img id="existsImagePreview" src="{{product.name_card_file_path}}" class="preview-image" alt="Image Preview">
+                      {% endif %}
+                      <span>{{product.name_card_file_name}}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'product-update' product.id %}">
+                      <i class="ti-pencil-alt"></i>
+                      </a>
+                      {% if role != 'seller' %}
+                          <button type="submit" class="btn btn-danger btn-sm mR-10" onclick="deleteProduct('{{product.id}}')">
+                          <i class="text-light ti-trash"></i>
+                          </button>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="importProductModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Import Products'%}</h4>
+          <button id="btnCloseModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" id="id_importProductsFile" name="sample_file" accept=".xlsx" >
+            <div style="margin: 10px 0px 0px 5px;">Only <b>.xlsx</b> file is allowed. <a href="{% url 'product_import_samplefile' %}">Click here</a> to download sample file.</div>
+          </form>
+          <span id="id_modalMsg" style="display: none;"></span>
+        </div>
+        <div class="modal-footer">
+          <button id="btnClose" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="btnImport" class="btn btn-primary rounded btn-send m-10" style="color: white;" type="button" onclick="importProducts()">{% trans 'Import'%}</button>
+          <button id="btnImporting" class="btn btn-primary rounded btn-send m-10" style="color: white; display: none;" type="button" disabled>{% trans 'Importing...'%}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  $(document).ready(function() {
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+      // If DataTable is already initialized, destroy it
+      $('#dataTable').DataTable().destroy();
+    }
+
+    // Reinitialize DataTable with default sorting
+    $('#dataTable').DataTable({
+      "order": [[0, "desc"]],
+      "pageLength": 100,
+    });
+  });
+
+  function deleteProduct(product_id) {
+      var confirmed = confirm("Are you sure want to delete?")
+      if (confirmed) {
+          setTimeout(() => {
+              $('#loader_spin').show();
+          }, 0);
+          var formData = new FormData();
+          formData.append('product_id', product_id);
+          $.ajax({
+              type: "POST",
+              url: "{% url 'product_delete' %}",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                  if (response.code == 1) {
+                      window.location = '/product-list/';
+                  } else {
+                      setTimeout(() => {
+                          $('#loader_spin').hide();
+                          $('#id_Msg').show();
+                          $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                      }, 0);
+                  }
+                  setTimeout(() => {
+                      $('#id_Msg').hide();
+                  }, 5000);
+              },
+              error: function(error) {
+                setTimeout(() => {
+                    $('#loader_spin').hide();
+                }, 0);
+                  console.error('Error:', error);
+              }
+          });
+      }
+  }
+
+  function importProductModal() {
+    afterImportCss();
+    $('#importProductModal').modal("show");
+ }
+
+ function importProducts() {
+   var formData = new FormData();
+   var import_product_file = $('#id_importProductsFile')[0].files[0];
+   formData.append('import_product_file', import_product_file);
+    if (import_product_file && import_product_file.name && ((import_product_file.name).split('.').pop()).toLowerCase() == "xlsx") {
+      startImportCss();
+      $.ajax({
+          type: "POST",
+          url: "{% url 'products_import' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      afterImportCss();
+                      location.reload();
+                      // $('#id_modalMsg').show();
+                      // $('#id_modalMsg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      afterImportCss();
+                      $('#id_modalMsg').show();
+                      $('#id_modalMsg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+            },
+            error: function(error) {
+              afterImportCss();
+              console.error('Error:', error);
+            }
+      });
+    } else {
+      setTimeout(() => {
+          $('#id_modalMsg').show();
+          $('#id_modalMsg').html('<div class="alert alert-info" role="alert" style="margin-bottom: 0px;">Please choose correct file to import!</div>');
+      }, 0);
+    }
+
+   setTimeout(() => {
+       $('#id_modalMsg').hide();
+   }, 10000);
+ }
+
+ function startImportCss() {
+    setTimeout(() => {
+      $("#btnImporting").show();
+      $("#btnImport").hide();
+      $("#btnClose").attr('disabled', 'disabled');
+      $("#id_importProductsFile").attr('disabled', 'disabled');
+      $("#btnCloseModel").hide();
+    }, 0);
+ }
+
+ function afterImportCss() {
+    setTimeout(() => {
+      $("#btnImport").show();
+      $("#btnImporting").hide();
+      $("#btnClose").removeAttr('disabled');
+      $("#id_importProductsFile").removeAttr('disabled');
+      $('#id_importProductsFile').val("");
+      $("#btnCloseModel").show();
+    }, 0);
+ }
+</script>
+{% endblock javascripts %}

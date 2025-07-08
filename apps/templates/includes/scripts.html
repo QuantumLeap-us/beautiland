@@ -1,0 +1,45 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"
+        integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg=="
+        crossorigin="anonymous"referrerpolicy="no-referrer"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+   
+<script  src="{{ ASSETS_ROOT }}/js/index.js"></script>
+
+<style>
+        .alert {
+          opacity: 1;
+          transition: opacity 1s ease-out; /* Adjust the duration and easing as needed */
+        }
+      
+        .alert.hidden {
+          opacity: 0;
+        }
+      </style>
+      
+      <script>
+        setTimeout(function () {
+          var alertElement = document.querySelector(".alert");
+          if (alertElement) {
+            alertElement.classList.add("hidden");
+            setTimeout(function () {
+              alertElement.style.display = "none";
+            }, 1000); // This delay should match the transition duration
+          }
+        }, 10000);
+      </script>
+      

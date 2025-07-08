@@ -1,0 +1,192 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Pending Order'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+      {% endif %}
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Pending Order List'%}</h4>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <div class="input-group" id="datepicker-container" style="width: 35%;float: right;margin: 0px 0px 10px 0px;">
+                <label for="id_from_date" style="margin: 5px 10px 5px 5px;">Order Date Search:</label>
+                <div class="input-group-text bgc-white bd bdwR-0">
+                  <i class="ti-calendar"></i>
+                </div>
+                <!-- <input type="text" class="form-control bdc-grey-200 start-date" value="" id="id_from_date" name="from_date" value="{{from_date}}" data-provide="datepicker">
+                <label for="id_to_date" style="margin: 5px">&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" class="form-control bdc-grey-200 start-date" value="" id="id_to_date" name="to_date" value="{{to_date}}" data-provide="datepicker"> -->
+                <input type="text" class="form-control" name="daterange" id="daterange">
+                <button type="submit" class="btn btn-sm btn-primary" style="color: white; margin-left: 10px" onclick="searchWithDate()"><i class="ti-search"></i></button>
+              </div>
+            <table id="dataTable" class="table" cellspacing="0" width="100%" data-ajax-url="{% url 'order-approval-list' %}">
+              <thead>
+                <tr>
+                  <th>{% trans 'Order Date'%}</th>
+                  <th>{% trans 'Company Name'%}</th>
+                  <th>{% trans 'Invoice ID'%}</th>
+                  <th>{% trans 'Old Invoice ID'%}</th>
+                  <th>{% trans 'Phone'%}</th>
+                  <th>{% trans 'Product ID'%}</th>
+                  <th>{% trans 'Product Name'%}</th>
+                  <th>{% trans 'Remark'%}</th>
+                  <th>{% trans 'Quantity'%}</th>
+                  <th>{% trans 'Currency'%}</th>
+                  <th>{% trans 'Unit Price'%}</th>
+                  <th>{% trans 'Total Price'%}</th>
+                  <th>{% trans 'Payment Method'%}</th>
+                  <th>{% trans 'Delivery Date'%}</th>
+                  <th>{% trans 'Order Status'%}</th>
+                  <th>{% trans 'Sales'%}</th>
+                  <th>{% trans 'Type'%}</th>
+                  <th>{% trans 'Action'%}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in order_data %}
+                <tr>
+                  <td>{{order.date}}</td>
+                  <td>{{order.customer__company_name}}</td>
+                  <td>{{order.invoice_id}}</td>
+                  <td><a href="{% url 'order-get' order.old_order_id %}" target="_blank">{{order.old_order_order_id}}</a></td>
+                  <td>{{order.customer__phone_number}}</td>
+                  <td>{{order.product_id}}</td>
+                  <td>{{order.product_chinese_name}}</td>
+                  <td>{{order.ramarks}}</td>
+                  <td>{{order.quantity}}</td>
+                  <td>{{order.currency}}</td>
+                  <td>{{order.unit_price}}</td>
+                  <td>{{order.total_price}}</td>
+                  <td>{{order.payment_method}}</td>
+                  <td>{{order.delivery_date}}</td>
+                  <td>{{order.order_status}}</td>
+                  <td>{{order.sales_person}}</td>
+                  <td>{{order.type}}</td>
+                  <td>
+                    <div style="display: flex; justify-content: center" title="View order">
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'order-approval-get' order.id %}">
+                        <i class="ti-eye"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  setTimeout(() => {
+    // $('#id_from_date').val('{{from_date}}');
+    // $('#id_to_date').val('{{to_date}}');
+    var daterange = '{{daterange}}'
+    $('#daterange').val(daterange);
+  }, 0);
+
+  function searchWithDate() {
+    var daterange = $('#daterange').val();
+    var daterange_li = daterange.split(' - ');
+    var from_date = daterange_li[0];
+    var to_date = daterange_li[1];
+
+    var encodedFromDate = encodeURIComponent(from_date);
+    var encodedToDate = encodeURIComponent(to_date);
+    if (from_date && to_date) {
+      window.location = '/order-approval-list/?from_date=' + encodedFromDate + '&to_date=' + encodedToDate;
+    } else {
+      window.location = '/order-approval-list/';
+    }
+  }
+
+  function confirmDelete() {
+    var confirmed = confirm("Are you sure? This will delete whole order.")
+    if (!confirmed) {
+        event.preventDefault(); // Prevent the form from submitting
+    }
+  }
+
+  // $(document).ready(function () {
+  //     $('#dataTable2').DataTable({
+  //         "processing": true,
+  //         "serverSide": true,
+  //         "ajax": {
+  //             "url": $('#dataTable').data('ajax-url'),
+  //             "type": "GET",
+  //             "dataType": "json",
+  //             "dataSrc": "data"
+  //         },
+  //         "columns": [
+  //             { "data": "No" },
+  //             { "data": "date" },
+  //             { "data": "customer__company_name" },
+  //             { "data": "invoice_id" },
+  //             { "data": "customer__phone_number" },
+  //             { "data": "product_id" },
+  //             { "data": "product_chinese_name" },
+  //             { "data": "ramarks" },
+  //             { "data": "quantity" },
+  //             { "data": "unit_price" },
+  //             { "data": "total_price" },
+  //             { "data": "payment_method" },
+  //             { "data": "delivery_date" },
+  //             { "data": "order_status" },
+  //             { "data": "sales_person" },
+  //             { "data": "type" }
+  //         ]
+  //       })
+  //     });
+        
+  $(document).ready(function() {
+    // $('#dataTable2').DataTable({
+    //     "scrollX": true
+    //     // Add other DataTables options as needed
+    // });
+
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+      // If DataTable is already initialized, destroy it
+      $('#dataTable').DataTable().destroy();
+    }
+
+    // Reinitialize DataTable with default sorting
+    $('#dataTable').DataTable({
+      "order": [[0, "desc"]],
+    });
+
+    $('#daterange').daterangepicker({
+      autoUpdateInput: false,
+    });
+    $('#daterange').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+      // searchWithDate();
+    })
+    //   $('#daterange').on('cancel.daterangepicker', function(ev, picker) {
+    //     $(this).val('');
+    // });
+
+    // Position the datepicker before the DataTable filter input
+    // $('#datepicker-container').insertBefore($('.dataTables_filter label'));
+    // $('#dataTable_filter').append($('#datepicker-container'));
+  });
+</script>
+{% endblock javascripts %}

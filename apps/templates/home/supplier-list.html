@@ -1,0 +1,284 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Supplier List'%} 
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+{% endblock stylesheets %} {% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg}}</span></div>
+      {% endif %}
+      <span id="id_Msg" style="display: none;"></span>
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'Supplier'%}</h4>
+        <div>
+          <a class="btn btn-primary rounded btn-send" href="{% url 'supplier' %}">
+            {% trans 'Add Supplier'%}
+          </a>
+          {% if role != 'seller' %}
+              <button class="btn btn-info rounded btn-send" style="color: white;" onclick="exportSuppliers()" >{% trans 'Export'%}</button>
+              <button class="btn btn-info rounded btn-send" style="color: white;" onclick="importSupplierModal()">{% trans 'Import'%}</button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table" cellspacing="0" width="100%">
+              <thead>
+                <tr>
+                  <th>{% trans 'Created Date' %}</th>
+                  <th>{% trans 'Company Name' %}</th>
+                  <th>{% trans 'Supplier Type' %}</th>
+                  <th>{% trans 'Product Type' %}</th>
+                  <th>{% trans 'Contact Person 1' %}</th>
+                  <th>{% trans 'Phone 1' %}</th>
+                  <th>{% trans 'Last Purchase Order Date' %}</th>
+                  <th>{% trans 'Accumulated' %}</th>
+                  <th>{% trans 'No. of Order' %}</th>
+                  <th>{% trans 'Purchasing Comments' %}</th>
+                  <th>{% trans 'Remark' %}</th>
+                  <th>{% trans 'Contact Type' %}</th>
+                  <th>{% trans 'Contact Person 2' %}</th>
+                  <th>{% trans 'Phone 2' %}</th>
+                  <th>{% trans 'Email' %}</th>
+                  <th>{% trans 'Website' %}</th>
+                  <th>{% trans 'Location' %}</th>
+                  <th>{% trans 'Currency' %}</th>
+                  <th>{% trans 'Prefix' %}</th>
+                  <th>{% trans 'Supplier ID' %}</th>
+                  <th>{% trans 'Name Card' %}</th>
+                  <th>{% trans 'Status' %}</th>
+                  <th>{% trans 'Action' %}</th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                {% for supplier in suppliers %}
+                <tr>
+                  <td>{{supplier.created_date}}</td>
+                  <td>{{supplier.company_name}}</td>
+                  <td>{{supplier.supplier_type}}</td>
+                  <td>{{supplier.product_type}}</td>
+                  <td>{{supplier.contact_person_1}}</td>
+                  <td>{{supplier.phone_1}}</td>
+                  <td>{{supplier.last_po_date}}</td>
+                  <td>{{supplier.total_cost}}</td>
+                  <td>{{supplier.no_of_orders}}</td>
+                  <td>{{supplier.purchasing_comments}}</td>
+                  <td>{{supplier.remark}}</td>
+                  <td>{{supplier.contact_type}}</td>
+                  <td>{{supplier.contact_person_2}}</td>
+                  <td>{{supplier.phone_2}}</td>
+                  <td>{{supplier.email}}</td>
+                  <td>{{supplier.website}}</td>
+                  <td>{{supplier.location}}</td>
+                  <td>{{supplier.currency}}</td>
+                  <td>{{supplier.prefix}}</td>
+                  <td>{{supplier.supplier_id}}</td>
+                  <td>
+                    <div style="display: flex;">
+                      {% if supplier.name_card_file_path %}
+                      <img id="existsImagePreview" src="{{supplier.name_card_file_path}}" class="preview-image" alt="Image Preview">
+                      {% endif %}
+                      <span>{{supplier.name_card_file_name}}</span>
+                    </div>
+                  </td>
+                  <td style="text-transform: capitalize;">{{supplier.status}}</td>
+                  <td>
+                    <div style="display: flex; justify-content: center">
+                      <!-- <a class="btn btn-primary btn-sm mR-10" href="{% url "supplier-details" supplier.id %}">
+                      <i class="ti-eye"></i>
+                      </a> -->
+                      <a class="btn btn-primary btn-sm mR-10" href="{% url 'supplier-update' supplier.id %}">
+                      <i class="ti-pencil-alt"></i>
+                      </a>
+                      {% if role != 'seller' %}
+                          <button type="submit" class="btn btn-danger btn-sm mR-10" onclick="deleteSupplier('{{supplier.id}}')">
+                          <i class="text-light ti-trash"></i>
+                          </button>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="importSupplierModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Import Suppliers'%}</h4>
+          <button id="btnCloseModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" id="id_importSuppliersFile" name="sample_file" accept=".xlsx" >
+            <div style="margin: 10px 0px 0px 5px;">Only <b>.xlsx</b> file is allowed. <a href="{% url 'supplier_import_samplefile' %}">Click here</a> to download sample file.</div>
+          </form>
+          <span id="id_modalMsg" style="display: none;"></span>
+        </div>
+        <div class="modal-footer">
+          <button id="btnClose" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="btnImport" class="btn btn-primary rounded btn-send m-10" style="color: white;" type="button" onclick="importSuppliers()">{% trans 'Import'%}</button>
+          <button id="btnImporting" class="btn btn-primary rounded btn-send m-10" style="color: white; display: none;" type="button" disabled>{% trans 'Importing...'%}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+   $(document).ready(function() {
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+      // If DataTable is already initialized, destroy it
+      $('#dataTable').DataTable().destroy();
+    }
+
+    // Reinitialize DataTable with default sorting
+    $('#dataTable').DataTable({
+      "order": [[0, "desc"]],
+      "pageLength": 100,
+    });
+  });
+
+  function deleteSupplier(supplier_id) {
+    var confirmed = confirm("Are you sure want to delete?")
+    if (confirmed) {
+        setTimeout(() => {
+            $('#loader_spin').show();
+        }, 0);
+        var formData = new FormData();
+        formData.append('supplier_id', supplier_id);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'supplier_delete' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.code == 1) {
+                    window.location = '/supplier-list/';
+                } else {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                        $('#id_Msg').show();
+                        $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }, 0);
+                }
+                setTimeout(() => {
+                    $('#id_Msg').hide();
+                }, 5000);
+            },
+            error: function(error) {
+                setTimeout(() => {
+                    $('#loader_spin').hide();
+                }, 0);
+                console.error('Error:', error);
+            }
+        });
+    }
+  }
+
+  function exportSuppliers() {
+    var search_keyword = $('#dataTable_filter input').val();
+    // var daterange = $('#daterange').val();
+    // var daterange_li = daterange.split(' - ');
+    // var from_date = daterange_li[0];
+    // var to_date = daterange_li[1];
+
+    // var encodedFromDate = encodeURIComponent(from_date);
+    // var encodedToDate = encodeURIComponent(to_date);
+    var encoded_search_keyword = encodeURIComponent(search_keyword);
+    if (search_keyword) {
+      window.location = '/supplier-list-export/?search_keyword=' + encoded_search_keyword;
+    } else {
+      window.location = '/supplier-list-export/';
+    }
+  }
+
+  function importSupplierModal() {
+    afterImportCss();
+    $('#importSupplierModal').modal("show");
+  }
+
+  function importSuppliers() {
+    var formData = new FormData();
+    var import_supplier_file = $('#id_importSuppliersFile')[0].files[0];
+    formData.append('import_supplier_file', import_supplier_file);
+    if (import_supplier_file && import_supplier_file.name && ((import_supplier_file.name).split('.').pop()).toLowerCase() == "xlsx") {
+      startImportCss();
+      $.ajax({
+          type: "POST",
+          url: "{% url 'suppliers_import' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                      location.reload();
+                      // $('#id_modalMsg').show();
+                      // $('#id_modalMsg').html('<div class="alert alert-success" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      afterImportCss();
+                      $('#id_modalMsg').show();
+                      $('#id_modalMsg').html('<div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">' + response.msg + '</div>');
+                  }, 0);
+              }
+            },
+            error: function(error) {
+              afterImportCss();
+              console.error('Error:', error);
+            }
+      });
+    } else {
+      setTimeout(() => {
+          $('#id_modalMsg').show();
+          $('#id_modalMsg').html('<div class="alert alert-info" role="alert" style="margin-bottom: 0px;">Please choose correct file to import!</div>');
+      }, 0);
+    }
+
+    setTimeout(() => {
+        $('#id_modalMsg').hide();
+    }, 5000);
+  }
+
+  function startImportCss() {
+    setTimeout(() => {
+      $("#btnImporting").show();
+      $("#btnImport").hide();
+      $("#btnClose").attr('disabled', 'disabled');
+      $("#id_importSuppliersFile").attr('disabled', 'disabled');
+      $("#btnCloseModel").hide();
+    }, 0);
+ }
+
+ function afterImportCss() {
+    setTimeout(() => {
+      $("#btnImport").show();
+      $("#btnImporting").hide();
+      $("#btnClose").removeAttr('disabled');
+      $("#id_importSuppliersFile").removeAttr('disabled');
+      $('#id_importSuppliersFile').val("");
+      $("#btnCloseModel").show();
+    }, 0);
+ }
+</script>
+{% endblock javascripts %}

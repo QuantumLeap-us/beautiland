@@ -1,0 +1,351 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Create Purchase Order'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container">
+      <div style="align-items: center; ">
+        <h3 class="c-grey-900 mB-20" style="text-align: center">
+          {% trans 'Create Purchase Order'%}
+        </h3>
+      </div>
+      <div>
+        <div class="m 2px">
+          <label>{% trans 'Product List'%}:</label>
+        </div>
+
+        <table id="dataTable" class="table"
+            cellspacing="0"
+            width="100%"
+          >
+            <thead style="text-align: center;">
+              <th>{% trans 'Product No' %}</th>
+              <th>{% trans 'Name' %}</th>
+              <th>{% trans 'English Name' %}</th>
+              <th>{% trans 'Supplier Product Name' %}</th>
+              <th>{% trans 'Current Quantity' %}</th>
+              <th>{% trans 'Safety Quantity' %}</th>
+              <th>{% trans 'Recommended Purchase Quantity' %}</th>
+              <th>{% trans 'Supplier Name' %}</th>
+              <th>{% trans 'Supplier Code'%}</th>
+              <th>{% trans 'Add' %}</th>
+            </thead>
+            <tbody class="">
+              {% for inventory in products %}
+              <tr>
+                <td>{{ inventory.product.product_id }}</td>
+                <td>{{ inventory.product.product_chinese_name }}</td>
+                <td>{{ inventory.product.product_english_name }}</td>
+                <td>{{ inventory.product.supplier_product_name }}</td>
+                <td>{{ inventory.current_quantity }}</td>
+                <td>{{ inventory.safety_quantity }}</td>
+                <td>{{ inventory.recommended_purchase_quantity }}</td>
+                <td>{{inventory.product.supplier.company_name}}</td>
+                <td>{{inventory.product.supplier.supplier_id}}</td>
+                <td><button
+                    onclick="addToProductList('{{inventory.product.id}}', '{{ inventory.product.product_id }}', '{{inventory.product.product_chinese_name}}', 
+                    '{{inventory.recommended_purchase_quantity}}')"
+                    class="btn btn-primary btn-sm"><i class="ti-plus" style="color: white;"></i></button></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        <div class="mb-3 mt-3">
+          <label>{% trans 'Purchase Order List'%}:</label>
+        </div>
+
+        <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+          <thead style="text-align: center;">
+            <th>{% trans 'Product No'%}</th>
+            <th>{% trans 'Product Name'%}</th>
+            <th>{% trans 'Quantity'%}</th>
+            <th>{% trans 'Raw Material Cost'%}</th>
+            <th>{% trans 'Processing Cost'%}</th>
+            <th>{% trans 'Packaging Cost'%}</th>
+            <th>{% trans 'Other Cost'%}</th>
+            <th>{% trans 'Freight Cost'%}</th>
+            <th>{% trans 'Sub Total'%}</th>
+            <th>{% trans 'Action'%}</th>
+          </thead>
+          <tbody style="text-align: center;" id="orderList"></tbody>
+        </table>
+        <!-- <div class="mb-3 mt-3" style="display: flex;">
+          <button style="margin: 3px;" type="button" class="btn btn-success btn-sm" onclick="createOrderList()"><i style="color: white;" class="ti-check"></i></button>
+        </div> -->
+      </div>
+
+      <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div id="prompt_area" style="display: flexbox; justify-content: space-between"></div>
+
+        <div class="row gx-4">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Total Product Cost'%}:</label>
+              {{form.total_product_cost}}
+            </div>
+            <span class="text-error">{{ form.total_product_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Delivery Cost'%}</label>
+              {{form.delivery_cost}}
+            </div>
+            <span class="text-error">{{ form.delivery_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Other Cost'%}</label>
+              {{form.other_cost}}
+            </div>
+            <span class="text-error">{{ form.other_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Total Cost'%}</label>
+              {{form.total_cost}}
+            </div>
+            <span class="text-error">{{ form.other_cost.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Delivery Date'%}</label>
+              <div class="input-group">
+                <div class="input-group-text bgc-white bd bdwR-0">
+                  <i class="ti-calendar"></i>
+                </div>
+                <input type="text" class="form-control  start-date" value="{{form.delivery_date.value|date:'d/m/Y'}}" id="id_delivery_date" name="delivery_date" data-provide="datepicker">
+              </div>
+            </div>
+            <span class="text-error">{{ form.delivery_date.errors }}</span>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Remarks'%}</label>
+              {{form.remarks}}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label" class="text-normal text-dark">{% trans 'Payment Method'%}</label>
+              {{form.payment_method}}
+            </div>
+            <span class="text-error">{{ form.payment_method.errors }}</span>
+          </div>
+        </div>
+        
+
+        <input type="hidden" name="productDetails" id="orderDetailsInput" value="" />
+        <div style="display: flex; justify-content: center">
+          <button type="submit" class="btn btn-primary rounded btn-send " style="color: white;" >{% trans 'Submit'%}</button>
+        </div>
+      </form>
+
+      {{ msg }}
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+
+
+  var ids = 0;
+  var productDetails = [];
+  var total_product_cost = 0;
+  var total_cost = 0;
+
+  function addToProductList(productId, productNo, ProductName) {
+
+    var existingRow = document.getElementById(`${productId}_row`);
+    if (existingRow) {
+      alert("Product is already in the order list.");
+      return;
+    }
+
+    var orderList = document.getElementById("orderList");
+    orderList.insertAdjacentHTML(
+          "beforeend",
+          `<tr id="${productId}_row">
+          <td>${productNo}</td>
+          <td>${ProductName}</td>
+          <td id="${productId}_quantity_div" style="width: 10%;"><input class="form-control" type="text" size="5" id="${productId}_quantity"/></td>
+          <td id="${productId}_raw_material_cost_div" style="width: 10%;"><input class="form-control" type="text" size="5" id="${productId}_raw_material_cost"/></td>
+          <td id="${productId}_processing_cost_div" style="width: 10%;"><input class="form-control" type="text" size="5" id="${productId}_processing_cost"/></td>
+          <td id="${productId}_packaging_cost_div" style="width: 10%;"><input class="form-control" type="text" size="5" id="${productId}_packaging_cost"/></td>
+          <td id="${productId}_other_cost_div" style="width: 10%;"><input class="form-control" type="text" size="5" id="${productId}_other_cost"/></td>
+          <td id="${productId}_freight_cost_div" style="width: 10%;"><input class="form-control" type="text" size="5" id="${productId}_freight_cost"/></td>
+          <td id="${productId}_sub_total_div"></td>  
+          <td>
+            <div class="display: flex; justify-content: space-evenly;">
+              <button type="button" class="btn btn-danger btn-sm" onclick=deleteProduct('${productId}')>
+                <i class="ti-trash" style="color: white;"></i>
+              </button>
+              <button style="margin: 3px;" id="${productId}_confirmproduct" type="button" class="btn btn-success btn-sm" onclick="createOrderList( '${productId}')">
+                <i style="color: white;" class="ti-check"></i>
+              </button>
+            </div>
+          </td>
+          </tr>`
+        );
+      
+  }
+
+  function createOrderList(productId) {
+    quantity = parseFloat(document.getElementById(`${productId}_quantity`).value);
+    rawMaterialCost = parseFloat(document.getElementById(`${productId}_raw_material_cost`).value);
+    processingCost = parseFloat(document.getElementById(`${productId}_processing_cost`).value);
+    packagingCost = parseFloat(document.getElementById(`${productId}_packaging_cost`).value);
+    otherCost = parseFloat(document.getElementById(`${productId}_other_cost`).value);
+    freightCost = parseFloat(document.getElementById(`${productId}_freight_cost`).value);
+
+    if (isNaN(quantity) || quantity === 0 || quantity < 0) {
+      alert("You can't put 0, negative value, or None in Quantity!");
+      return;
+    }
+
+    if (isNaN(rawMaterialCost) || rawMaterialCost === 0 || rawMaterialCost < 0) {
+      alert("You can't put 0, negative value, or None in Raw Material Cost!");
+      return;
+    }
+
+    if (isNaN(freightCost) || freightCost === 0 || freightCost < 0) {
+      alert("You can't put 0, negative value, or None in Freight Cost!");
+      return;
+    }
+
+    if (!processingCost) {
+      processingCost = 0;
+    }
+
+    if (!packagingCost) {
+      packagingCost = 0;
+    }
+
+    if (!otherCost) {
+      otherCost = 0;
+    }
+
+    total_cost = quantity * (rawMaterialCost + processingCost + packagingCost + otherCost + freightCost);  
+    total_product_cost = total_product_cost+ total_cost;
+
+    var quantity_div = document.getElementById(productId + "_quantity_div");
+    quantity_div.innerHTML = '';
+    quantity_div.insertAdjacentHTML('beforeend', `<label>${quantity}</label>`);
+
+    var quantity_div = document.getElementById(productId + "_raw_material_cost_div");
+    quantity_div.innerHTML = '';
+    quantity_div.insertAdjacentHTML('beforeend', `<label>${rawMaterialCost}</label>`);
+
+    var quantity_div = document.getElementById(productId + "_processing_cost_div");
+    quantity_div.innerHTML = '';
+    quantity_div.insertAdjacentHTML('beforeend', `<label>${processingCost}</label>`);
+
+    var quantity_div = document.getElementById(productId + "_packaging_cost_div");
+    quantity_div.innerHTML = '';
+    quantity_div.insertAdjacentHTML('beforeend', `<label>${packagingCost}</label>`);
+
+    var quantity_div = document.getElementById(productId + "_other_cost_div");
+    quantity_div.innerHTML = '';
+    quantity_div.insertAdjacentHTML('beforeend', `<label>${otherCost}</label>`);
+
+    var quantity_div = document.getElementById(productId + "_freight_cost_div");
+    quantity_div.innerHTML = '';
+    quantity_div.insertAdjacentHTML('beforeend', `<label>${freightCost}</label>`);
+
+    var subtotat_div = document.getElementById(productId + "_sub_total_div");
+    subtotat_div.innerHTML = '';
+    subtotat_div.insertAdjacentHTML('beforeend', `<label>${total_cost}</label>`);
+    
+    var details = {
+      product_id: productId,
+      recommended_purchase_quantity: quantity,
+      raw_material_cost: rawMaterialCost,
+      packaging_cost: packagingCost,
+      processing_cost: processingCost,
+      product_other_cost: otherCost,
+      freight_cost: freightCost,
+      total_cost: total_cost,
+    };
+
+    productDetails.push(details);
+    var totalProductCost = document.getElementById("id_total_product_cost");
+    totalProductCost.value = total_product_cost;
+    updateTotalCost();
+    document.getElementById(productId + "_confirmproduct").disabled = true;
+
+    
+  }
+
+  function deleteProduct(product_id) {
+    // Find the product to be deleted
+    const deletedProduct = productDetails.find((product) => product.product_id === product_id);
+
+    
+    if (deletedProduct) {
+      // Subtract the subtotalCost of the deleted product from total_product_cost
+      total_product_cost -= deletedProduct.total_cost;
+
+      // Remove the product from the productDetails array
+      productDetails = productDetails.filter((product) => product.product_id !== product_id);
+
+      // Update the value of total_product_cost in the input field
+      var totalProductCost = document.getElementById("id_total_product_cost");
+      totalProductCost.value = total_product_cost;
+    }
+
+    
+    var row = document.getElementById(product_id + "_row");
+    row.parentNode.removeChild(row);
+  }
+  document.getElementById('id_delivery_cost').addEventListener('input', updateTotalCost);
+  document.getElementById('id_other_cost').addEventListener('input', updateTotalCost);
+  document.getElementById('id_total_product_cost').addEventListener('input', updateTotalCost);
+
+  function updateTotalCost() {
+    // Get values from the form fields
+    var deliveryCost = parseFloat(document.getElementById('id_delivery_cost').value) || 0;
+    var otherCost = parseFloat(document.getElementById('id_other_cost').value) || 0;
+    var totalProductCost = parseFloat(document.getElementById('id_total_product_cost').value) || 0;
+
+    // Calculate total cost
+    var totalCost = total_product_cost + deliveryCost + otherCost;
+
+    // Update the total_cost field in the form
+    document.getElementById('id_total_cost').value = totalCost;
+  }
+
+  document.querySelector('form').addEventListener('submit', function(event) {
+    // Prevent the form from submitting by default
+    event.preventDefault();
+
+    // Check if productDetails is empty
+    if (productDetails.length === 0) {
+      // Show an alert or any other validation message
+      alert('Please add at least one product to the order list.');
+      return;
+    }
+
+    document.getElementById('orderDetailsInput').value = JSON.stringify(productDetails);
+    // If productDetails is not empty, proceed with form submission
+    this.submit();
+  });
+
+  $(document).ready(function () {
+    $('#dataTable2').DataTable({
+      "scrollX": true
+      // Add other DataTables options as needed
+    });
+  });
+
+</script>
+{% endblock javascripts %}
+
+
+<!-- document.getElementById("orderDetailsInput").value =
+JSON.stringify(orderDetails); -->

@@ -1,0 +1,108 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'System Parameter'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="display: flex; justify-content: space-between">
+        <h4 class="c-grey-900 mB-20">{% trans 'System Parameters List'%}</h4>
+        {% comment %} <div>
+            <a class="btn btn-secondary rounded btn-send" href="{% url 'system_parameter' 0 %}" style="color: white">{% trans 'Add System Parameter'%}</a>  
+        </div> {% endcomment %}
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            <table id="dataTable" class="table" cellspacing="0" width="100%" >
+              <thead>
+                <tr>
+                  <th>{% trans 'Created On'%}</th>
+                  <th>{% trans 'System Parameter'%}</th>
+                  <th>{% trans 'Value'%}</th>
+                  <th>{% trans 'Created By'%}</th>
+                  <th>{% trans 'Action'%}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for system_param in system_parameteres %}
+                <tr>
+                  <td>{{system_param.created_on}}</td>
+                  <td>{{system_param.system_parameter}}</td>
+                  <td>{% if system_param.name %}{{system_param.name}}{% else %}-{% endif %}</td>
+                  <td style="text-transform: capitalize;">{{system_param.created_by}}</td>
+                  <td>
+                    <div style="display: flex;">
+                      {% if system_param.system_parameter == "Category - Subcategory" %}
+                        <a class="btn btn-primary btn-sm mR-10" href="{% url 'category-list' %}">
+                          <i class="ti-pencil-alt"></i>
+                        </a>
+                      {% else %}
+                        <a class="btn btn-primary btn-sm mR-10" href="{% url 'system_parameter' system_param.id %}">
+                          <i class="ti-pencil-alt"></i>
+                        </a>
+                      {% endif %}
+                      <!-- {% if role != 'seller' %}
+                        <form action="{% url 'system_parameter_delete' system_param.id %}" method="post" onsubmit="return confirmDelete()" class="inline">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm mR-10">
+                          <i class="text-light ti-trash"></i>
+                          </button>
+                        </form>
+                      {% endif %} -->
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  function confirmDelete() {
+    var confirmed = confirm("Are you sure want to delete?")
+    if (!confirmed) {
+        event.preventDefault(); // Prevent the form from submitting
+    }
+  }
+        
+  $(document).ready(function() {
+    // $('#dataTable').DataTable({
+    //   "order": [[0, "desc"]],
+    //     "scrollX": true,
+    //     // Add other DataTables options as needed
+    // });
+
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+      // If DataTable is already initialized, destroy it
+      $('#dataTable').DataTable().destroy();
+    }
+
+    // Reinitialize DataTable with default sorting
+    $('#dataTable').DataTable({
+      "order": [[0, "desc"]],
+      "pageLength": 100,
+    });
+
+    // Position the datepicker before the DataTable filter input
+    // $('#datepicker-container').insertBefore($('.dataTables_filter label'));
+    // $('#dataTable_filter').append($('#datepicker-container'));
+  });
+
+</script>
+{% endblock javascripts %}

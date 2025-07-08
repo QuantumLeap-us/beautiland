@@ -1,0 +1,840 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Delivery Details'%} - {% trans 'Pending Delivery'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      <div class="row">
+        {% if error_msg %}
+        <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+        {% endif %}
+        <span id="id_Msg" style="display: none;margin-bottom: 5px;"></span>
+        <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Delivery Details'%} - {% if delivery_status == "Partially Delivered" %} {% trans "Partial Delivered" %} {% elif delivery_status == "Delivered" %} {% trans "Delivered" %} {% else %} {% trans 'Pending Delivery'%} {% endif %}</h3>
+        <form id="productForm" method="post" action="/product/" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                <label style="font-size: 15.7px;">{% trans 'General Information' %}</label>
+                <div style="border-top: 1px solid;margin-top: 5px;">
+                    <table class='table' style="margin-top: 5px;">
+                        <tbody>
+                            <tr>
+                                <th>{%trans 'Order Type'%}</th>
+                                <td>{{delivery_data.order_type}}</td>
+                                <th>{%trans 'Invoice ID'%}</th>
+                                <td>{{delivery_data.order_id}}</td>
+                                <th>{%trans 'Order Date'%}</th>
+                                <td>{{delivery_data.created_date}}</td>
+                                <th>{%trans 'Customer ID'%}</th>
+                                <td>{{delivery_data.customer__customer_id}}</td>
+                            </tr>
+                            <tr>
+                                <th>{%trans 'Company Name'%}</th>
+                                <td>{{delivery_data.customer__company_name}}</td>
+                                <th>{%trans 'Customer Name'%}</th>
+                                <td>{{delivery_data.customer__name}}</td>
+                                <th>{%trans 'Phone'%}</th>
+                                <td>{{delivery_data.customer__phone_number}}</td>
+                                <th>{%trans 'Payment Status'%}</th>
+                                <td>{{delivery_data.payment_status}}</td>
+                            </tr>
+                            <tr>
+                                <th>{%trans 'Payment Method'%}</th>
+                                <td>{{delivery_data.payment_method}}</td>
+                                <th>{%trans 'Payment Date'%}</th>
+                                <td>{{delivery_data.payment_date}}</td>
+                                <th>{%trans 'Sales Person'%}</th>
+                                <td>{{delivery_data.sales_person_name}}</td>
+                                <th></th>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                <label style="font-size: 15.7px;">{% trans 'Basic Delivery Information' %}</label>
+                  <div style="border-top: 1px solid;margin-top: 5px;">
+                      <table class='table' style="margin-top: 5px;">
+                          <tbody>
+                              <tr>
+                                  <th>{%trans 'Delivery Status'%}</th>
+                                  <td>
+                                    <div id="deliveryStatusDropdown">
+                                        <select class="form-control inputField" name="delivery_status" id="id_delivery_status" >
+                                            <option value="Pending">Pending</option>
+                                            <option value="Pending Delivery">Pending Delivery</option>
+                                            <option value="Partially Delivered">Partially Delivered</option>
+                                            <option value="Delivering">Delivering</option>
+                                            <option value="Delivered">Delivered</option>
+                                            <option value="Handling">Handling</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                            <option value="Out of Stock">Out of Stock</option>
+                                            <option value="Partial Out of Stock">Partial Out of Stock</option>
+                                        </select>
+                                    </div>
+                                  </td>
+                                  <th>{%trans 'Delivery Fee'%}</th>
+                                  {% if delivery_status in '["Partially Delivered", "Delivered"]' %}
+                                    <td>{{total_delivery_fee}}</td>
+                                  {% else %}
+                                    <td>{{delivery_data.delivery_fee}}</td>
+                                  {% endif %}
+                                  <th>{%trans 'Delivery Area'%}</th>
+                                  <td>{{delivery_data.customer__company_name}}</td>
+                                </tr>
+                                <tr>
+                                  <th>{%trans 'Delivery Comments'%}</th>
+                                  <td>
+                                    <textarea name="delivery_comment" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_delivery_comment" {% if delivery_status == "Delivered" %} disabled {% endif %}>{{delivery_data.delivery_comment}}</textarea>
+                                  </td>
+                                  <th>{%trans 'Delivery Address'%} <span class="text-danger">*</span></th>
+                                  <td>
+                                    <textarea name="delivery_address" cols="20" rows="3" class="form-control inputField" maxlength="1024" required="" id="id_delivery_address"  {% if delivery_status == "Delivered" %} disabled {% endif %}>{{delivery_data.delivery_address}}</textarea>
+                                  </td>
+                                  <th></th>
+                                  <td></td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+
+              {% if delivery_status in '["Partially Delivered", "Delivered"]' %}
+              <div><label style="font-size: 15.7px; margin-bottom: 10px; font-weight: 700; cursor: pointer;"  id="DeliveryInfoLabel">{% trans 'Delivery Information' %}<i class="c-brown fas fa-angle-down" style="margin-left: 10px;"></i></label></div>
+                <div class="bgc-white bd bdrs-3 p-20 mB-20" id="DeliveryInfo" style="max-height: 800px; overflow-y: auto;">
+                    {% if delivered_data %}
+                        {% for deliver_data in delivered_data %}
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    {% if deliver_data.type == "after sales" %}
+                                    <h5 style="margin-top: 10px; font-weight: 700;">After Sales Information</h5>
+                                    {% else %}
+                                    <h5 style="margin-top: 10px; font-weight: 700;">{{ deliver_data.count }}.</h5>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if deliver_data.type != "after sales" %}
+                                    {% if delivery_status != "Delivered" %}
+                                    <a href="{% url 'after_sales_delivery' deliver_data.id %}" class="btn btn-primary btn-send btn-click" style="color: white; margin-bottom: 5px; padding: 5px; margin-right: 5px;">{% trans 'After Sales' %}</a>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% if role == "admin" %}
+                                    {% if deliver_data.type != "after sales" %}
+                                        <button type="button" class="btn btn-danger btn-send btn-click" style="color: white; margin-bottom: 5px; padding: 5px; margin-right: 5px;" onclick="showcancelDeliveryModal('{{ deliver_data.id }}', '{{ deliver_data.delivery_id }}', '{{ deliver_data.type }}')">{% trans 'Cancel Delivery' %}</button>
+                                    {% endif %}
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-send btn-click" style="color: white; margin-bottom: 5px; padding: 5px;" onclick="downloadDeliveryNote('{{ deliver_data.id }}', '{{ delivery_data.id }}', '{{ deliver_data.type }}')"><i class="fa fa-download" style="margin-right: 5px;" aria-hidden="true"></i>{% trans 'Delivery Note' %}</button>
+                                </div>
+                            </div>
+                            <div style="border-top: 1px solid;margin-top: 5px;">
+                            <table class='table' style="margin-top: 5px;">
+                                <tbody>
+                                        <tr>
+                                        <th>{%trans 'Delivery ID'%}</th>
+                                        <td style="color: green;">{{deliver_data.delivery_id}}</td>
+                                        <th>{%trans 'Handle By'%}</th>
+                                        <td>{{deliver_data.handle_by}}</td>
+                                        <th>{%trans 'Delivery Comments'%}</th>
+                                        <td><textarea name="deliver_delivery_comment" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_deliver_delivery_comment" {% if delivery_status == "Delivered" %} disabled {% endif %}>{{deliver_data.delivery_comment}}</textarea></td>
+                                        <th>{%trans 'Warehouse Comment'%}</th>
+                                        <td><textarea name="deliver_warehouse_comment" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_deliver_warehouse_comment">{{ deliver_data.warehouse_comment }}</textarea></td>
+                                        </tr>
+                                        <tr>
+                                        <th>{%trans 'Delivery Fee'%}</th>
+                                        <td>
+                                            {{ deliver_data.delivery_fee }}
+                                        </td>
+                                        <th>{%trans 'Delivery Date'%}</th>
+                                        <td>{{ deliver_data.delivery_date }}</td>
+                                        <th>{%trans 'Delivery Method'%}</td>
+                                        <td>
+                                            <div id="deliveryMethodDropdown">
+                                                <select class="form-control inputField" name="deliver_delivery_method" id="id_deliver_delivery_method" >
+                                                    <option value="">-------</option>
+                                                    <option value="Self-Pickup" {% if deliver_data.delivery_method == "Self-Pickeup" %} selected {% endif %}>Self-Pickup</option>
+                                                    <option value="SF Express" {% if deliver_data.delivery_method == "SF Express" %} selected {% endif %}>SF Express</option>
+                                                    <option value="Salesperson Delivery" {% if deliver_data.delivery_method == "Salesperson Delivery" %} selected {% endif %}>Salesperson Delivery</option>
+                                                    <option value="GOGOVAN" {% if deliver_data.delivery_method == "GOGOVAN" %} selected {% endif %}>GOGOVAN</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <th>{%trans 'Delivery Address'%}</th>
+                                        <td>
+                                            {{deliver_data.delivery_address}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+
+                            <label style="font-size: 15.7px;">{% trans 'Delivered Product List' %}</label>
+                            <div style="border-top: 1px solid;margin-top: 5px;">
+                                {% if deliver_data.type == "after sales" %}
+                                    <table class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">{% trans 'Product ID' %}</th>
+                                                <th rowspan="2">{% trans 'Product Name' %}</th>
+                                                <th rowspan="2">{% trans 'Product English Name' %}</th>
+                                                <th rowspan="2">{% trans 'Remark' %}</th>
+                                                <th rowspan="2">{% trans 'Delivery Date' %}</th>
+                                                <th rowspan="2">{% trans 'Delivered Quantity' %}</th>
+                                                <th colspan="4" style="text-align: center;">{% trans 'After Sales Arrangement' %}</th> <!-- New grouped column -->
+                                            </tr>
+                                            <tr>
+                                                <th>{% trans 'Failed to Delivery Quantity' %}</th>
+                                                <th>{% trans 'Redelivery Quantity' %}</th>
+                                                <th>{% trans 'Overdelivery Quantity' %}</th>
+                                                <th>{% trans 'Return Quantity' %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for deliver_item in deliver_data.delivered_order_items %}
+                                                <tr>
+                                                    <td>{{ deliver_item.product_id }}</td>
+                                                    <td>{{ deliver_item.product_chinese_name }}</td>
+                                                    <td>{{ deliver_item.product_english_name }}</td>
+                                                    <td>{{ deliver_item.remarks }}</td>
+                                                    <td>{{ deliver_item.item_delivery_date }}</td>
+                                                    <td>{{ deliver_item.item_delivered_qty }}</td>
+                                                    <td>{{ deliver_item.failed_delivery_quantity }}</td>
+                                                    <td>{{ deliver_item.redelivery_quantity }}</td>
+                                                    <td>{{ deliver_item.overdelivery_quantity }}</td>
+                                                    <td>{{ deliver_item.return_quantity }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <table class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                                        <thead>
+                                            <th>{% trans 'Product ID' %}</th>
+                                            <th>{% trans 'Product Name' %}</th>
+                                            <th>{% trans 'Product English Name' %}</th>
+                                            <th>{% trans 'Remark' %}</th>
+                                            <th>{% trans 'Delivery Date' %}</th>
+                                            <th>{% trans 'Delivered Quantity' %}</th>
+                                        </thead>
+                                        <tbody>
+                                            {% for deliver_item in deliver_data.delivered_order_items %}
+                                                <tr>
+                                                    <td>{{ deliver_item.product_id }}</td>
+                                                    <td>{{ deliver_item.product_chinese_name }}</td>
+                                                    <td>{{ deliver_item.product_english_name }}</td>
+                                                    <td>{{ deliver_item.remarks }}</td>
+                                                    <td>{{ deliver_item.item_delivery_date }}</td>
+                                                    <td>{{ deliver_item.item_delivered_qty }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div style="text-align: center;">Data is not available.</div>
+                    {% endif %}
+                </div>
+
+                {% if cancelled_delivered_data %}
+                <div><label style="font-size: 15.7px; margin-bottom: 10px; font-weight: 700; cursor: pointer;" id="cancelledDeliveryInfoLabel">{% trans 'Cancelled Delivery Information' %}<i class="c-brown fas fa-angle-down" style="margin-left: 10px;"></i></label></div>
+                    <div class="bgc-white bd bdrs-3 p-20 mB-20" id="cancelledDeliveryInfo" style="max-height: 800px; overflow-y: auto;">
+                        {% for cancelled_deliver_data in cancelled_delivered_data %}
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h5 style="margin-top: 10px; font-weight: 700;">{{ cancelled_deliver_data.cancelled_count }}.</h5>
+                                </div>
+                                {% comment %} <div>
+                                    <button type="button" class="btn btn-primary btn-send btn-click" style="color: white; margin-bottom: 5px; padding: 5px; margin-right: 5px;">{% trans 'After Sales' %}</button>
+                                    {% if role == "admin" %}
+                                        <button type="button" class="btn btn-danger btn-send btn-click" style="color: white; margin-bottom: 5px; padding: 5px; margin-right: 5px;" onclick="showcancelDeliveryModal('{{ cancelled_deliver_data.id }}', '{{ cancelled_deliver_data.delivery_id }}')">{% trans 'Cancel Delivery' %}</button>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-success btn-send btn-click" style="color: white; margin-bottom: 5px; padding: 5px;" onclick="downloadDeliveryNote('{{ cancelled_deliver_data.id }}', '{{ delivery_data.id }}')">{% trans 'Download Delivery Note' %}</button>
+                                </div> {% endcomment %}
+                            </div>
+                            <div style="border-top: 1px solid;margin-top: 5px;">
+                            <table class='table' style="margin-top: 5px;">
+                                <tbody>
+                                        <tr>
+                                            <th>{%trans 'Delivery ID'%}</th>
+                                            <td style="color: red;">{{cancelled_deliver_data.delivery_id}}</td>
+                                            <th>{%trans 'Handle By'%}</th>
+                                            <td>{{cancelled_deliver_data.handle_by}}</td>
+                                            <th>{%trans 'Delivery Comments'%}</th>
+                                            <td>{{cancelled_deliver_data.delivery_comment}}</td>
+                                            <th>{%trans 'Warehouse Comment'%}</th>
+                                            <td>{{ cancelled_deliver_data.warehouse_comment }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{%trans 'Delivery Fee'%}</th>
+                                            <td>{{ cancelled_deliver_data.delivery_fee }}</td>
+                                            <th>{%trans 'Delivery Date'%}</th>
+                                            <td>{{ cancelled_deliver_data.delivery_date }}</td>
+                                            <th>{%trans 'Delivery Method'%}</td>
+                                            <td>{{ cancelled_deliver_data.delivery_method }}</td>
+                                            <th>{%trans 'Delivery Address'%}</th>
+                                            <td>{{cancelled_deliver_data.delivery_address}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{%trans 'Delivered Order Status'%}</th>
+                                            <td style="color: red;">{{ cancelled_deliver_data.delivered_order_status }}</td>
+                                            <th>{%trans 'Cancel Delivery Reason'%}</th>
+                                            <td>{{ cancelled_deliver_data.cancel_delivery_reason }}</td>
+                                            <th></td>
+                                            <td></td>
+                                            <th></th>
+                                            <td></td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                            </div>
+
+                            <label style="font-size: 15.7px;">{% trans 'Delivered Product List' %}</label>
+                            <div style="border-top: 1px solid;margin-top: 5px;">
+                                <table class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                                    <thead>
+                                        <th>{% trans 'Product ID' %}</th>
+                                        <th>{% trans 'Product Name' %}</th>
+                                        <th>{% trans 'Product English Name' %}</th>
+                                        <th>{% trans 'Remark' %}</th>
+                                        <th>{% trans 'Delivery Date' %}</th>
+                                        <th>{% trans 'Delivered Quantity' %}</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for cancelled_deliver_item in cancelled_deliver_data.cancelled_delivered_order_items %}
+                                            <tr>
+                                                <td>{{ cancelled_deliver_item.product_id }}</td>
+                                                <td>{{ cancelled_deliver_item.product_chinese_name }}</td>
+                                                <td>{{ cancelled_deliver_item.product_english_name }}</td>
+                                                <td>{{ cancelled_deliver_item.remarks }}</td>
+                                                <td>{{ cancelled_deliver_item.item_delivery_date }}</td>
+                                                <td>{{ cancelled_deliver_item.item_delivered_qty }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+              {% endif %}
+
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                    <label style="font-size: 15.7px;">{% trans 'Product List' %}</label>
+                    <div style="margin-top: 10px;">
+                        <table id="dataTable" class="table" cellspacing="0" width="100%" style="margin-top: 5px;">
+                            <button type="button" class="btn btn-info btn-send btn-click" style="color: white; float: inline-end; margin-bottom: 5px; padding: 5px;" onclick="selectAll()"><i class="ti-check-box" style="margin-right: 5px;"></i>{% trans 'Select All' %}</button>
+                            <thead>
+                                <th>{% trans 'Product ID' %}</th>
+                                <th>{% trans 'Product Name' %}</th>
+                                <th>{% trans 'Product English Name' %}</th>
+                                <th>{% trans 'Remark' %}</th>
+                                <th>{% trans 'Quantity' %}</th>
+                                <th>{% trans 'Delivery Date' %}</th>
+                                <th>{% trans 'Delivered Quantity' %}</th>
+                                <th>{% trans 'Stock' %}</th>
+                                <th>{% trans 'Deliver Quantity' %}</th>
+                                <th>{% trans 'Select' %}</th>
+                            </thead>
+                            <tbody id="id_product_list">
+                                {% for order_item in delivery_data.order_items %}
+                                    <tr item-id="{{order_item.item_id}}" product-id="{{ order_item.prod_id }}">
+                                        <td>{{ order_item.product_id }}</td>
+                                        <td>{{ order_item.product_chinese_name }}</td>
+                                        <td>{{ order_item.product_english_name }}</td>
+                                        <td>{{ order_item.remarks }}</td>
+                                        <td id="item_qty_{{ order_item.item_id }}">{{ order_item.quantity }}</td>
+                                        <td>{{ order_item.item_delivery_date }}</td>
+                                        <td id="item_delivered_qty_{{ order_item.item_id }}">{{ order_item.item_delivered_qty }}</td>
+                                        <td id="item_stock_{{ order_item.item_id }}">{{ order_item.stock }}</td>
+                                        <td style="width: 10%;"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control item-quantity inputField" name="quantity" id="quantity_{{order_item.item_id}}" value="{{ order_item.item_deliver_qty }}"></td>
+                                        <td style="text-align: center;">
+                                            <input type="checkbox" id="checkProduct_{{ order_item.item_id }}" class="inputField">
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="row gx-4" style="margin-top: 20px; justify-content: space-between;">
+                            <div class="col-md-4">
+                                <div class="div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_note" class="text-normal text-dark label-css">{% trans 'Delivery Note'%}</label>
+                                    <textarea name="delivery_note" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_delivery_note" disabled>{{ delivery_data.delivery_note }}</textarea>
+                                </div>
+                                <div class="div-css" style="justify-content: end;">
+                                    <div id="copyMsg" style="margin-right: 10px;"></div>
+                                    <button type="button" class="btn btn-info btn-send btn-click" style="color: white; padding: 3px 5px 3px 5px;" onclick="copyText()" > <i class="ti-files" style="margin-right: 5px;"></i>{% trans 'Copy' %}</button>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_warehouse_comment" class="text-normal text-dark label-css">{% trans 'Warehouse Comment'%}</label>
+                                    <textarea name="warehouse_comment" cols="20" rows="3" class="form-control inputField" maxlength="1024" id="id_warehouse_comment">{{ delivery_data.warehouse_comment }}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_date" class="text-normal text-dark label-css">{% trans 'Delivery Date'%} <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <div class="input-group-text bgc-white bd bdwR-0">
+                                          <i class="ti-calendar"></i>
+                                        </div>
+                                        <input type="text" name="date" class="form-control bdc-grey-200 start-date inputField"  placeholder="Delivery Date" id="id_delivery_date" value="{{ delivery_data.delivery_date }}" {% if role == "seller" %} disabled {% endif %}>
+                                    </div>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_method" class="text-normal text-dark label-css">{% trans 'Delivery Method'%}</label>
+                                    <input id="id_delivery_method" class="form-control inputField" value="{{ delivery_data.delivery_method }}" disabled>
+                                </div>
+                                <div class="mb-3 div-css">
+                                    <label style="font-weight: 700;" for="id_delivery_fee" class="text-normal text-dark label-css">{% trans 'Delivery Fee'%}</label>
+                                    <input type="text" id="id_delivery_fee" onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control inputField" name="delivery_fee" value="{{ delivery_data.delivery_fee }}">
+                                </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+          </div>
+          
+          <div class="col-md-12">
+           <div class="bgc-white bd bdrs-3 p-20 mB-20">
+             <input type="hidden" name="button_clicked" id="buttonClicked" value="">
+             <div style="display: flex; justify-content: center;">
+                {% if delivery_status != "Delivered" %}
+                    <button type="button" id="submitBtn" onclick="saveDelivery('{{ delivery_data.id }}', 'deliver_and_print')" class="btn btn-success btn-send btn-click" style="color: white;margin-right: 20px;">
+                    {% trans 'Deliver & Print' %}
+                    </button>
+                {% endif %}
+                <button type="button" id="saveBtn" onclick="saveDelivery('{{ delivery_data.id }}', 'save')" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                {% trans 'Save' %}
+                </button>
+                <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitDelivery()">
+                {% trans 'Exit' %}
+                </button>
+             </div>
+           </div>
+         </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="cancelDeliveryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" style="--bs-modal-width: 30%">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="c-grey-900 modal-title">{% trans 'Cancel Delivery'%}</h4>
+          <span>&nbsp-&nbsp</span>
+          <h4 id="cancelDeliveryTitle" class="c-grey-900 modal-title" style="color: gray !important;"></h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="table-container" style="text-align: center;">
+            <span style="font-size: 17px;">The order is delivered, Are you sure want to cancel it?</span>
+            <div style="display: flex; align-items: center; margin-top: 30px; margin-bottom: 10px;">
+                <label style="width: 30%; margin-left: 10px;" for="id_cancel_reason" class="text-normal text-dark">{% trans 'Cancel Reason' %} <span class="text-danger">*</span></label>
+                <textarea name="cancel_reason" style="margin-right: 10px;" cols="20" rows="3" class="form-control" maxlength="1024" id="id_cancel_reason"></textarea>
+            </div>
+          </div>
+          <div id="validationMsg" style="display: none;">
+            <label style="width: 25%;"></label>
+            <span style="color: red;">This field is mandatory.</span>
+          </div>
+          <span id="id_modalMsg" style="display: none;margin-bottom: 5px;"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="saveBtn" onclick="cancelDelivery()" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 5px;">{% trans 'Save' %}</button>
+            <button type="button" class="btn btn-secondary btn-send btn-click" data-bs-dismiss="modal" >{% trans 'Close' %}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    var item_ids = JSON.parse('{{delivery_data.item_ids | safe}}');
+    var changed = false;
+    var role = '{{role}}';
+
+    $(document).ready(function() {
+        $('#saveBtn, #submitBtn').click(function() {
+            $('#buttonClicked').val($(this).attr('id'));  // Set the value of hidden input to the ID of the clicked button
+        });
+
+        $('#saveBtn, #submitBtn').click(function() {
+            $('#buttonClicked').val($(this).attr('id'));  // Set the value of hidden input to the ID of the clicked button
+        });
+
+        var dropdown = document.getElementById('id_delivery_status');
+        var optionToSelect = '{{ delivery_data.delivery_status }}';
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === optionToSelect) {
+                dropdown.options[i].selected = true;
+                break;
+            }
+        }
+
+        {% comment %} var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+
+        var todayDate = yyyy + '-' + mm + '-' + dd;
+
+        // Set the min attribute to today's date
+        document.getElementById('id_delivery_date').setAttribute('min', todayDate); {% endcomment %}
+
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+        var formattedToday = dd + '/' + mm + '/' + yyyy; // Adjust format as per your requirement
+
+        // Initialize the datepicker and restrict past dates
+        if (role !== 'admin') {
+            $('#id_delivery_date').datepicker({
+                startDate: today,   // Disable past dates
+                autoclose: true,    // Close the datepicker after date selection
+                todayHighlight: true // Highlight today's date
+            });
+        } else {
+            $('#id_delivery_date').datepicker({
+                autoclose: true,    // Close the datepicker after date selection
+                todayHighlight: true // Highlight today's date
+            });
+        }
+
+        checkDeliverQty();
+        checkFormValueChange();
+    });
+
+    function copyText() {
+        // Get the text input element
+        var inputElement = document.getElementById("id_delivery_note");
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+                var copyText = inputElement.value;
+                navigator.clipboard.writeText(copyText).then(function() {
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = `<span style="color: green;">Text copied!</span>`;
+            }).catch(function(error) {
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = `<span style="color: red;">Failed to copy text.</span>`;
+            });
+        } else {
+            // Fallback for older browsers
+            inputElement.select(); // Select the text field
+            inputElement.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                // Execute the copy command
+                var successful = document.execCommand('copy');
+                var message = successful ? `<span style="color: green;">Text copied!</span>` : `<span style="color: red;">Failed to copy text.</span>`;
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = message;
+            } catch (err) {
+                $('#copyMsg').show();
+                document.getElementById("copyMsg").innerHTML = `<span style="color: red;">Failed to copy text.</span>`;
+            }
+        }
+        setTimeout(() => {
+            $('#copyMsg').hide();
+        }, 5000);
+    }
+
+    function selectAll() {
+        var items_length = item_ids.length;
+        for (let i = 0; i < items_length; i++) {
+            setTimeout(() => {
+                if (!$('#checkProduct_' + item_ids[i]).is(":disabled")) {
+                    $('#checkProduct_' + item_ids[i]).prop('checked', true);
+                }
+            }, 0)
+        }
+    }
+
+    $('.item-quantity').on("keyup change", function () {
+        checkDeliverQty();
+    })
+
+    $('.btn-click').click(function () {
+        changed = false;
+    })
+
+    window.addEventListener('beforeunload', function(event) {
+        if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function checkFormValueChange() {
+        // Get the form and input fields
+        var form = document.getElementById('productForm');
+        var inputFields = document.getElementsByClassName('inputField');
+
+        // Store the initial values of the input fields
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+
+        // Add event listener for input changes
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    function exitDelivery() {
+        if (changed) {
+            confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+            if (confirmed) {
+                setTimeout(() => {
+                    $('#loader_spin').show();
+                }, 0);
+                changed = false;
+                window.location = '/delivery-list/';
+            }
+        } else {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            changed = false;
+            window.location = '/delivery-list/';
+        }
+    }
+
+    function checkDeliverQty() {
+        $('#id_product_list tr').each(function(index, element) {
+            var item_id = $(this).attr('item-id');
+            var item_stock = parseInt($('#item_stock_' + item_id).text() || 0);
+            var deliver_qty = parseInt($('#quantity_' + item_id).val() || 0);
+            var item_qty = parseInt($('#item_qty_' + item_id).text() || 0);
+            var item_delivered_qty = parseInt($('#item_delivered_qty_' + item_id).text() || 0);
+            var remain_qty = item_qty - item_delivered_qty;
+            if (item_stock < deliver_qty || remain_qty < deliver_qty || remain_qty == 0) {
+                $('#checkProduct_' + item_id).prop("checked", false);
+                $('#checkProduct_' + item_id).prop("disabled", true);
+            } else {
+                $('#checkProduct_' + item_id).prop("disabled", false);
+            }
+        });
+    }
+
+    function saveDelivery(order_id, button) {
+        var productDetails = [];
+        var delivery_address = $('#id_delivery_address').val()
+        var delivery_date = $('#id_delivery_date').val()
+
+        if (!delivery_address || !delivery_date) {
+            alert("Please fill all the mandatory fields.");
+            return;
+        }
+
+        var error_msg = "";
+        $('#id_product_list tr').each(function(index, element) {
+            var item_id = $(this).attr('item-id');
+            var product_id = $(this).attr('product-id');
+            if ($('#checkProduct_' + item_id).is(":checked")) {
+                var deliver_qty = parseInt($('#quantity_' + item_id).val() || 0);
+                if (deliver_qty === 0) {
+                    error_msg = "Selected product quantity must be greater than 0.";
+                    return;
+                }
+                productDetails.push({
+                    'item_id': parseInt(item_id),
+                    'deliver_qty': deliver_qty,
+                    'product_id': product_id,
+                })
+            }
+        });
+
+        if (error_msg) {
+            alert(error_msg);
+            return;
+        }
+
+        if (button === "save") {
+            var warn_msg = `Are you sure you want to deliver selected product${productDetails.length > 1 ? 's' : ''}?`;
+            if (productDetails.length === 0) {
+                {% comment %} alert("Please select product to deliver.");
+                return; {% endcomment %}
+                warn_msg = "You didn't select any product, This will save delivery details except `Delivery Quantity`. Are you sure?"
+            }
+        } else {
+            var warn_msg = `Are you sure you want to deliver and print selected product${productDetails.length > 1 ? 's' : ''}?`;
+            if (productDetails.length === 0) {
+                warn_msg = "You didn't select any product, This will save delivery details except `Delivery Quantity` and print. Are you sure?"
+            }
+        }
+
+        var confirmed = confirm(warn_msg)
+        if (confirmed) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            var formData = new FormData();    
+            formData.append('productDetails', JSON.stringify(productDetails));
+            formData.append('delivery_comment', $('#id_delivery_comment').val());
+            formData.append('delivery_address', delivery_address);
+            formData.append('warehouse_comment', $('#id_warehouse_comment').val());
+            formData.append('delivery_date', delivery_date);
+            formData.append('delivery_fee', $('#id_delivery_fee').val() || 0);
+            formData.append('order_id', order_id);
+            formData.append('delivery_status', $('#id_delivery_status').val());
+            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'save_item_delivery' %}",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.code == 1) {
+                        setTimeout(() => {
+                            $('#loader_spin').hide();
+                        }, 0);
+                        changed = false;
+                        if (button === "save") {
+                            location.reload();
+                        } else {
+                            var generate_pdf_url = '/generate_pdf_for_delivery_note/' + order_id + '/0/';
+                            window.open(generate_pdf_url, '_blank');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                        {% comment %} window.location = '/order-list/'; {% endcomment %}
+                    } else {
+                        setTimeout(() => {
+                            scrollToTop();
+                            $('#loader_spin').hide();
+                            $('#id_Msg').show()
+                            $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                        }, 0);
+                    }
+                    setTimeout(() => {
+                        $('#id_Msg').hide();
+                    }, 5000);
+                },
+                error: function(error) {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                    }, 0);
+                }
+            });
+        }
+    }
+
+    function downloadDeliveryNote(deliver_id, order_id, deliver_type) {
+        var generate_pdf_url = '/generate_pdf_for_delivery_note/' + order_id + '/' + deliver_id + '/';
+        if (deliver_type == "after sales") {
+            generate_pdf_url = '/after_sales_generate_pdf_for_delivery_note/' + order_id + '/' + deliver_id + '/';
+        }
+        window.open(generate_pdf_url, '_blank');
+    }
+
+    var cancel_deliver_id = "";
+    function showcancelDeliveryModal(deliver_id, delivery_id) {
+        cancel_deliver_id = deliver_id;
+        $('#id_cancel_reason').val("");
+        $('#validationMsg').hide();
+        $('#cancelDeliveryModal').modal("show");
+        $('#cancelDeliveryTitle').html(delivery_id);
+    }
+
+    function cancelDelivery() {
+        var cancel_reason = $('#id_cancel_reason').val();
+        if (!cancel_reason) {
+            $('#validationMsg').show();
+            setTimeout(() => {
+                $('#validationMsg').hide();
+            }, 5000);
+            return;
+        }
+
+        setTimeout(() => {
+            $('#loader_spin').show();
+        }, 0);
+        var formData = new FormData();    
+        formData.append('cancel_deliver_id', cancel_deliver_id);
+        formData.append('cancel_delivery_reason', $('#id_cancel_reason').val());
+        
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cancel_delivered_order' %}",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.code == 1) {
+                    setTimeout(() => {
+                        $('#loader_spin').hide();
+                    }, 0);
+                    changed = false;
+                    location.reload();
+                } else {
+                    setTimeout(() => {
+                        scrollToTop();
+                        $('#loader_spin').hide();
+                        $('#id_modalMsg').show()
+                        $('#id_modalMsg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                    }, 0);
+                }
+                setTimeout(() => {
+                    $('#id_modalMsg').hide();
+                }, 5000);
+            },
+            error: function(error) {
+                setTimeout(() => {
+                    $('#loader_spin').hide();
+                }, 0);
+            }
+        });
+        }
+
+    $('#cancelledDeliveryInfoLabel').on("click", function() {
+        $('#cancelledDeliveryInfo').toggle("display-hide");
+    })
+
+    $('#DeliveryInfoLabel').on("click", function() {
+        $('#DeliveryInfo').toggle("display-hide");
+    })
+
+    $('#productForm').on('submit', function(event) {
+        event.preventDefault();
+
+        if (this.checkValidity()) {
+            setTimeout(() => {
+                $('#loader_spin').show();
+            }, 0);
+            this.submit();
+        }
+    });
+
+
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+</script>
+{% endblock javascripts %}

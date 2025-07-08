@@ -1,0 +1,226 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'Voucher details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+    .bold-label {
+        font-weight: bold;
+    }
+
+    .newline-label {
+        display: block;
+        margin-top: 5px;
+        /* Adjust the margin as needed */
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container">
+            <div style="align-items: center">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'Voucher Details'%}
+                </h3>
+            </div>
+            <div class="row gx-4">
+                {% if voucher.product_combo %}
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Product No' %}</label>
+                        <label>{{voucher.product_combo.product.product_id}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Chinese Name' %}</label>
+                        <label>{{voucher.product_combo.product.product_chinese_name}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'English Name' %}</label>
+                        <label>{{voucher.product_combo.product.product_english_name}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Minimum Quantity' %}</label>
+                        <label>{{voucher.product_combo.min_quantity}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Maximum Quantity' %}</label>
+                        <label>{{voucher.product_combo.max_quantity}}</label>
+                    </div>
+                </div>
+                {% endif %}
+                {% if discount_voucher %}
+                <div class="mb-3">
+                    <label class="form-label bold-label newline-label">{% if voucher.voucher_type == "Free Gift" %}
+                        {% trans 'Gift List' %}{% else %}{% trans 'Eligible Products' %}{% endif %}</label>
+                </div>
+                <table class="table" cellspacing="0" width="100%">
+                    <thead>
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Chinese name' %}</th>
+                        <th>{% trans 'English name' %}</th>
+                        <th>{% trans 'Supplier Product Name' %}</th>
+                    </thead>
+                    <tbody>
+                        {% for product in only_available_to %}
+                        <tr>
+                            <td>{{ product.product_id }}</td>
+                            <td>{{ product.product_chinese_name }}</td>
+                            <td>{{ product.product_english_name }}</td>
+                            <td>{{ product.supplier_product_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if discount_voucher.quantity %}
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% if voucher.voucher_type == "Free Gift" %}
+                            {% trans 'Total Quantity' %}{% else %}{% trans 'Quantity' %}{% endif %}</label>
+                        <label>{{discount_voucher.quantity}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Quantity Condition' %}</label>
+                        <label>{{discount_voucher.quantity_trigger}}</label>
+                    </div>
+                </div>
+                {% endif %}
+                {% if discount_voucher.price %}
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% if voucher.voucher_type == "Free Gift" %}
+                            {% trans 'Total Price' %}{% else %}{% trans 'Price' %}{% endif %}</label>
+                        <label>{{discount_voucher.price}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Price Condition' %}</label>
+                        <label>{{discount_voucher.amount_trigger}}</label>
+                    </div>
+                </div>
+                {% endif %}
+                {% if discount_voucher.category %}
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Category' %}</label>
+                        <label>{{discount_voucher.category}}</label>
+                    </div>
+                </div>
+                {% endif %}
+                {% if discount_voucher.no_of_gift %}
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'No of Gifts' %}</label>
+                        <label>{{discount_voucher.no_of_gift}}</label>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Voucher ID' %}</label>
+                        <label>{{voucher.voucherid}}</label>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Chinese Name' %}</label>
+                        <label>{{voucher.chinese_name}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'English Name' %}</label>
+                        <label>{{voucher.english_name}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Highlights' %}</label>
+                        <label>{{voucher.voucher_highlights}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Details' %}</label>
+                        <label>{{voucher.voucher_details}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Type' %}</label>
+                        <label>{{voucher.voucher_type}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Discount Type' %}</label>
+                        <label>{{voucher.discount_type}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Discount Value' %}</label>
+                        <label>{{voucher.discount_value}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Quota' %}</label>
+                        <label>{{voucher.quota}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Start Date' %}</label>
+                        <label>{{voucher.start_date}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'End Date' %}</label>
+                        <label>{{voucher.end_date}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Status' %}</label>
+                        <label>{{voucher.status}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Created By' %}</label>
+                        <label>{{voucher.created_by}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Created Date' %}</label>
+                        <label>{{voucher.created_date}}</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label bold-label newline-label">{% trans 'Last Modified' %}</label>
+                        <label>{{voucher.last_modified_date}}</label>
+                    </div>
+                </div>
+            </div>
+            {{ msg }}
+        </div>
+    </div>
+</main>
+{% endblock content %} {% block javascripts %}
+{% endblock javascripts %}

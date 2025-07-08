@@ -1,0 +1,85 @@
+{% extends "layouts/base.html" %} {% load i18n %} {% block title %} {% trans 'In Stock Details'%}
+{% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+    <div id="mainContent">
+        <div class="container-fluid">
+            <div style="align-items: center">
+                <h3 class="c-grey-900 mB-20" style="text-align: center">
+                    {% trans 'In Stock Details'%}
+                </h3>
+            </div>
+            <div >
+                <div class="m 2px">
+                    <label>{% trans 'Product List'%}:</label>
+                </div>
+
+                <table id="dataTable" class="table" cellspacing="0" width="100%">
+                    <thead>
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Name' %}</th>
+                        <th>{% trans 'English Name' %}</th>
+                        <th>{% trans 'Supplier Product Name' %}</th>
+                        <th>{% trans 'Supplier Name' %}</th>
+                        <th>{% trans 'Supplier Code'%}</th>
+                        <th>{% trans 'Quantity' %}</th>
+                        {% if order.status == "Partially Delivered" %}
+                            <th>{% trans 'Remaining Quantity' %}</th> 
+                        {% endif %}    
+                        <th>{% trans 'Damage Quantity'%}</th>
+                        <th>{% trans 'Delivered Quantity'%}</th>
+                    </thead>
+                    <tbody>
+                        {% for product in order.purchaseitems %}
+                        <tr>
+                            <td>{%if product.product_id %}{{ product.product_id }}{% else %}-{% endif %}</td>
+                            <td>{%if product.product_chinese_name %}{{ product.product_chinese_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.product_english_name %}{{ product.product_english_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.supplier_product_name %}{{ product.supplier_product_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.supplier_name %}{{ product.supplier_name }}{% else %}-{% endif %}</td>
+                            <td>{%if product.supplier_code %}{{ product.supplier_code }}{% else %}-{% endif %}</td>
+                            <td>{%if product.purchase_quantity %}{{ product.purchase_quantity }}{% else %}-{% endif %}</td>
+                            {% if order.status == "Partially Delivered" %}
+                                <td>{%if product.remaining_quantity %}{{ product.remaining_quantity }}{% else %}-{% endif %}</td>
+                            {% endif %}
+                            <td>{%if product.damage_quantity %}{{ product.damage_quantity }}{% else %}-{% endif %}</td>
+                            <td>{%if product.delivered_quantity %}{{ product.delivered_quantity }}{% else %}-{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>{% trans 'Status'%}</td>
+                            <td>{{order.status}}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Delivery Date'%}</td>
+                            <td>{{order.delivery_date}}</td>
+                        </tr>
+                        <tr>
+                            <td>{% trans 'Remarks'%}</td>
+                            <td>{% if order.remarks %}{{order.remarks}}{% endif %}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% if order.status != "Delivered" %}
+                    <div style="display: flex; justify-content: center;">
+                        <a
+                        class="btn btn-primary rounded btn-send"
+                        href="{% url 'in-stock-delivery' order.id %}"
+                        >
+                        {% trans 'Confirm Delivery' %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %} {% block javascripts %}
+{% endblock javascripts %}

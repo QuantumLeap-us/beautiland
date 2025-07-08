@@ -1,0 +1,137 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Category - Subcategory'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- ### $App Screen Content ### -->
+<main class='main-content bgc-grey-100'>
+  <div id='mainContent'>
+    <div class="container-fluid">
+      {% comment %} <h4 class="c-grey-900 mT-10 mB-30">Student Management </h4> {% endcomment %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bgc-white bd bdrs-3 p-20 mB-20">
+            {% if error_msg %}
+                <div class="alert alert-danger" role="alert"><span>{{error_msg|safe}}</span></div>
+            {% endif %}
+            {% if success_msg %}
+                <div class="alert alert-success" role="alert"><span>{{success_msg}}</span></div>
+            {% endif %}
+            <h4 class="c-grey-900 mB-20" style="text-align: center;">{% trans "Add Category - Subcategory" %}</h4>
+            <div class="pb-3 ">
+              <div class="bgc-white p-20 bd">
+                <div class="mT-10">
+                  <form enctype="multipart/form-data" action="{% url 'category' %}" method="post" id="myForm">
+                      {% csrf_token %}
+                    <div class="row justify-content-center">
+                      <div class="mb-3 col-md-6 div-css">
+                        <label class="label-css" for="id_name" class="text-normal text-dark" style="width: 20%;">{% trans 'Name'%} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" id="id_name" required>    
+                        <span class="text-error">{{ form.name.errors }}</span>
+                      </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                      <div class="mb-3 col-md-6 div-css">
+                        <label class="label-css" for="id_type" class="text-normal text-dark" style="width: 20%;">{% trans 'Type'%} <span class="text-danger">*</span></label>
+                        {{form.type}}
+                        <span class="text-error">{{ form.type.errors }}</span>
+                      </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                      <div class="mb-3 col-md-6 div-css">
+                        <label class="label-css" for="id_parent_id" class="text-normal text-dark" style="width: 20%;">{% trans 'Parent'%}</label>
+                        {{form.parent_id}}
+                        <span class="text-error">{{ form.parent_id.errors }}</span>
+                      </div>
+                    </div>          
+                      
+                    <div class="row justify-content-center">
+                      <label class="col-sm-2 col-form-label"></label>
+                      <div class="mb-3 col-md-6 div-css">
+                        <button class="btn-primary btn" style="color: white;">{% trans 'Save'%}</button>
+                      </div>
+                    </div>   
+                  </div>
+                  </form>
+                </div>
+            </div>
+            <h4 class="c-grey-900 my-3" style="text-align: center;">{% trans "Category - Subcategory List" %}</h4>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                  <table id="dataTable" class="table" cellspacing="0" width="100%" >
+                    <thead>
+                      <tr>
+                        <th scope="col">{% trans 'Created Date'%}</th>
+                        <th scope="col">{% trans 'Name'%}</th>
+                        <th scope="col">{% trans 'Type'%}</th>
+                        <th scope="col">{% trans 'Parent'%}</th>
+                        {% if role != 'seller' %}
+                          <th scope="col">{% trans 'Action'%}</th>
+                        {% endif %}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for category in categories %}
+                        <tr>
+                          <td>{{category.created_date}}</td>
+                          <td>{{category.name}}</td>
+                          <td>{{category.type}}</td>
+                          <td>{% if category.parent__name %} {{category.parent__name}} ({{category.parent__type}}) {% else %} - {% endif %}</td>
+                          {% if role != 'seller' %}
+                            <td>
+                              <div>
+                                  <form action="{% url 'category-delete' category.id %}" method="post" onsubmit="return confirmDelete()" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm mR-10">
+                                    <i class="text-light ti-trash"></i>
+                                    </button>
+                                  </form>
+                              </div>
+                            </td>
+                          {% endif %}
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock content %}
+
+{% block javascripts %}
+<script>
+  function confirmDelete() {
+    var confirmed = confirm("Are you sure want to delete?")
+    if (!confirmed) {
+        event.preventDefault(); // Prevent the form from submitting
+    }
+  }
+        
+  $(document).ready(function() {
+    if ($.fn.DataTable.isDataTable('#dataTable')) {
+      // If DataTable is already initialized, destroy it
+      $('#dataTable').DataTable().destroy();
+    }
+
+    // Reinitialize DataTable with default sorting
+    $('#dataTable').DataTable({
+      "order": [[0, "desc"]],
+      "pageLength": 100,
+    });
+  });
+
+</script>
+{% endblock javascripts %}

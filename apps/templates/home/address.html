@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Add Address'%} {% endblock title %}
+
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} <main class='main-content bgc-grey-100'>
+    <div id='mainContent'>
+      <div class="container-fluid">
+        {% comment %} <h4 class="c-grey-900 mT-10 mB-30">Student Management </h4> {% endcomment %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                <h3 class="c-grey-900 mB-20" style="text-align: center;">{% trans 'Address'%}</h3>
+          
+            <form method="post" action="">
+                {% csrf_token %}
+                
+                <div class="row gx-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" class="text-normal text-dark">{% trans 'Address Line'%} <span class="text-danger">*</span> :</label>
+                            <textarea type="text" class="form-control" name="address_line" id="id_address_line"></textarea>
+                                <span class="text-danger">{{ form.address_line.errors }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <button type="submit" class="btn btn-primary rounded btn-send " style="color: white;">{% trans 'Submit'%}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,1238 @@
+{% extends "layouts/base.html" %} 
+{% load i18n %} {% block title %}
+{% trans 'Create Order'%} {% endblock title %}
+{% csrf_token %}
+<!-- Specific CSS goes HERE  -->
+{% block stylesheets %}
+<style>
+    .add-btn {
+        background-color: var(--bs-btn-hover-bg);
+        border-color: var(--bs-btn-hover-border-color);
+        cursor: pointer;
+    }
+</style>
+{% endblock stylesheets %} {% block content %}
+<main class="main-content bgc-grey-100">
+  <div id="mainContent">
+    <div class="container-fluid">
+      <div style="align-items: center">
+        <h3 class="c-grey-900 mB-20" style="text-align: center">{% trans 'Create Order'%}</h3>
+        <span id="id_Msg" style="display: none;"></span>
+          <div style="display: grid">
+            <div style="display: flex; justify-self: flex-end; margin-bottom: 15px ">
+              <input name="search" id="id_search" style="width: auto;" class="form-control"  placeholder="Search Customer">
+              <button type="button" class="btn btn-sm btn-primary" style="color: white; margin-left: 5px; border-radius: 0.375rem;" onclick="searchCustomer()"><i class="ti-search"></i></button>
+              <!-- <button type="button" class="btn btn-sm btn-primary" style="color: white; margin-left: 10px" onclick="showTable()"><label>{% trans 'Create Customer' %}</label></button> -->
+            </div>
+            <form id="orderForm" method="post">
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <label style="font-size: 15.7px;">{% trans 'Basic Information' %}</label>
+              <div style="border-top: 1px solid; margin-top: 10px; max-height: 400px; overflow-y: auto;" id="resultContainer">
+                <table class="table">
+                  <thead class="sticky-thead">
+                    <tr>
+                      <th>{%trans "Customer ID"%}</th>
+                      <th>{%trans "Customer Name"%}</th>
+                      <th>{%trans "Company Name"%}</th>
+                      <th>{%trans "Phone Number"%}</th>
+                      <th>{% trans "Add" %}</th>
+                    </tr>
+                  </thead>
+                  <tbody id="resultContainerBody">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class='table mt-3 bgc-white bd bdrs-3 p-20 mB-20' style="border-top: 1px solid;"> 
+              <table class='table' id="details">
+                <tbody>
+                  <tr>
+                    <th>{%trans 'Customer ID'%}</th>
+                    <td>
+                      <label id="customer_id_div" ></label>
+                    </td>
+                    <th>{%trans 'Mobile'%} <span class="text-danger">*</span></th>
+                    <td id="mobile_div">
+                      <div>
+                        {{customerform.phone_number}}
+                      </div>
+                        <span class="text-danger">{{ customerform.errors.phone_number }}</span>
+                    </td>
+                    <th>{%trans 'Order Date'%}</th>
+                    <td id="order_date_div">
+                      <div class="input-group">
+                        <div class="input-group-text bgc-white bd bdwR-0">
+                          <i class="ti-calendar"></i>
+                        </div>
+                        {{orderform.date}}
+                      </div>
+                    </td>  
+                    <th style="padding: 11px;">{%trans 'Delivery Address'%} <span class="text-danger">*</span></th>
+                    <td id="delivery_address_div">
+                        {{orderform.delivery_address}}
+                        <span class="text-danger">{{ orderform.delivery_address.errors }}</span>
+                        <div id="addressDropdown"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>{%trans 'Company Name'%} <span class="text-danger">*</span></th>
+                    <td id="company_name_div">
+                        {{customerform.company_name}}
+                        <span class="text-danger">{{ customerform.company_name.errors }}</span>
+                    </td>
+                    <th>{%trans 'Sales Person'%}</th>
+                    <td>
+                      <div id="salesPersonDropdown">
+                        <select class="form-control inputField" name="sales_person" id="id_sales_person" {% if role == "seller" %} disabled {% endif %}>
+                            <option value="">-------</option>
+                            {% for sale_person in sales_person_data %}
+                                <option value="{{sale_person.id}}">{{ sale_person.full_name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="hidden" name="sales_person" id="id_sales_person_hidden" value="">
+                      </div>
+                    </td>
+                    <th>{%trans 'Payment Method'%}</th>
+                    <td>
+                        {{orderform.payment_method}}
+                        <span class="text-danger">{{ orderform.payment_method.errors }}</span>
+                    </td>
+                    <th>{%trans 'Customer Comments'%}</th>
+                    <td id="customer_comments_div">
+                      {{customerform.customer_comments}}
+                      <span class="text-danger">{{ customerform.customer_comments.errors }}</span>
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>{%trans 'Customer Name'%} <span class="text-danger">*</span></th>
+                    <td id="customer_name_div">
+                        {{customerform.name}}
+                        <span class="text-danger">{{ customerform.name.errors }}</span>
+                    </td>
+                    <th>{%trans 'Currency'%}</th>
+                    <td>
+                        {{orderform.currency}}
+                        <span class="text-danger">{{ orderform.currency.errors }}</span>
+                    </td>
+                    <th>{%trans 'Delivery Method'%}</th>
+                    <td>
+                        {{orderform.delivery_method}}
+                        <span class="text-danger">{{ orderform.delivery_method.errors }}</span>
+                    </td> 
+                    <th>{%trans 'Delivery Comments'%}</th>
+                    <td id="delivery_comments_div">
+                      {{customerform.delivery_comments}}
+                      <span class="text-danger">{{ customerform.delivery_comments.errors }}</span>
+                    </td>
+                    
+                  </tr>
+                  <tr>
+                    <th>{% trans 'Type' %}</th>
+                    <td id="type_div">
+                      {{orderform.type}}
+                      <span class="text-danger">{{ orderform.type.errors }}</span>
+                    </td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <label style="font-size: 15.7px;">{% trans 'Product List'%}:</label>
+              <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                  <div>
+                    <table id="dataTable" class="table" cellspacing="0" width="100%">
+                      <thead>
+                        <th>{% trans 'Product No' %}</th>
+                        <th>{% trans 'Product Name' %}</th>
+                        <th>{% trans 'Product English Name' %}</th>
+                        <th>{% trans 'Specification' %}</th>
+                        <th>{% trans 'Currency' %}</th>
+                        <th>{% trans 'Selling Price' %}</th>
+                        <th>{% trans 'Stock' %}</th>
+                        <th>{% trans 'Add' %}</th>
+                    </thead>
+                    <tbody id="id_product_list">
+                      {% for product in products %}
+                      <tr id="{{product.id}}">
+                        <td id="prod_no_{{product.id}}">{{ product.product_id }}</td>
+                        <td>{{ product.product_chinese_name }}</td>
+                        <td>{{ product.product_english_name }}</td>
+                        <td>{{ product.specification }}</td>
+                        <td id="prod_currency_{{product.id}}">{{ product.currency }}</td>
+                        <td id="product_selling_price_{{product.id}}">{{ product.selling_price }}</td>
+                        <td id="product_stock_{{product.id}}">{{ product.stock }}</td>
+                        <td><button type="button" id="addProduct_{{product.id}}" onclick="addToProductList('{{product.id}}', '{{ product.product_id }}', '{{product.product_chinese_name}}', '{{product.product_english_name}}')"
+                            class="btn btn-primary btn-sm" style="pointer-events: auto;"><i class="ti-plus" style="color: white;"></i></button>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+      
+            <div class="bgc-white bd bdrs-3 p-20 mB-20">
+              <label style="font-size: 15.7px;">{% trans 'Order List'%}:</label>
+              <div style="border-top: 1px solid; margin-top: 10px;">
+                <table class="table">
+                    <thead>
+                      <th>{% trans 'Product No' %}</th>
+                      <th>{% trans 'Product Name' %}</th>
+                      <th>{% trans 'Product English Name' %}</th>
+                      <th>{% trans 'Remarks' %}</th>
+                      <th>{% trans 'Currency' %}</th>
+                      <th>{% trans 'Selling Price' %}</th>
+                      <th>{% trans 'Quantity' %}</th>
+                      <th>{% trans 'Sub Total' %}</th>
+                      <th>{% trans 'Action' %}</th>
+                    </thead>
+                    <tbody id="orderList">
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                          <th colspan="5"></th>
+                          <th>{% trans 'Total Product Price'%}</th>
+                          <td><span id="totalProductPrice"></span></td>
+                          <th></th>
+                          <th></th>
+                      </tr>
+                      <tr>
+                          <th colspan="5"></th>
+                          <th>{% trans 'Special Discount'%}</th>
+                          <td>
+                            {{orderform.manual_cost}}
+                            <span class="text-danger">{{ orderform.errors.manual_cost}}</span>
+                          </td>
+                          <th></th>
+                          <th></th>
+                      </tr>
+                      <tr>
+                          <th colspan="5"></th>
+                          <th>{% trans 'Total Price(After Discount)'%}</th>
+                          <td>
+                            <span id="id_total_cost"></span>
+                          </td>
+                          <th></th>
+                          <th></th>
+                      </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- <div>
+              <label>{% trans 'Voucher Option'%}:</label>
+              <table class="table" cellspacing="0" width="100%" style="margin-top: 10px;">
+                <thead>
+                  <th>{% trans 'Voucher Code' %}</th>
+                  <th>{% trans 'Voucher Name' %}</th>
+                  <th>{% trans 'Voucher English Name' %}</th>
+                  <th>{% trans 'Voucher Type' %}</th>
+                  <th>{% trans 'Discount Type' %}</th>
+                  <th>{% trans 'Discount Value' %}</th>
+                  <th>{% trans 'Valid Date' %}</th>
+                  <th>{% trans 'Action' %}</th>
+              </thead>
+              <tbody id="id_vouchers">
+                {% for voucher in vouchers %}
+                <tr id="{{voucher.id}}" product_id="{{voucher.product_id}}">
+                  <td>{{ voucher.voucherid }}</td>
+                  <td>{{ voucher.chinese_name }}</td>
+                  <td>{{ voucher.english_name }}</td>
+                  <td id="voucherType_{{voucher.id}}">{{ voucher.voucher_type }}</td>
+                  <td id="discountType_{{voucher.id}}">{{ voucher.discount_type }}</td>
+                  <td id="discountValue_{{voucher.id}}">{{ voucher.discount_value }}</td>
+                  <td>{{ voucher.valid_date }}</td>
+                  <td>
+                    <input voucher_product_id="{{voucher.product_id}}" class="voucher-checkbox" id="voucherCheck_{{voucher.id}}" type="checkbox">
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              </table>
+            </div> -->
+
+              {% csrf_token %}
+              <div class="row gx-4">
+                <!-- <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label" class="text-normal text-dark" style="font-weight: bold; color: black;">{% trans 'Delivery Fee'%}</label>
+                    {{orderform.delivery_cost}}
+                  </div>
+                  <span class="text-danger">{{ orderform.errors.delivery_cost }}</span>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label" class="text-normal text-dark" style="font-weight: bold; color: black;">{% trans 'Other Fee'%}</label>
+                    {{orderform.other_cost}}
+                  </div>
+                  <span class="text-danger">{{ orderform.errors.other_cost }}</span>
+                </div> -->
+                <!-- <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label" class="text-normal text-dark" style="font-weight: bold; color: black;">{% trans 'Special Discount'%}</label>
+                    {{orderform.manual_cost}}
+                  </div>
+                  <span class="text-danger">{{ orderform.errors.manual_cost}}</span>
+                </div>
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label" class="text-normal text-dark" style="font-weight: bold; color: black;">{% trans 'Total Price(After Discount)'%}</label>
+                    {{orderform.total_cost}}
+                  </div>
+                  <span class="text-danger">{{ orderform.errors.total_cost}}</span>
+                </div> -->
+                <!-- <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label" class="text-normal text-dark" style="font-weight: bold; color: black;">{% trans 'Delivery Date'%}</label>
+                    <div class="input-group">
+                      <div class="input-group-text bgc-white bd bdwR-0">
+                        <i class="ti-calendar"></i>
+                      </div>
+                      {{orderform.delivery_date}}
+                    </div>
+                  </div>
+                  <span class="text-danger">{{ orderform.errors.delivery_date }}</span>
+                </div> -->
+                {% if role == "seller" %}
+                <div class="col-md-3">
+                  <div class="mb-3">
+                    <label class="form-label" class="text-normal text-dark" style="font-weight: bold; color: black;">{% trans 'Approval Comments'%}</label>
+                    {{orderform.approval_comments}}
+                  </div>
+                  <span class="text-danger">{{ orderform.errors.approval_comments }}</span>
+                </div>
+                {% endif %}
+              </div>
+              <input type="hidden" name="productDetails" id="orderDetailsInput" value="" />
+              <input type="hidden" name="total_quantity" id="totalQuantityInput" value="" />
+              <input type="hidden" name="total_product_cost" id="totalCostInput" value="" />
+              <input type="hidden" name="total_cost_after_discount" id="totalCostAfterDiscount" value="" />
+              <input type="hidden" name="selected_customer" id="selectedCustomerInput" value="">
+              <input type="hidden" name="is_submit" id="id_is_submit" value="">
+              <div class="col-md-12">
+                <div class="bgc-white bd bdrs-3 p-20 mB-20">
+                  <div style="display: flex; justify-content: center;">
+                    <button type="submit" id="submitBtn" class="btn btn-success btn-send" style="color: white;margin-right: 20px;" onclick="return confirmSubmitOrder()">
+                      {% trans 'Submit' %}
+                    </button>
+                    <button type="submit" id="saveBtn" class="btn btn-primary btn-send btn-click" style="color: white;margin-right: 20px;">
+                      {% trans 'Save' %}
+                    </button>
+                    <button type="button" id="exitBtn" class="btn btn-danger" style="color: white" onclick="exitOrder()">
+                      {% trans 'Exit' %}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {% comment %} </div> {% endcomment %}
+            </form>
+            {{msg}}
+          </div>
+
+    </div>
+  </div>
+</main>
+{% endblock content %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    var logged_in_user_id = '{{logged_in_user_id}}';
+    var can_edit_selling_price = '{{can_edit_selling_price}}';
+    var changed = false;
+
+    $('#loader_spin').hide();
+
+    $('#id_search').on("keyup", function (e) {
+      if (e.keyCode == 13) {
+        searchCustomer();
+      }
+    })
+
+    var phoneInput = document.querySelector('#id_phone_number');
+    phoneInput.addEventListener('keypress', function(event) {
+        var allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace', 'ArrowLeft', 'ArrowRight', 'Delete', 'Tab', 'Home', 'End'];
+        if (!allowedKeys.includes(event.key)) {
+            event.preventDefault();
+        }
+    });
+
+    $('#resultContainerBody').html(`<tr><td colspan="5" style="text-align: center;">Search to view customer details.</td></tr>`);
+    $('#resultContainer').show();
+
+    var currency_val = $("#id_currency").val();
+    var customer_id_addresss = {};
+    function searchCustomer() {
+        search = document.getElementById("id_search").value;
+        if (!search){
+            {% comment %} alert("Please write something in search!"); {% endcomment %}
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'search-customer' %}",
+            data: JSON.stringify({
+              keyword: search,
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+            }),
+            success: function(response) {
+              if (response.code == 1) {
+                customer_id_addresss = {};
+                var html = "";
+                var customer_address = response.customer_address;
+                var res_length = customer_address.length;
+                for (let index = 0; index < res_length; index++) {
+                  var id = customer_address[index].id;
+                  var customer_id = customer_address[index].customer_id;
+                  var customer_name = (customer_address[index].name).replace("'", "\\'");
+                  var company_name = (customer_address[index].company_name).replace("'", "\\'");
+                  var phone_number = customer_address[index].phone_number;
+                  var customer_comments = (customer_address[index].customer_comments).replace("'", "\\'");
+                  var delivery_comments = (customer_address[index].delivery_comments).replace("'", "\\'");
+                  var address_line = customer_address[index].address_line;
+                  var sale_person = customer_address[index].sale_person;
+                  customer_id_addresss[customer_id] = address_line;
+                  html += `<tr><td>${customer_id}
+                          </td><td>${customer_name}</td>><td>${company_name}</td><td>${phone_number}</td><td><button type="button" class="btn btn-primary btn-sm" onclick="addCutomerDetails('${customer_id}', '${customer_name}',
+                          '${company_name}', '${phone_number}', '${customer_comments}', '${delivery_comments}', '${sale_person}')"><i class="ti-plus" style="color: white;"</i></button></td></tr>`
+                }
+                if (html) {
+                  $('#resultContainerBody').html(html);
+                  $('#resultContainer').show();
+                } else {
+                  $('#resultContainerBody').html(`<tr><td colspan="5" style="text-align: center;">Data is not available.</td></tr>`);
+                  $('#resultContainer').show();
+                }
+              } else {
+                $('#resultContainerBody').html(`<tr><td colspan="5" style="text-align: center;">Data is not available.</td></tr>`);
+                $('#resultContainer').show();
+              }
+            },
+            error: function(error) {
+              console.error('Error:', error);
+            }
+        });
+    }
+
+    function addCutomerDetails(customer_id, customer_name, company_name, phone_number, customer_comments, delivery_comments, sale_person) {
+        setTimeout(() => {
+            detailstable = document.getElementById("details");
+            detailstable.style.display="table";
+            document.getElementById('selectedCustomerInput').value = JSON.stringify(customer_id);
+            var address_dropdown_html = `<option value="">-------</option>`;
+            if (customer_id_addresss.hasOwnProperty(customer_id)) {
+              var customer_add = customer_id_addresss[customer_id];
+              var customer_add_length = customer_add.length;
+              for (let i = 0; i < customer_add_length; i++) {
+                if (i == 0) {
+                  address_dropdown_html += `<option value="${customer_add[i]}" selected>${customer_add[i]}</option>`;
+                } else {
+                  address_dropdown_html += `<option value="${customer_add[i]}">${customer_add[i]}</option>`;
+                }
+              }
+            }
+            $('#id_delivery_address').remove();
+            $('#addressDropdown').html(`<select class="form-control" name="delivery_address" id="id_delivery_address_drop">${address_dropdown_html}</select>`);
+            $('#customer_id_div').text(customer_id);
+            $('#company_name_div').html(`<label>${company_name}<label>`);
+            $('#customer_name_div').html(`<label>${customer_name}<label>`);
+            $('#mobile_div').html(`<label>${phone_number}<label>`);
+            $('#customer_comments_div').html(`<label>${customer_comments}<label>`);
+            // $('#delivery_comments_div').html(`<label>${delivery_comments}<label>`);
+            $('#id_delivery_comments').val(delivery_comments);
+            // $('#id_sales_person').html(`<label>${sale_person}<label>`);
+            var dropdown = document.getElementById('id_sales_person');
+            var optionToSelect = sale_person;
+            
+            for (var i = 0; i < dropdown.options.length; i++) {
+                if (dropdown.options[i].text === optionToSelect) {
+                    dropdown.options[i].selected = true;
+                    $("#id_sales_person_hidden").val(dropdown.options[i].value);
+                    break;
+                } else {
+                  dropdown.options[i].selected = false;
+                }
+            }
+        }, 0);
+        
+    }
+
+    function showTable() {
+      detailstable = document.getElementById("details");
+      detailstable.style.display="table";
+    }
+
+    var productDetails = [];
+    var existed_product_ids = [];
+    var total_quantity = 0;
+    var total_product_cost = 0;
+    var total_cost = 0;
+
+    function addToProductList(productId, productNo, ProductName, productEnglishName) {
+      changed = true;
+      $('#addProduct_' + productId).hide();
+      var currency = $('#prod_currency_' + productId).text() || 'HKD';
+      var sellingPrice = $('#product_selling_price_' + productId).text() || 0;
+      // $('#addProduct_' + productId).attr('disabled', 'disabled');
+      // $('#addProduct_' + productId).css('cursor', 'not-allowed');
+      var existingRow = document.getElementById(`${productId}_row`);
+      if (existingRow) {
+        alert("Product is already in the order list.");
+        return;
+      }
+  
+      var orderList = document.getElementById("orderList");
+      orderList.insertAdjacentHTML(
+          "beforeend",
+          `<tr id="${productId}_row">
+            <td id="test_${productId}">${productNo}</td>
+            <td>${ProductName}</td>
+            <td>${productEnglishName}</td>
+            <td><input type="text" class="form-control inputField" name="remarks" id="${productId}_remarks"></td>
+            <td><span id="currency_${productId}">${currency}</span></td>
+            <td style="width: 12%;"><input type="text" id="sellingPrice_${productId}" min=1 onpaste="handleTextPaste(event)" onkeypress="return isValidInput(event)" class="form-control order-selling-price inputField" name="selling_price" value="${sellingPrice}"></td>
+            <td style="width: 12%;" id="${productId}_quantity_div"><input type="number" min=1 onpaste="handleIntTextPaste(event)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control order-quantity inputField" name="quantity" id="${productId}_quantity"></input></td>
+            <td><span id="${productId}_sub_total_div"></span></td>
+            <td>
+              <div class="display: flex; justify-content: space-evenly;">
+                <button style="margin: 2px;" id="${productId}_confirmproduct" type="button" class="btn btn-success btn-sm" onclick="createOrderList('${productId}')">
+                  <i style="color: white;" class="ti-check"></i>
+                </button>
+                <button style="margin: 2px;" type="button" class="btn btn-danger btn-sm" onclick=deleteProduct('${productId}')>
+                  <i class="ti-trash" style="color: white;"></i>
+                </button>
+              </div>
+            </td>
+          </tr>`
+      );
+
+      setTimeout(() => {
+        if (can_edit_selling_price == 'False') {
+<!--          $('#sellingPrice_' + productId).attr('disabled', 'disabled');-->
+        }
+      }, 0);
+    }
+
+    function createOrderList(productId) {
+        var quantity = parseFloat(document.getElementById(productId + "_quantity").value);
+        var product_stock = parseInt($('#product_stock_' + productId).text()) || 0;
+        // if (quantity > product_stock) {
+        //   alert("Quantity can not be greater than product " + $('#prod_no_' + productId).text() + " stock");
+        //   return false
+        // }
+        var sellingPrice = parseFloat(document.getElementById("sellingPrice_" + productId).value);
+        var remarks = document.getElementById(productId + "_remarks").value;
+        
+        if (isNaN(quantity) || quantity === 0 || quantity < 0) {
+          alert("You can't put 0, negative value, or None in Quantity!");
+          return;
+        }
+        
+        total_quantity = quantity + total_quantity;
+        total_cost = quantity * sellingPrice;
+        total_product_cost = total_cost + total_product_cost;
+
+        // var quantity_div = document.getElementById(productId + "_quantity_div");
+        // quantity_div.innerHTML = '';
+        // quantity_div.insertAdjacentHTML('beforeend', `${quantity}`);
+
+        var subtotat_div = document.getElementById(productId + "_sub_total_div");
+        subtotat_div.innerHTML = '';
+        subtotat_div.insertAdjacentHTML('beforeend', `${total_cost.toFixed(2)}`);
+
+        // var details = {
+        //     product_id: productId,
+        //     quantity: quantity,
+        //     total_cost: total_cost,
+        //     selling_price: sellingPrice,
+        //     remarks: remarks,
+        // };
+        //   existed_product_ids.push(productId);
+        //   productDetails.push(details);
+
+        setTimeout(() => {
+          $('#sellingPrice_' + productId).attr("disabled", "disabled");
+          $('#' + productId + '_quantity').attr("disabled", "disabled");
+          $('#' + productId + '_remarks').attr("disabled", "disabled");
+          document.getElementById(productId + "_confirmproduct").disabled = true;
+        }, 0);
+
+        setTimeout(() => {
+          var total_price = 0;
+          $('#orderList tr').each(function(index, element) {
+            var productId = $(this).attr('id').split('_')[0];
+            var subTotal = $(this).find("#" + productId + "_sub_total_div").text();
+            if (subTotal) {
+              total_price += parseFloat(subTotal);
+            }
+          });
+          $('#totalProductPrice').text(total_price.toFixed(2));
+          // $('#id_total_cost').val(total_price.toFixed(2));
+          updateTotalCost();
+          // var voucherDiscount = 0;
+          // voucherDiscount += updateTotalCost();
+          // var total_product_price = parseFloat($('#totalProductPrice').text()) || 0;
+          // var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+          // var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+          // var total_final_cost_price = deliveryCost + otherCost + total_product_price;
+          // if (total_final_cost_price < 0) {
+          //   total_final_cost_price = 0;
+          // }
+          // $('#id_total_cost').val(total_final_cost_price.toFixed(2));
+        }, 0);
+    }
+
+    function deleteProduct(product_id) {
+      $('#addProduct_' + product_id).show();
+      // $('#addProduct_' + product_id).removeAttr('disabled');
+      // $('#addProduct_' + product_id).css('cursor', '');
+        // Find the product to be deleted
+        const deletedProduct = productDetails.find((product) => product.product_id === product_id);
+    
+        if (deletedProduct) {
+          // Subtract the subtotalCost of the deleted product from total_product_cost
+          total_product_cost -= deletedProduct.total_cost;
+    
+          // Remove the product from the productDetails array
+          productDetails = productDetails.filter((product) => product.product_id !== product_id);
+        }
+    
+        var row = document.getElementById(product_id + "_row");
+        row.parentNode.removeChild(row);
+        $('#id_currency').val('HKD');
+
+        setTimeout(() => {
+          total_price = 0;
+          $('#orderList tr').each(function(index, element) {
+            var productId = $(this).attr('id').split('_')[0];
+            var subTotal = $(this).find("#" + productId + "_sub_total_div").text();
+            if (subTotal) {
+              total_price += parseFloat(subTotal);
+            }
+          });
+          $('#totalProductPrice').text(total_price.toFixed(2));
+          updateTotalCost();
+        }, 0);
+    }
+
+  function submitPage() {
+      var quantityInputs = document.querySelectorAll('input[name="quantity"]');
+
+      // Check if any of the quantity inputs is empty
+      var anyEmpty = Array.from(quantityInputs).some(function (input) {
+          return input.value.trim() === '';
+      });
+
+      // If any input is empty, show an alert
+      if (anyEmpty) {
+          alert('Please fill in quantity field.');
+          return false;
+      }
+
+      var alert_msg_products = []
+      var total_quantity = 0
+      $('#orderList tr').each(function(index, element) {
+        var productId = $(this).attr('id').split('_')[0];
+        var quantity = parseInt($('#' + productId + '_quantity').val()) || 0;
+        var product_stock = parseInt($('#product_stock_' + productId).text()) || 0;
+        if (quantity > product_stock) {
+          alert_msg_products.push($('#prod_no_' + productId).text())
+        }
+        total_quantity += quantity;
+        var sellingPrice = parseFloat($('#sellingPrice_' + productId).val()) || 0;
+        var subTotal = parseFloat($(this).find("#" + productId + "_sub_total_div").text()) || 0;
+        var remarks = $('#' + productId + "_remarks").val();
+        var details = {
+              product_id: productId,
+              quantity: quantity,
+              total_cost: subTotal,
+              selling_price: sellingPrice,
+              remarks: remarks,
+        };
+        productDetails.push(details);
+      });
+
+      {% comment %} if (alert_msg_products.length > 0) {
+        alert("Quantity cannot be greater than products " + alert_msg_products.join(', ') + " stock");
+        return false
+      } {% endcomment %}
+
+      // Check if productDetails is empty
+      if (productDetails.length === 0) {
+        alert('Please add at least one product in the order list to create order.');
+        return false;
+      }
+      var total_cost_after_discount = $('#id_total_cost').text();
+      // Create an object with the data to be sent to the backend
+      document.getElementById('orderDetailsInput').value = JSON.stringify(productDetails);
+      document.getElementById('totalQuantityInput').value = JSON.stringify(total_quantity);
+      document.getElementById('totalCostInput').value = JSON.stringify(total_product_cost);  
+      document.getElementById('totalCostAfterDiscount').value = JSON.stringify(total_cost_after_discount);  
+      return true;
+    }
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+      // Prevent the form from submitting by default
+      event.preventDefault();
+
+      // Call createData function and submit the form if it returns true
+      if (submitPage()) {
+          setTimeout(() => {
+              $('#loader_spin').show();
+          }, 0);
+          this.submit();
+      }
+  });
+
+  function autoCalcSubTotalProductTotal(product_id) {
+    var selling_price = parseFloat($('#sellingPrice_' + product_id).val()) || 0;
+    var quantity = parseInt($('#' + product_id + '_quantity').val()) || 0;
+    var sub_total = selling_price * quantity;
+    $('#' + product_id + '_sub_total_div').text(sub_total.toFixed(2));
+    total_price = 0;
+    $('#orderList tr').each(function(index, element) {
+      var productId = $(this).attr('id').split('_')[0];
+      var subTotal = $(this).find("#" + productId + "_sub_total_div").text();
+      if (subTotal) {
+        total_price += parseFloat(subTotal);
+      }
+    });
+    if (total_price > 0) {
+      $('#totalProductPrice').text(total_price.toFixed(2));
+    }
+    updateTotalCost();
+  }
+
+    $(document).ready(function () {
+
+        var dropdown = document.getElementById('id_sales_person');
+        
+        for (var i = 0; i < dropdown.options.length; i++) {
+            if (dropdown.options[i].value === logged_in_user_id) {
+                dropdown.options[i].selected = true;
+                $("#id_sales_person_hidden").val(dropdown.options[i].value);
+                break;
+            }
+        }
+
+        $(document).on("change", '#id_sales_person', function(e) {
+          setTimeout(() => {
+            $("#id_sales_person_hidden").val($('#id_sales_person').val());
+          }, 0);
+        });
+
+        $('#id_is_submit').val(false);
+
+        $(document).on("change keyup", '.order-quantity', function(e) {
+          setTimeout(() => {
+            var product_id = (e.currentTarget.id).split("_")[0];
+            autoCalcSubTotalProductTotal(product_id)
+            }, 0);
+        });
+
+        $(document).on("change keyup", '.order-selling-price', function(e) {
+          setTimeout(() => {
+            var product_id = (e.currentTarget.id).split("_")[1];
+            autoCalcSubTotalProductTotal(product_id)
+          }, 0);
+        });    
+        
+
+        // window.addEventListener('beforeunload', function(event) {
+        //   event.returnValue = "Are you sure want to exit? Changes you made may not be saved.";
+        // });
+
+        // Initialize DataTables for the product list table
+        // $('#dataTable2').DataTable({
+        // "scrollX": true
+        // // Add other DataTables options as needed
+        // });
+
+        if ($.fn.DataTable.isDataTable('#dataTable')) {
+          // If DataTable is already initialized, destroy it
+          $('#dataTable').DataTable().destroy();
+        }
+
+        $('#dataTable').DataTable({
+          // "order": [[0, "desc"]],
+        });
+
+
+        // Initialize Select2 for the 'customer' field
+        $('#id_customer').select2({
+        width: '100%',
+        });
+
+        $('#id_customer').on('change', function () {
+          // Update the value of the hidden input with the selected customer ID
+          $('#selectedCustomerInput').val($(this).val());
+        });
+
+        var currentDate = new Date();
+        var month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1
+        var day = currentDate.getDate();
+        var year = currentDate.getFullYear();
+
+        var formattedDate = month + '/' + day + '/' + year;
+        $('#id_date').val(formattedDate);
+
+        
+        // $('.voucher-checkbox').on("change", function (e) {
+        //   setTimeout(() => {          
+        //     var current_voucher_id = (e.currentTarget.id).split("_")[1]; 
+        //     if ($("#" + e.currentTarget.id).prop("checked") === false) {
+        //       var voucher_type = $("#voucherType_" + current_voucher_id).text();
+        //       var discount_type = $("#discountType_" + current_voucher_id).text();
+        //       var discount_value = parseFloat($("#discountValue_" + current_voucher_id).text()) || 0;
+        //       var totalProductCost = parseFloat($('#totalProductPrice').text()) || 0;
+        //       var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+        //       var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+        //       var total_price_cost = parseFloat($('#id_total_cost').val()) || 0;
+        //       if (voucher_type == "Product Combo") {
+        //         var productId = $(this).attr("voucher_product_id");
+        //         var quantity = parseFloat($('#' + productId + '_quantity_div').text()) || 0;
+        //         var org_selling_price = parseFloat($('#product_selling_price_' + productId).text()) || 0;
+        //         console.log("org_selling_price", org_selling_price);
+        //         var voucher_discount = calculateDiscount(discount_type, discount_value, org_selling_price)
+
+        //         var total_cost_price = parseFloat($('#id_total_cost').val()) || 0;
+        //         var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+        //         var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+        //         var total_final_cost_price = deliveryCost + otherCost + total_cost_price + voucher_discount;
+        //         if (total_final_cost_price < 0) {
+        //           total_final_cost_price = 0;
+        //         }
+        //         $('#id_total_cost').val(total_final_cost_price.toFixed(2));
+        //       } 
+        //       if (voucher_type == "Free Gift") {
+        //         var remove_voucher_value = calculateDiscount(discount_type, discount_value, totalProductCost);
+        //         var total_cost_price = total_price_cost + remove_voucher_value;
+        //         $('#id_total_cost').val(total_cost_price.toFixed(2));
+        //         } 
+        //       if (voucher_type == "Discount Voucher") {
+        //           var remove_voucher_value = calculateDiscount(discount_type, discount_value, totalProductCost);
+        //           var total_cost_price = total_price_cost + remove_voucher_value;
+        //           $('#id_total_cost').val(total_cost_price.toFixed(2));
+        //         }
+        //     }
+
+        //     var dicount_voucher_count = 0;
+        //     var voucher_discount = 0;
+        //     // var product_id = $(this).attr("voucher_product_id");
+        //     var exists_prod_ids = [];
+        //     $('#id_vouchers tr').each(function(index, element) {
+        //       var voucherId = $(this).attr('id');
+        //       var product_id = $(this).attr('product_id');
+        //       var voucher_type = $(this).find("#voucherType_" + voucherId).text();
+        //       var discount_type = $(this).find("#discountType_" + voucherId).text();
+        //       var discount_value = $(this).find("#discountValue_" + voucherId).text();
+        //       var voucher_check = $('#voucherCheck_'+ voucherId).prop('checked');
+        //       if (voucher_check === true) {
+        //         if (voucher_type == "Discount Voucher") {
+        //           dicount_voucher_count += 1;
+        //           if (dicount_voucher_count > 1) {
+        //             $('#' + e.currentTarget.id).prop('checked', false);
+        //             alert('Please select only one Discount Voucher.');
+        //             return;
+        //           }
+        //         }
+        //         // if (!exists_prod_ids.includes(product_id) ) {
+        //         //   exists_prod_ids.push(product_id);
+        //           voucher_discount += updateTotalCost(0, voucherId, product_id, voucher_type, discount_type, discount_value, voucher_check);
+        //         // }
+        //       }
+        //     });
+        //     var total_product_price = parseFloat($('#totalProductPrice').text()) || 0;
+        //     var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+        //     var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+        //     console.log("voucher_discount---", voucher_discount);
+        //     var total_final_cost_price = deliveryCost + otherCost + total_product_price - voucher_discount;
+        //     if (total_final_cost_price < 0) {
+        //       total_final_cost_price = 0;
+        //     }
+        //     $('#id_total_cost').val(total_final_cost_price.toFixed(2));
+        //   }, 0);
+        // })
+
+        checkFormValueChange();
+    });
+
+    $('.btn-click').click(function () {
+        changed = false;
+    })
+
+    window.addEventListener('beforeunload', function(event) {
+    if (changed) {
+            var confirmationMessage = 'Are you sure you want to leave this page?';
+            (event || window.event).returnValue = confirmationMessage;
+            return confirmationMessage;
+        }
+    });
+
+    function checkFormValueChange() {
+        // Get the form and input fields
+        var form = document.getElementById('orderForm');
+        var inputFields = document.getElementsByClassName('inputField');
+
+        // Store the initial values of the input fields
+        var initialValues = [];
+        for (var i = 0; i < inputFields.length; i++) {
+            initialValues.push(inputFields[i].value);
+        }
+
+        // Add event listener for input changes
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener('input', function() {
+                for (var j = 0; j < inputFields.length; j++) {
+                    if (inputFields[j].value !== initialValues[j]) {
+                        changed = true;
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    // $('#id_delivery_cost').on("keyup", function () {
+    //   var voucher_discount_value = 0;
+    //   var voucherDiscount = 0;
+    //   $('#id_vouchers tr').each(function(index, element) {
+    //     var voucherId = $(this).attr('id');
+    //     var voucher_type = $(this).find("#voucherType_" + voucherId).text();
+    //     var discount_type = $(this).find("#discountType_" + voucherId).text();
+    //     var discount_value = $(this).find("#discountValue_" + voucherId).text();
+    //     var voucher_check = $('#voucherCheck_'+ voucherId).prop('checked');
+    //     if (voucher_type != "Product Combo" && voucher_check === true) {
+    //       var total_price = $('#id_total_cost').val();
+    //       voucher_discount_value += calculateDiscount(discount_type, discount_value, total_price)
+    //     }
+    //   });
+    //   voucherDiscount += updateTotalCost(parseFloat(voucher_discount_value));
+    //   var total_product_price = parseFloat($('#totalProductPrice').text()) || 0;
+    //   var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+    //   var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+    //   var total_final_cost_price = deliveryCost + otherCost + total_product_price - voucherDiscount - voucher_discount_value;
+    //   if (total_final_cost_price < 0) {
+    //     total_final_cost_price = 0;
+    //   }
+    //   $('#id_total_cost').val(total_final_cost_price.toFixed(2));
+    // });
+    
+    // $('#id_other_cost').on("keyup", function () {
+    //   var voucher_discount_value = 0;
+    //   var voucherDiscount = 0;
+    //   $('#id_vouchers tr').each(function(index, element) {
+    //     var voucherId = $(this).attr('id');
+    //     var voucher_type = $(this).find("#voucherType_" + voucherId).text();
+    //     var discount_type = $(this).find("#discountType_" + voucherId).text();
+    //     var discount_value = $(this).find("#discountValue_" + voucherId).text();
+    //     var voucher_check = $('#voucherCheck_'+ voucherId).prop('checked');
+    //     if (voucher_type != "Product Combo" && voucher_check === true) {
+    //       var total_price = $('#id_total_cost').val();
+    //       voucher_discount_value += calculateDiscount(discount_type, discount_value, total_price)
+    //     }
+    //   });
+    //   voucherDiscount += updateTotalCost(parseFloat(voucher_discount_value));
+    //   var total_product_price = parseFloat($('#totalProductPrice').text()) || 0;
+    //   var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+    //   var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+    //   var total_final_cost_price = deliveryCost + otherCost + total_product_price - voucherDiscount - voucher_discount_value;
+    //   if (total_final_cost_price < 0) {
+    //     total_final_cost_price = 0;
+    //   }
+    //   $('#id_total_cost').val(total_final_cost_price.toFixed(2));
+    // });
+
+    $('#id_delivery_cost').on("keyup", function () {
+      updateTotalCost();
+    });
+    
+    $('#id_other_cost').on("keyup", function () {
+      updateTotalCost();
+    });
+
+    $('#id_manual_cost').on("keyup", function () {
+      updateTotalCost();
+    });
+
+    function updateTotalCost() {
+      var total_product_price = parseFloat($('#totalProductPrice').text()) || 0;
+      var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+      var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+      var manualCost = parseFloat($('#id_manual_cost').val()) || 0;
+      var total_final_cost_price = deliveryCost + otherCost + total_product_price - manualCost;
+      if (total_final_cost_price < 0) {
+        total_final_cost_price = 0;
+      }
+      $('#id_total_cost').text(total_final_cost_price.toFixed(2));
+    }
+
+    // function updateTotalCost(voucher_discount_value=0, voucherId, product_id, voucher_type, discount_type, discount_value, voucher_check) {
+    //   var voucherDiscount = 0;
+    //     var selectedVouchers = $('#id_voucher').val();
+    //     var deliveryCost = parseFloat($('#id_delivery_cost').val()) || 0;
+    //     var otherCost = parseFloat($('#id_other_cost').val()) || 0;
+    //     var totalProductCost = parseFloat($('#totalProductPrice').text()) || 0;
+    //     var total_price_cost = parseFloat($('#id_total_cost').val()) || 0;
+    //     var discountVoucherCount = 0;
+    //     var freeGiftVoucherCount = 0;
+        
+    //     var total_price = 0;
+    //     if (voucher_type == "Product Combo") {
+    //       var disc_selling_price = 0;
+    //         var selling_price = parseFloat($("#sellingPrice_" + product_id).val()) || 0;
+    //         var quantity = parseFloat($('#' + product_id + '_quantity_div').text()) || 0;
+    //         if (discount_value !== "-") {
+    //           voucherDiscount += calculateDiscount(discount_type, discount_value, selling_price)
+    //         }
+    //       }
+
+    //     if (voucher_type == "Free Gift") {
+    //       var total_price = $('#id_total_cost').val();
+    //       if (total_price) {
+    //         voucherDiscount += calculateDiscount(discount_type, discount_value, total_price);
+    //       }
+    //     } 
+    //     if (voucher_type == "Discount Voucher") {
+    //       var total_price = $('#id_total_cost').val();
+    //       if (total_price) {
+    //         voucherDiscount += calculateDiscount(discount_type, discount_value, total_price);
+    //       }
+    //     }
+    //     return parseFloat(voucherDiscount);
+    // }
+
+    function calculateDiscount(discountType, discountValue, productPrice) {
+      if (discountType === 'Rate(%)') {
+        return (parseFloat(discountValue) / 100) * parseFloat(productPrice);
+      } else if (discountType === 'Fixed Amount') {
+        return parseFloat(discountValue);
+      } else {
+        return 0;
+      }
+    }
+
+    function submitOrder() {
+      var customer_details = {};
+      var order_details = {"orders": []};
+      var fees_details = {};
+      var delivery_add = "";
+      var customer_id = $('#customer_id_div').text() || 0;
+      if (customer_id != 0) {
+        delivery_add = $('#id_delivery_address_drop').val();
+      } else {
+        delivery_add = $('#id_delivery_address').val();
+      }
+      customer_details["customer_id"] = customer_id;
+      customer_details["company_name"] = $('#company_id').val();
+      customer_details["customer_name"] = $('#customer_id').val();
+      customer_details["mobile_num"] = $('#mobile_id').val();
+      customer_details["currency"] = $('#id_currency').val();
+      customer_details["payment_method"] = $('#id_payment_method').val();
+      customer_details["delivery_method"] = $('#id_delivery_method').val();
+      customer_details["delivery_address"] = delivery_add;
+      customer_details["customer_comments"] = $('#id_customer_comments').val();
+      customer_details["delivery_comments"] = $('#id_delivery_comments').val();
+      customer_details["create_order_date"] = $('#id_order_date').val();
+      customer_details["order_type"] = $('#id_type').val();
+
+      fees_details["delivery_fees"] = $('#id_delivery_cost').val() || 0;
+      fees_details["other_cost"] = $('#id_other_cost').val() || 0;
+      fees_details["total_cost"] = $('#id_total_cost').text() || 0;
+      fees_details["manual_cost"] = $('#id_manual_cost').val() || 0;
+      fees_details["delivery_date"] = $('#id_delivery_date').val();
+
+      $('#orderList tr').each(function() {
+        var productId = $(this).attr('id').split('_')[0];
+        var selling_price = $('#sellingPrice_' + productId).val() || 0;
+        var quantity = $('#' + productId + '_quantity').val() || 0;
+        var sub_total = $('#' + productId + '_sub_total_div').text() || 0;
+        var remarks = $('#' + productId + '_remarks').val() || 0;
+        order_details.orders.push({
+          'productId': productId,
+          'selling_price': selling_price,
+          'quantity': quantity,
+          'sub_total': sub_total,
+          'remarks': remarks,
+        })
+      });
+      var total_product_price = $('#totalProductPrice').text() || 0;
+      order_details["total_product_price"] = total_product_price;
+      if ((order_details.orders).length == 0) {
+        alert("Please add orders!");
+        return;
+      }
+      if (!delivery_add) {
+        alert("Please add delivery address!");
+        return;
+      }
+
+
+
+      {% comment %} $.ajax({
+        type: "POST",
+        url: "{% url 'create-order' %}",
+        data: JSON.stringify({
+          customer_details: customer_details,
+          order_details: order_details,
+          fees_details: fees_details,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+        }),
+        success: function(response) {
+          if (response.code == 1) {
+           location.reload();
+          }
+        },
+        error: function(error) {
+          console.error('Error:', error);
+        }
+    }); {% endcomment %}
+    }
+
+    function exitOrder() {
+      if (changed) {
+        confirmed = confirm("Are you sure want to exit? Changes you made may not be saved.");
+        if (confirmed) {
+          setTimeout(() => {
+              $('#loader_spin').show();
+          }, 0);
+          changed = false;
+          window.location = '/order-list/';
+        }
+      } else {
+          setTimeout(() => {
+              $('#loader_spin').show();
+          }, 0);
+          changed = false;
+          window.location = '/order-list/';
+      }
+    }
+
+    $("#id_currency").on("change", function () {
+      $('#loader_spin').show();
+      var new_currency = $("#id_currency").val();
+
+      var product_list_data = [];
+      $('#id_product_list tr').each(function () {
+        var productId = $(this).attr('id').split('_')[0];
+        var prod_old_currency = $('#prod_currency_' + productId).text();
+        var prod_selling_price = parseFloat($('#product_selling_price_' + productId).text()) || 0;
+        product_list_data.push({
+          "product_id": productId,
+          "prod_old_currency": prod_old_currency,
+          "prod_selling_price": prod_selling_price,
+        })
+      })
+
+      var order_list_data = [];
+      $('#orderList tr').each(function(index, element) {
+        var productId = $(this).attr('id').split('_')[0];
+        var old_currency = $('#currency_' + productId).text();
+        var selling_price = $('#sellingPrice_' + productId).val() || 0;
+        order_list_data.push({
+          "product_id": productId,
+          // "new_currency": new_currency,
+          "old_currency": old_currency,
+          "selling_price": selling_price,
+        })
+      });
+
+      // if (order_list_data.length == 0) {
+      //   if (currency_val) {
+      //     $("#id_currency").val(currency_val);
+      //   }
+      //   alert("Please add products to order list!")
+      //   return;
+      // }
+
+      currency_val = $("#id_currency").val();
+
+      var formData = new FormData();
+      formData.append('order_list_data', JSON.stringify(order_list_data));
+      formData.append('product_list_data', JSON.stringify(product_list_data));
+      formData.append('new_currency', JSON.stringify(new_currency));
+
+      $.ajax({
+          type: "POST",
+          url: "{% url 'get_currency_converted_price' %}",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              if (response.code == 1) {
+                  setTimeout(() => {
+                    var converted_price_products = response.converted_price_products;
+                    var converted_price_products_length = converted_price_products.length;
+                    if (converted_price_products_length > 0) {
+                      var total_product_price = 0;
+                      for (let prod_index = 0; prod_index < converted_price_products_length; prod_index++) {
+                        var product_id = converted_price_products[prod_index]["product_id"];
+                        var prod_converted_price = (converted_price_products[prod_index]["prod_converted_price"]).toFixed(2);
+                        $('#product_selling_price_' + product_id).text(prod_converted_price);
+                        $('#prod_currency_' + product_id).text(new_currency);
+                      }
+                    }
+
+                    var converted_price_orders = response.converted_price_orders;
+                    var converted_price_orders_length = converted_price_orders.length;
+                    if (converted_price_orders_length > 0) {
+                      var total_product_price = 0;
+                      for (let index = 0; index < converted_price_orders_length; index++) {
+                        var product_id = converted_price_orders[index]["product_id"];
+                        var converted_price = (converted_price_orders[index]["converted_price"]).toFixed(2);
+                        $('#sellingPrice_' + product_id).val(converted_price);
+                        $('#currency_' + product_id).text(new_currency);
+                        var quantity = $('#' + product_id + '_quantity').val() || 0;
+                        if (quantity > 0) {
+                          var sub_total = parseFloat(converted_price) * parseInt(quantity);
+                          total_product_price += sub_total;
+                          $('#' + product_id + '_sub_total_div').text(sub_total.toFixed(2));
+                        }
+                      }
+                      $('#totalProductPrice').text(total_product_price.toFixed(2));
+                      updateTotalCost();
+                      // $('#id_Msg').show();
+                      // $('#id_Msg').html('<div class="alert alert-success" role="alert">Selling price converted according to currency.</div>');
+                    } 
+                    // else {
+                    //   $('#id_Msg').show();
+                    //   $('#id_Msg').html('<div class="alert alert-warning" role="alert">Error in convert selling price according to currency!</div>');
+                    // }
+                  }, 0);
+              } else {
+                  setTimeout(() => {
+                      $('#id_Msg').show();
+                      $('#id_Msg').html('<div class="alert alert-danger" role="alert">' + response.msg + '</div>');
+                  }, 0);
+              }
+              setTimeout(() => {
+                  $('#id_Msg').hide();
+              }, 5000);
+              $('#loader_spin').hide();
+          },
+          error: function(error) {
+              console.error('Error:', error);
+              $('#loader_spin').hide();
+          }
+      });
+    })
+
+    function confirmSubmitOrder() {
+      // var approval_comments = $('#id_approval_comments').val();
+      // if (!approval_comments) {
+      //   alert("Please add approval comments!")
+      //   return false;
+      // }
+      changed = false;
+      $('#id_is_submit').val(true);
+    }
+
+</script>
+{% endblock javascripts %}
